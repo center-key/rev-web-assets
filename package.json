@@ -1,6 +1,6 @@
 {
    "name": "rev-web-assets",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "description": "Revision web asset filenames and links with a cache busting content hash fingerprint",
    "license": "MIT",
    "type": "module",

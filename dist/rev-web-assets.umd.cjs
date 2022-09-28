@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -98,8 +98,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 const content = fs_extra_1.default.readFileSync(detail.origin, 'utf-8');
                 const hashedContent = content
                     .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
-                fs_extra_1.default.ensureDirSync(detail.destFolder);
                 const filename = (_a = detail.hashFilename) !== null && _a !== void 0 ? _a : detail.filename;
+                fs_extra_1.default.ensureDirSync(detail.destFolder);
                 fs_extra_1.default.writeFileSync(detail.destFolder + '/' + filename, hashedContent);
             };
             manifest.filter(detail => detail.isCss).forEach(process);
@@ -108,6 +108,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const process = (detail) => {
                 var _a;
                 const filename = (_a = detail.hashFilename) !== null && _a !== void 0 ? _a : detail.filename;
+                fs_extra_1.default.ensureDirSync(detail.destFolder);
                 fs_extra_1.default.copyFileSync(detail.origin, detail.destFolder + '/' + filename);
             };
             manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);

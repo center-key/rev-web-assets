@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export declare type Options = {
     cd?: string;
