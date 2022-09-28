@@ -87,4 +87,5 @@ buildProject() {
 setupTools
 releaseInstructions
 buildProject
+sleep 1
 open spec/fixtures/target/mock1.html
