@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -43,14 +43,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 return {
                     origin: file,
                     filename: path_1.default.basename(file),
-                    extension: fileExtension,
                     canonicalFolder: canonicalFolder,
                     canonical: canonical,
                     isHtml: isHtml,
                     isCss: isCss,
                     hash: null,
-                    hashFilename: null,
+                    hashedFilename: null,
                     destFolder: destFolder,
+                    destPath: null,
                 };
             };
             const manifest = files.map(process);
@@ -63,8 +63,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         calcAssetHash(detail) {
             const hashLen = 7;
             const contents = fs_extra_1.default.readFileSync(detail.origin).toString();
-            detail.hash = crypto_1.default.createHash('md5').update(contents).digest('hex').substring(0, hashLen);
-            detail.hashFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
+            const hash = crypto_1.default.createHash('md5').update(contents).digest('hex');
+            detail.hash = hash.substring(0, hashLen);
+            detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
         },
         hashAssetPath(manifest, detail) {
             return (matched, pre, uri, post) => {
@@ -86,8 +87,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 const hashedContent = content
                     .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail))
                     .replace(srcPattern, revWebAssets.hashAssetPath(manifest, detail));
+                detail.destPath = detail.destFolder + '/' + detail.filename;
                 fs_extra_1.default.ensureDirSync(detail.destFolder);
-                fs_extra_1.default.writeFileSync(detail.destFolder + '/' + detail.filename, hashedContent);
+                fs_extra_1.default.writeFileSync(detail.destPath, hashedContent);
             };
             manifest.filter(detail => detail.isHtml).forEach(process);
         },
@@ -98,18 +100,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 const content = fs_extra_1.default.readFileSync(detail.origin, 'utf-8');
                 const hashedContent = content
                     .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
-                const filename = (_a = detail.hashFilename) !== null && _a !== void 0 ? _a : detail.filename;
+                detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
                 fs_extra_1.default.ensureDirSync(detail.destFolder);
-                fs_extra_1.default.writeFileSync(detail.destFolder + '/' + filename, hashedContent);
+                fs_extra_1.default.writeFileSync(detail.destPath, hashedContent);
             };
             manifest.filter(detail => detail.isCss).forEach(process);
         },
         copyAssets(manifest) {
             const process = (detail) => {
                 var _a;
-                const filename = (_a = detail.hashFilename) !== null && _a !== void 0 ? _a : detail.filename;
+                detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
                 fs_extra_1.default.ensureDirSync(detail.destFolder);
-                fs_extra_1.default.copyFileSync(detail.origin, detail.destFolder + '/' + filename);
+                fs_extra_1.default.copyFileSync(detail.origin, detail.destPath);
             };
             manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
         },

@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export declare type Options = {
     cd?: string;
@@ -7,14 +7,14 @@ export declare type Options = {
 export declare type ManifestDetail = {
     origin: string;
     filename: string;
-    extension: string;
     canonical: string;
     canonicalFolder: string;
     isHtml: boolean;
     isCss: boolean;
     hash: string | null;
-    hashFilename: string | null;
+    hashedFilename: string | null;
     destFolder: string;
+    destPath: string | null;
 };
 export declare type Manifest = ManifestDetail[];
 export declare type Results = {
@@ -29,14 +29,14 @@ declare const revWebAssets: {
     manifest(source: string, target: string): {
         origin: string;
         filename: string;
-        extension: string;
         canonicalFolder: string;
         canonical: string;
         isHtml: boolean;
         isCss: boolean;
         hash: null;
-        hashFilename: null;
+        hashedFilename: null;
         destFolder: string;
+        destPath: null;
     }[];
     hashFilename(filename: string, hash: string | null): string;
     calcAssetHash(detail: ManifestDetail): void;

@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs-extra';
@@ -28,14 +28,14 @@ const revWebAssets = {
             return {
                 origin: file,
                 filename: path.basename(file),
-                extension: fileExtension,
                 canonicalFolder: canonicalFolder,
                 canonical: canonical,
                 isHtml: isHtml,
                 isCss: isCss,
                 hash: null,
-                hashFilename: null,
+                hashedFilename: null,
                 destFolder: destFolder,
+                destPath: null,
             };
         };
         const manifest = files.map(process);
@@ -48,8 +48,9 @@ const revWebAssets = {
     calcAssetHash(detail) {
         const hashLen = 7;
         const contents = fs.readFileSync(detail.origin).toString();
-        detail.hash = crypto.createHash('md5').update(contents).digest('hex').substring(0, hashLen);
-        detail.hashFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
+        const hash = crypto.createHash('md5').update(contents).digest('hex');
+        detail.hash = hash.substring(0, hashLen);
+        detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
     },
     hashAssetPath(manifest, detail) {
         return (matched, pre, uri, post) => {
@@ -71,8 +72,9 @@ const revWebAssets = {
             const hashedContent = content
                 .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail))
                 .replace(srcPattern, revWebAssets.hashAssetPath(manifest, detail));
+            detail.destPath = detail.destFolder + '/' + detail.filename;
             fs.ensureDirSync(detail.destFolder);
-            fs.writeFileSync(detail.destFolder + '/' + detail.filename, hashedContent);
+            fs.writeFileSync(detail.destPath, hashedContent);
         };
         manifest.filter(detail => detail.isHtml).forEach(process);
     },
@@ -83,18 +85,18 @@ const revWebAssets = {
             const content = fs.readFileSync(detail.origin, 'utf-8');
             const hashedContent = content
                 .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
-            const filename = (_a = detail.hashFilename) !== null && _a !== void 0 ? _a : detail.filename;
+            detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
             fs.ensureDirSync(detail.destFolder);
-            fs.writeFileSync(detail.destFolder + '/' + filename, hashedContent);
+            fs.writeFileSync(detail.destPath, hashedContent);
         };
         manifest.filter(detail => detail.isCss).forEach(process);
     },
     copyAssets(manifest) {
         const process = (detail) => {
             var _a;
-            const filename = (_a = detail.hashFilename) !== null && _a !== void 0 ? _a : detail.filename;
+            detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
             fs.ensureDirSync(detail.destFolder);
-            fs.copyFileSync(detail.origin, detail.destFolder + '/' + filename);
+            fs.copyFileSync(detail.origin, detail.destPath);
         };
         manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
     },
