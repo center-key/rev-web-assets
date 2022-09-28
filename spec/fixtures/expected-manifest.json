@@ -1,5 +1,17 @@
 [
    {
+      "origin": "spec/fixtures/source/graphics/mock1.jpg",
+      "filename": "mock1.jpg",
+      "extension": ".jpg",
+      "canonicalFolder": "graphics",
+      "canonical": "graphics/mock1.jpg",
+      "isHtml": false,
+      "isCss": false,
+      "hash": "ad41b20",
+      "hashFilename": "mock1.ad41b20.jpg",
+      "destFolder": "spec/fixtures/target/graphics"
+   },
+   {
       "origin": "spec/fixtures/source/mock1.html",
       "filename": "mock1.html",
       "extension": ".html",
@@ -9,18 +21,6 @@
       "isCss": false,
       "hash": null,
       "hashFilename": null,
-      "destFolder": "spec/fixtures/target"
-   },
-   {
-      "origin": "spec/fixtures/source/mock1.jpg",
-      "filename": "mock1.jpg",
-      "extension": ".jpg",
-      "canonicalFolder": "",
-      "canonical": "mock1.jpg",
-      "isHtml": false,
-      "isCss": false,
-      "hash": "ad41b20",
-      "hashFilename": "mock1.ad41b20.jpg",
       "destFolder": "spec/fixtures/target"
    },
    {
@@ -43,9 +43,21 @@
       "canonical": "mock1.min.css",
       "isHtml": false,
       "isCss": true,
-      "hash": "b215322",
-      "hashFilename": "mock1.min.b215322.css",
+      "hash": "c2f4e84",
+      "hashFilename": "mock1.min.c2f4e84.css",
       "destFolder": "spec/fixtures/target"
+   },
+   {
+      "origin": "spec/fixtures/source/subfolder/graphics/mock2.jpg",
+      "filename": "mock2.jpg",
+      "extension": ".jpg",
+      "canonicalFolder": "subfolder/graphics",
+      "canonical": "subfolder/graphics/mock2.jpg",
+      "isHtml": false,
+      "isCss": false,
+      "hash": "9e7dfdb",
+      "hashFilename": "mock2.9e7dfdb.jpg",
+      "destFolder": "spec/fixtures/target/subfolder/graphics"
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.html",
@@ -57,18 +69,6 @@
       "isCss": false,
       "hash": null,
       "hashFilename": null,
-      "destFolder": "spec/fixtures/target/subfolder"
-   },
-   {
-      "origin": "spec/fixtures/source/subfolder/mock2.jpg",
-      "filename": "mock2.jpg",
-      "extension": ".jpg",
-      "canonicalFolder": "subfolder",
-      "canonical": "subfolder/mock2.jpg",
-      "isHtml": false,
-      "isCss": false,
-      "hash": "9e7dfdb",
-      "hashFilename": "mock2.9e7dfdb.jpg",
       "destFolder": "spec/fixtures/target/subfolder"
    },
    {
@@ -91,8 +91,8 @@
       "canonical": "subfolder/mock2.min.css",
       "isHtml": false,
       "isCss": true,
-      "hash": "87c1950",
-      "hashFilename": "mock2.min.87c1950.css",
+      "hash": "9b4a1b2",
+      "hashFilename": "mock2.min.9b4a1b2.css",
       "destFolder": "spec/fixtures/target/subfolder"
    }
 ]

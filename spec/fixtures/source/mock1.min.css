@@ -34,8 +34,8 @@ article >p {
    padding: 30px;
    }
 article >p:nth-of-type(1) {
-   background-image: url(mock1.jpg);
+   background-image: url(graphics/mock1.jpg);
    }
 article >p:nth-of-type(2) {
-   background-image: url(subfolder/mock2.jpg);
+   background-image: url(subfolder/graphics/mock2.jpg);
    }

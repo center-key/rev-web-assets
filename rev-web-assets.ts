@@ -120,8 +120,8 @@ const revWebAssets = {
          const content = fs.readFileSync(detail.origin, 'utf-8');
          const hashedContent = content
             .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
-         fs.ensureDirSync(detail.destFolder);
          const filename = detail.hashFilename ?? detail.filename;
+         fs.ensureDirSync(detail.destFolder);
          fs.writeFileSync(detail.destFolder + '/' + filename, hashedContent);
          };
       manifest.filter(detail => detail.isCss).forEach(process);
@@ -130,6 +130,7 @@ const revWebAssets = {
    copyAssets(manifest: Manifest) {
       const process = (detail: ManifestDetail) => {
          const filename = detail.hashFilename ?? detail.filename;
+         fs.ensureDirSync(detail.destFolder);
          fs.copyFileSync(detail.origin, detail.destFolder + '/' + filename);
          };
       manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
