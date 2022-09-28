@@ -1,0 +1,96 @@
+{
+   "name": "rev-web-assets",
+   "version": "0.0.1",
+   "description": "Revision web asset filenames and links with a cache busting content hash fingerprint",
+   "license": "MIT",
+   "type": "module",
+   "module": "dist/rev-web-assets.js",
+   "main": "dist/rev-web-assets.umd.cjs",
+   "types": "dist/rev-web-assets.d.ts",
+   "files": [
+      "dist"
+   ],
+   "exports": {
+      ".": {
+         "import": "./dist/rev-web-assets.js",
+         "require": "./dist/rev-web-assets.umd.cjs"
+      },
+      "./": "./dist/"
+   },
+   "bin": {
+      "rev-web-assets": "bin/cli.js"
+   },
+   "repository": "github:center-key/rev-web-assets",
+   "homepage": "https://github.com/center-key/rev-web-assets",
+   "bugs": "https://github.com/center-key/rev-web-assets/issues",
+   "docs": "https://github.com/center-key/rev-web-assets#readme",
+   "author": "Center Key (https://centerkey.com)",
+   "keywords": [
+      "revision"
+   ],
+   "jshintConfig": {
+      "esversion": 11,
+      "strict": "implied",
+      "eqeqeq": true,
+      "undef": true,
+      "unused": true,
+      "varstmt": true,
+      "browser": true,
+      "node": true,
+      "mocha": true
+   },
+   "eslintConfig": {
+      "ignorePatterns": [
+         "build",
+         "dist",
+         "node_modules"
+      ],
+      "root": true,
+      "parser": "@typescript-eslint/parser",
+      "plugins": [
+         "@typescript-eslint"
+      ],
+      "extends": [
+         "eslint:recommended",
+         "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+         "@typescript-eslint/no-non-null-assertion": "off"
+      }
+   },
+   "scripts": {
+      "step:01": "rimraf build dist spec/fixtures/target **/.DS_Store",
+      "step:02": "jshint . --exclude-path .gitignore",
+      "step:03": "eslint --max-warnings 0 . --ext .ts",
+      "step:04": "tsc",
+      "step:05": "tsc --module UMD --outDir build/umd",
+      "step:06": "copy-file build/umd/rev-web-assets.js build/rev-web-assets.umd.cjs",
+      "step:07": "add-dist-header build dist",
+      "pretest": "npm-run-all step:*",
+      "test": "mocha spec/*.spec.js",
+      "posttest": "html-validator spec/fixtures"
+   },
+   "dependencies": {
+      "chalk": "~5.0",
+      "fancy-log": "~2.0",
+      "fs-extra": "~10.1",
+      "slash": "~4.0"
+   },
+   "devDependencies": {
+      "@types/fancy-log": "~2.0",
+      "@types/fs-extra": "~9.0",
+      "@types/node": "~18.7",
+      "@typescript-eslint/eslint-plugin": "~5.38",
+      "@typescript-eslint/parser": "~5.38",
+      "add-dist-header": "~0.2",
+      "assert-deep-strict-equal": "~1.0",
+      "copy-file-util": "~0.1",
+      "eslint": "~8.24",
+      "jshint": "~2.13",
+      "mocha": "~10.0",
+      "npm-run-all2": "~6.0",
+      "rimraf": "~3.0",
+      "typescript": "~4.8",
+      "w3c-html-validator": "~1.1.3"
+   }
+}
