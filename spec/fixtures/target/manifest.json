@@ -2,97 +2,97 @@
    {
       "origin": "spec/fixtures/source/graphics/mock1.jpg",
       "filename": "mock1.jpg",
-      "extension": ".jpg",
       "canonicalFolder": "graphics",
       "canonical": "graphics/mock1.jpg",
       "isHtml": false,
       "isCss": false,
       "hash": "ad41b20",
-      "hashFilename": "mock1.ad41b20.jpg",
-      "destFolder": "spec/fixtures/target/graphics"
+      "hashedFilename": "mock1.ad41b20.jpg",
+      "destFolder": "spec/fixtures/target/graphics",
+      "destPath": "spec/fixtures/target/graphics/mock1.ad41b20.jpg"
    },
    {
       "origin": "spec/fixtures/source/mock1.html",
       "filename": "mock1.html",
-      "extension": ".html",
       "canonicalFolder": "",
       "canonical": "mock1.html",
       "isHtml": true,
       "isCss": false,
       "hash": null,
-      "hashFilename": null,
-      "destFolder": "spec/fixtures/target"
+      "hashedFilename": null,
+      "destFolder": "spec/fixtures/target",
+      "destPath": "spec/fixtures/target/mock1.html"
    },
    {
       "origin": "spec/fixtures/source/mock1.js",
       "filename": "mock1.js",
-      "extension": ".js",
       "canonicalFolder": "",
       "canonical": "mock1.js",
       "isHtml": false,
       "isCss": false,
       "hash": "a2fcaff",
-      "hashFilename": "mock1.a2fcaff.js",
-      "destFolder": "spec/fixtures/target"
+      "hashedFilename": "mock1.a2fcaff.js",
+      "destFolder": "spec/fixtures/target",
+      "destPath": "spec/fixtures/target/mock1.a2fcaff.js"
    },
    {
       "origin": "spec/fixtures/source/mock1.min.css",
       "filename": "mock1.min.css",
-      "extension": ".css",
       "canonicalFolder": "",
       "canonical": "mock1.min.css",
       "isHtml": false,
       "isCss": true,
       "hash": "c2f4e84",
-      "hashFilename": "mock1.min.c2f4e84.css",
-      "destFolder": "spec/fixtures/target"
+      "hashedFilename": "mock1.min.c2f4e84.css",
+      "destFolder": "spec/fixtures/target",
+      "destPath": "spec/fixtures/target/mock1.min.c2f4e84.css"
    },
    {
       "origin": "spec/fixtures/source/subfolder/graphics/mock2.jpg",
       "filename": "mock2.jpg",
-      "extension": ".jpg",
       "canonicalFolder": "subfolder/graphics",
       "canonical": "subfolder/graphics/mock2.jpg",
       "isHtml": false,
       "isCss": false,
       "hash": "9e7dfdb",
-      "hashFilename": "mock2.9e7dfdb.jpg",
-      "destFolder": "spec/fixtures/target/subfolder/graphics"
+      "hashedFilename": "mock2.9e7dfdb.jpg",
+      "destFolder": "spec/fixtures/target/subfolder/graphics",
+      "destPath": "spec/fixtures/target/subfolder/graphics/mock2.9e7dfdb.jpg"
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.html",
       "filename": "mock2.html",
-      "extension": ".html",
       "canonicalFolder": "subfolder",
       "canonical": "subfolder/mock2.html",
       "isHtml": true,
       "isCss": false,
       "hash": null,
-      "hashFilename": null,
-      "destFolder": "spec/fixtures/target/subfolder"
+      "hashedFilename": null,
+      "destFolder": "spec/fixtures/target/subfolder",
+      "destPath": "spec/fixtures/target/subfolder/mock2.html"
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.js",
       "filename": "mock2.js",
-      "extension": ".js",
       "canonicalFolder": "subfolder",
       "canonical": "subfolder/mock2.js",
       "isHtml": false,
       "isCss": false,
       "hash": "868e0e2",
-      "hashFilename": "mock2.868e0e2.js",
-      "destFolder": "spec/fixtures/target/subfolder"
+      "hashedFilename": "mock2.868e0e2.js",
+      "destFolder": "spec/fixtures/target/subfolder",
+      "destPath": "spec/fixtures/target/subfolder/mock2.868e0e2.js"
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.min.css",
       "filename": "mock2.min.css",
-      "extension": ".css",
       "canonicalFolder": "subfolder",
       "canonical": "subfolder/mock2.min.css",
       "isHtml": false,
       "isCss": true,
       "hash": "9b4a1b2",
-      "hashFilename": "mock2.min.9b4a1b2.css",
-      "destFolder": "spec/fixtures/target/subfolder"
+      "hashedFilename": "mock2.min.9b4a1b2.css",
+      "destFolder": "spec/fixtures/target/subfolder",
+      "destPath": "spec/fixtures/target/subfolder/mock2.min.9b4a1b2.css"
    }
 ]

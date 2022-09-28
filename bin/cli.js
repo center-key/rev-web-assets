@@ -49,9 +49,12 @@ const printReport = (results, summaryOnly) => {
    const arrow =     { big: chalk.gray.bold('➤➤➤'), little: chalk.gray.bold(' ⟹  ') };  //extra space for alignment
    const infoColor = results.count ? chalk.white : chalk.red.bold;
    const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
-   const logDetail = (detail) => log(name, chalk.white(detail.origin), arrow.little,
-      chalk.green(detail.destFolder + '/' + (detail.hashFilename ?? detail.filename)));
    log(name, source, arrow.big, target, info);
+   const logDetail = (detail) => {
+      const origin = chalk.white(detail.origin.substring(results.source.length + 1));
+      const dest =   chalk.green(detail.destPath.substring(results.target.length + 1));
+      log(name, origin, arrow.little, dest);
+      };
    if (!summaryOnly)
       results.manifest.forEach(logDetail);
    };

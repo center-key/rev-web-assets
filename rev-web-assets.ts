@@ -12,14 +12,14 @@ export type Options = {
 export type ManifestDetail = {
    origin:          string,         //source path of asset file
    filename:        string,         //source filename of asset file
-   extension:       string,         //file extension of asset file
    canonical:       string,         //normalized path used to lookup asset in manifest
    canonicalFolder: string,         //directory of the normalized path of the asset file
    isHtml:          boolean,        //true if the asset file is HTML
    isCss:           boolean,        //true if the asset file is CSS
    hash:            string | null,  //seven digit cache busting hex humber that changes if the asset changes
-   hashFilename:    string | null,  //filename of the asset with hash inserted before the file extension
+   hashedFilename:  string | null,  //filename of the asset with hash inserted before the file extension
    destFolder:      string,         //directory of the target asset
+   destPath:        string | null,  //folder and filename of the target asset
    };
 export type Manifest = ManifestDetail[];  //list of assets
 export type Results = {
@@ -38,7 +38,7 @@ const revWebAssets = {
          if (fs.statSync(item).isFile())
             files.push(slash(item));
          else
-         fs.readdirSync(item).forEach((nestedItem: string) =>
+            fs.readdirSync(item).forEach((nestedItem: string) =>
                process(path.join(item, nestedItem)));
          };
       process(path.normalize(folder));
@@ -57,14 +57,14 @@ const revWebAssets = {
          return {
             origin:          file,
             filename:        path.basename(file),
-            extension:       fileExtension,
             canonicalFolder: canonicalFolder,
             canonical:       canonical,
             isHtml:          isHtml,
             isCss:           isCss,
             hash:            null,
-            hashFilename:    null,
+            hashedFilename:  null,
             destFolder:      destFolder,
+            destPath:        null,
             };
          }
       const manifest = files.map(process);
@@ -74,14 +74,14 @@ const revWebAssets = {
    hashFilename(filename: string, hash: string | null): string {
       const lastDot = /\.(?=[^.]*$)/;
       return !hash ? filename : filename.replace(lastDot, '.' + hash + '.');
-      // return filename.replace('.', '.' + hash + '.');
       },
 
    calcAssetHash(detail: ManifestDetail): void {
-      const hashLen =  7;
-      const contents = fs.readFileSync(detail.origin).toString();
-      detail.hash = crypto.createHash('md5').update(contents).digest('hex').substring(0, hashLen);
-      detail.hashFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
+      const hashLen =         7;
+      const contents =        fs.readFileSync(detail.origin).toString();
+      const hash =            crypto.createHash('md5').update(contents).digest('hex');
+      detail.hash =           hash.substring(0, hashLen);
+      detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
       },
 
    hashAssetPath(manifest: Manifest, detail: ManifestDetail) {
@@ -107,8 +107,9 @@ const revWebAssets = {
          const hashedContent = content
             .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail))
             .replace(srcPattern,  revWebAssets.hashAssetPath(manifest, detail));
+         detail.destPath = detail.destFolder + '/' + detail.filename;
          fs.ensureDirSync(detail.destFolder);
-         fs.writeFileSync(detail.destFolder + '/' + detail.filename, hashedContent);
+         fs.writeFileSync(detail.destPath, hashedContent);
          };
       manifest.filter(detail => detail.isHtml).forEach(process);
       },
@@ -120,18 +121,18 @@ const revWebAssets = {
          const content = fs.readFileSync(detail.origin, 'utf-8');
          const hashedContent = content
             .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
-         const filename = detail.hashFilename ?? detail.filename;
+         detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
          fs.ensureDirSync(detail.destFolder);
-         fs.writeFileSync(detail.destFolder + '/' + filename, hashedContent);
+         fs.writeFileSync(detail.destPath, hashedContent);
          };
       manifest.filter(detail => detail.isCss).forEach(process);
       },
 
    copyAssets(manifest: Manifest) {
       const process = (detail: ManifestDetail) => {
-         const filename = detail.hashFilename ?? detail.filename;
+         detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
          fs.ensureDirSync(detail.destFolder);
-         fs.copyFileSync(detail.origin, detail.destFolder + '/' + filename);
+         fs.copyFileSync(detail.origin, detail.destPath);
          };
       manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
       },
