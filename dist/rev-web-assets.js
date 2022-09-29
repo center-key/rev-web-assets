@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs-extra';
@@ -46,7 +46,7 @@ const revWebAssets = {
         return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
     },
     calcAssetHash(detail) {
-        const hashLen = 7;
+        const hashLen = 8;
         const contents = fs.readFileSync(detail.origin).toString();
         const hash = crypto.createHash('md5').update(contents).digest('hex');
         detail.hash = hash.substring(0, hashLen);

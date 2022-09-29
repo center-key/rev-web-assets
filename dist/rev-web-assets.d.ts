@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export declare type Settings = {
     cd: string | null;

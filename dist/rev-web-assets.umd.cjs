@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -61,7 +61,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             return (0, slash_1.default)(path_1.default.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
         },
         calcAssetHash(detail) {
-            const hashLen = 7;
+            const hashLen = 8;
             const contents = fs_extra_1.default.readFileSync(detail.origin).toString();
             const hash = crypto_1.default.createHash('md5').update(contents).digest('hex');
             detail.hash = hash.substring(0, hashLen);
