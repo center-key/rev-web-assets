@@ -17,7 +17,7 @@
 //    $ cd rev-web-assets
 //    $ npm install
 //    $ npm test
-//    $ node bin/cli.js --cd=spec/fixtures source target
+//    $ node bin/cli.js --cd=spec/fixtures source target --meta-content-base=https://example.net
 
 // Imports
 import { revWebAssets } from '../dist/rev-web-assets.js';

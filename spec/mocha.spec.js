@@ -8,7 +8,10 @@ import assert from 'assert';
 
 // Setup
 import { revWebAssets } from '../dist/rev-web-assets.js';
-const options = { saveManifest: true };
+const options = {
+   metaContentBase: 'https://example.net',
+   saveManifest:    true,
+   };
 let results;
 before(() =>
    results = revWebAssets.revision('spec/fixtures/source', 'spec/fixtures/target', options));

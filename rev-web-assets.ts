@@ -8,7 +8,7 @@ import slash  from 'slash';
 export type Settings = {
    cd:              string | null,  //change working directory
    metaContentBase: string | null,  //make og:image or other url absolute
-   saveManifest:    boolean,       //output the list of files to manifest.json in the target folder
+   saveManifest:    boolean,        //output the list of files to manifest.json in the target folder
    };
 export type Options = Partial<Settings>;
 export type ManifestDetail = {
@@ -100,7 +100,7 @@ const revWebAssets = {
          const hashedUri = () => {
             const hashed = revWebAssets.hashFilename(uri, assetDetail!.hash);
             const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
-            return noBase ? hashed : settings.metaContentBase + '/' + hashed;
+            return slash(path.normalize(noBase ? hashed : settings.metaContentBase + '/' + hashed));
             };
          return assetDetail?.hash ? pre + hashedUri() + post : matched;
          };
