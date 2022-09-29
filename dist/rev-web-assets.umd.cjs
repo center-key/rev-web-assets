@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -58,7 +58,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         },
         hashFilename(filename, hash) {
             const lastDot = /\.(?=[^.]*$)/;
-            return !hash ? filename : filename.replace(lastDot, '.' + hash + '.');
+            return (0, slash_1.default)(path_1.default.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
         },
         calcAssetHash(detail) {
             const hashLen = 7;
@@ -67,7 +67,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             detail.hash = hash.substring(0, hashLen);
             detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
         },
-        hashAssetPath(manifest, detail) {
+        hashAssetPath(manifest, detail, settings) {
             return (matched, pre, uri, post) => {
                 const ext = path_1.default.extname(uri);
                 const doNotHash = uri.includes(':') || ['.html', '.htm'].includes(ext) || ext.length < 2;
@@ -76,30 +76,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 const assetDetail = doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
                 if (assetDetail && !assetDetail.hash)
                     revWebAssets.calcAssetHash(assetDetail);
-                return (assetDetail === null || assetDetail === void 0 ? void 0 : assetDetail.hash) ? pre + revWebAssets.hashFilename(uri, assetDetail.hash) + post : matched;
+                const hashedUri = () => {
+                    const hashed = revWebAssets.hashFilename(uri, assetDetail.hash);
+                    const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
+                    const trailingSlashes = /\/*$/;
+                    return noBase ? hashed : settings.metaContentBase.replace(trailingSlashes, '/') + hashed;
+                };
+                return (assetDetail === null || assetDetail === void 0 ? void 0 : assetDetail.hash) ? pre + hashedUri() + post : matched;
             };
         },
-        processHtml(manifest) {
+        processHtml(manifest, settings) {
             const hrefPattern = /(<[a-z]{1,4}\s.*href=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
             const srcPattern = /(<[a-z]{3,6}\s.*src=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
+            const metaPattern = /(<meta\s.*content=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
             const process = (detail) => {
                 const content = fs_extra_1.default.readFileSync(detail.origin, 'utf-8');
                 const hashedContent = content
-                    .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail))
-                    .replace(srcPattern, revWebAssets.hashAssetPath(manifest, detail));
+                    .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
+                    .replace(srcPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
+                    .replace(metaPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
                 detail.destPath = detail.destFolder + '/' + detail.filename;
                 fs_extra_1.default.ensureDirSync(detail.destFolder);
                 fs_extra_1.default.writeFileSync(detail.destPath, hashedContent);
             };
             manifest.filter(detail => detail.isHtml).forEach(process);
         },
-        processCss(manifest) {
+        processCss(manifest, settings) {
             const urlPattern = /(url\(["']?)([^)('"]*)(["']?\))/ig;
             const process = (detail) => {
                 var _a;
                 const content = fs_extra_1.default.readFileSync(detail.origin, 'utf-8');
                 const hashedContent = content
-                    .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
+                    .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
                 detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
                 fs_extra_1.default.ensureDirSync(detail.destFolder);
                 fs_extra_1.default.writeFileSync(detail.destPath, hashedContent);
@@ -118,6 +126,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         revision(sourceFolder, targetFolder, options) {
             const defaults = {
                 cd: null,
+                metaContentBase: null,
                 saveManifest: false,
             };
             const settings = Object.assign(Object.assign({}, defaults), options);
@@ -138,8 +147,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             if (errorMessage)
                 throw Error('[rev-web-assets] ' + errorMessage);
             const manifest = revWebAssets.manifest(source, target);
-            revWebAssets.processHtml(manifest);
-            revWebAssets.processCss(manifest);
+            revWebAssets.processHtml(manifest, settings);
+            revWebAssets.processCss(manifest, settings);
             revWebAssets.copyAssets(manifest);
             const manifestPath = path_1.default.join(target, 'manifest.json');
             if (settings.saveManifest)

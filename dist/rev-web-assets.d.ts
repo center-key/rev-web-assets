@@ -1,9 +1,11 @@
-//! rev-web-assets v0.0.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.0.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
-export declare type Options = {
-    cd?: string;
-    saveManifest?: boolean;
+export declare type Settings = {
+    cd: string | null;
+    metaContentBase: string | null;
+    saveManifest: boolean;
 };
+export declare type Options = Partial<Settings>;
 export declare type ManifestDetail = {
     origin: string;
     filename: string;
@@ -40,9 +42,9 @@ declare const revWebAssets: {
     }[];
     hashFilename(filename: string, hash: string | null): string;
     calcAssetHash(detail: ManifestDetail): void;
-    hashAssetPath(manifest: Manifest, detail: ManifestDetail): (matched: string, pre: string, uri: string, post: string) => string;
-    processHtml(manifest: ManifestDetail[]): void;
-    processCss(manifest: ManifestDetail[]): void;
+    hashAssetPath(manifest: Manifest, detail: ManifestDetail, settings: Settings): (matched: string, pre: string, uri: string, post: string) => string;
+    processHtml(manifest: ManifestDetail[], settings: Settings): void;
+    processCss(manifest: ManifestDetail[], settings: Settings): void;
     copyAssets(manifest: Manifest): void;
     revision(sourceFolder: string, targetFolder: string, options?: Options): Results;
 };
