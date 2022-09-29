@@ -48,9 +48,18 @@ describe('Library module', () => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 describe('Generated manifest', () => {
 
-   it('contains the correct list of files', () => {
-      const actual = results.manifest;
-      const expected = JSON.parse(readFileSync('spec/fixtures/expected-manifest.json', 'utf-8'));
+   it('contains a list of 8 files', () => {
+      const manifest = JSON.parse(readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
+      const actual = {
+         files:        manifest.length,
+         results:      results.count,
+         resultsFiles: results.manifest.length,
+         };
+      const expected = {
+         files:        8,
+         results:      8,
+         resultsFiles: 8,
+         };
       assertDeepStrictEqual(actual, expected);
       });
 
@@ -64,11 +73,11 @@ describe('Target folder', () => {
       const expected = [
          'spec/fixtures/target/graphics/mock1.ad41b20.jpg',
          'spec/fixtures/target/manifest.json',
-         'spec/fixtures/target/mock1.a2fcaff.js',
+         'spec/fixtures/target/mock1.189c636.js',
          'spec/fixtures/target/mock1.html',
          'spec/fixtures/target/mock1.min.c2f4e84.css',
          'spec/fixtures/target/subfolder/graphics/mock2.9e7dfdb.jpg',
-         'spec/fixtures/target/subfolder/mock2.868e0e2.js',
+         'spec/fixtures/target/subfolder/mock2.09d6bb5.js',
          'spec/fixtures/target/subfolder/mock2.html',
          'spec/fixtures/target/subfolder/mock2.min.9b4a1b2.css',
          ];

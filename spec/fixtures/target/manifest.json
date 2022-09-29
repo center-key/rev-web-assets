@@ -30,10 +30,10 @@
       "canonical": "mock1.js",
       "isHtml": false,
       "isCss": false,
-      "hash": "a2fcaff",
-      "hashedFilename": "mock1.a2fcaff.js",
+      "hash": "189c636",
+      "hashedFilename": "mock1.189c636.js",
       "destFolder": "spec/fixtures/target",
-      "destPath": "spec/fixtures/target/mock1.a2fcaff.js"
+      "destPath": "spec/fixtures/target/mock1.189c636.js"
    },
    {
       "origin": "spec/fixtures/source/mock1.min.css",
@@ -78,10 +78,10 @@
       "canonical": "subfolder/mock2.js",
       "isHtml": false,
       "isCss": false,
-      "hash": "868e0e2",
-      "hashedFilename": "mock2.868e0e2.js",
+      "hash": "09d6bb5",
+      "hashedFilename": "mock2.09d6bb5.js",
       "destFolder": "spec/fixtures/target/subfolder",
-      "destPath": "spec/fixtures/target/subfolder/mock2.868e0e2.js"
+      "destPath": "spec/fixtures/target/subfolder/mock2.09d6bb5.js"
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.min.css",

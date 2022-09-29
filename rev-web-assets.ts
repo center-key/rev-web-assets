@@ -5,10 +5,12 @@ import fs     from 'fs-extra';
 import path   from 'path';
 import slash  from 'slash';
 
-export type Options = {
-   cd?:           string,   //change working directory
-   saveManifest?: boolean,  //output the list of files to manifest.json in the target folder
+export type Settings = {
+   cd:              string | null,  //change working directory
+   metaContentBase: string | null,  //make og:image or other url absolute
+   saveManifest:    boolean,       //output the list of files to manifest.json in the target folder
    };
+export type Options = Partial<Settings>;
 export type ManifestDetail = {
    origin:          string,         //source path of asset file
    filename:        string,         //source filename of asset file
@@ -84,8 +86,10 @@ const revWebAssets = {
       detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
       },
 
-   hashAssetPath(manifest: Manifest, detail: ManifestDetail) {
+   hashAssetPath(manifest: Manifest, detail: ManifestDetail, settings: Settings) {
       return (matched: string, pre: string, uri: string, post: string): string => {
+         // Example matched broken into 3 parts:
+         //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
          const ext =           path.extname(uri);
          const doNotHash =     uri.includes(':') || ['.html', '.htm'].includes(ext) || ext.length < 2;
          const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
@@ -93,20 +97,28 @@ const revWebAssets = {
          const assetDetail =   doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
          if (assetDetail && !assetDetail.hash)
             revWebAssets.calcAssetHash(assetDetail);
-         return assetDetail?.hash ? pre + revWebAssets.hashFilename(uri, assetDetail.hash) + post : matched;
+         const hashedUri = () => {
+            const hashed = revWebAssets.hashFilename(uri, assetDetail!.hash);
+            const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
+            return noBase ? hashed : settings.metaContentBase + '/' + hashed;
+            };
+         return assetDetail?.hash ? pre + hashedUri() + post : matched;
          };
       },
 
-   processHtml(manifest: ManifestDetail[]) {
+   processHtml(manifest: ManifestDetail[], settings: Settings) {
       // href: <a>, <area>, <link>, <base>
-      // src: <img>, <script>, <iframe>, <audio>, <video>, <embed>, <input>, <source>, <track>
+      // src:  <img>, <script>, <iframe>, <audio>, <video>, <embed>, <input>, <source>, <track>
+      // meta: <meta property=og:image content=graphics/logo-card.png>
       const hrefPattern = /(<[a-z]{1,4}\s.*href=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
       const srcPattern =  /(<[a-z]{3,6}\s.*src=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
+      const metaPattern =  /(<meta\s.*content=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
       const process = (detail: ManifestDetail) => {
          const content = fs.readFileSync(detail.origin, 'utf-8');
          const hashedContent = content
-            .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail))
-            .replace(srcPattern,  revWebAssets.hashAssetPath(manifest, detail));
+            .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
+            .replace(srcPattern,  revWebAssets.hashAssetPath(manifest, detail, settings))
+            .replace(metaPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
          detail.destPath = detail.destFolder + '/' + detail.filename;
          fs.ensureDirSync(detail.destFolder);
          fs.writeFileSync(detail.destPath, hashedContent);
@@ -114,13 +126,13 @@ const revWebAssets = {
       manifest.filter(detail => detail.isHtml).forEach(process);
       },
 
-   processCss(manifest: ManifestDetail[]) {
+   processCss(manifest: ManifestDetail[], settings: Settings) {
       // url(../background.jpg)
       const urlPattern = /(url\(["']?)([^)('"]*)(["']?\))/ig
       const process = (detail: ManifestDetail) => {
          const content = fs.readFileSync(detail.origin, 'utf-8');
          const hashedContent = content
-            .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail));
+            .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
          detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
          fs.ensureDirSync(detail.destFolder);
          fs.writeFileSync(detail.destPath, hashedContent);
@@ -139,8 +151,9 @@ const revWebAssets = {
 
    revision(sourceFolder: string, targetFolder: string, options?: Options): Results {
       const defaults = {
-         cd:           null,
-         saveManifest: false,
+         cd:              null,
+         metaContentBase: null,
+         saveManifest:    false,
          };
       const settings = { ...defaults, ...options };
       const startTime = Date.now();
@@ -162,8 +175,8 @@ const revWebAssets = {
       if (errorMessage)
          throw Error('[rev-web-assets] ' + errorMessage);
       const manifest = revWebAssets.manifest(source, target);
-      revWebAssets.processHtml(manifest);
-      revWebAssets.processCss(manifest);
+      revWebAssets.processHtml(manifest, settings);
+      revWebAssets.processCss(manifest, settings);
       revWebAssets.copyAssets(manifest);
       const manifestPath = path.join(target, 'manifest.json');
       if (settings.saveManifest)

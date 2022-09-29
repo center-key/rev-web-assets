@@ -25,7 +25,7 @@ import chalk            from 'chalk';
 import log              from 'fancy-log';
 
 // Parameters
-const validFlags =  ['cd', 'manifest', 'quiet', 'summary'];
+const validFlags =  ['cd', 'manifest', 'meta-content-base', 'quiet', 'summary'];
 const args =        process.argv.slice(2);
 const flags =       args.filter(arg => /^--/.test(arg));
 const flagMap =     Object.fromEntries(flags.map(flag => flag.replace(/^--/, '').split('=')));
@@ -68,7 +68,11 @@ const error =
    null;
 if (error)
    throw Error('[rev-web-assets] ' + error);
-const options = { cd: flagMap.cd ?? null, saveManifest: mode.manifest };
+const options = {
+   cd:              flagMap.cd ?? null,
+   metaContentBase: flagMap['meta-content-base'] ?? null,
+   saveManifest:    mode.manifest,
+   };
 const results = revWebAssets.revision(source, target, options);
 if (!mode.quiet)
    printReport(results, mode.summary);

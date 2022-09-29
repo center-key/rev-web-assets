@@ -8,7 +8,7 @@ _Revision web asset filenames with cache busting content hash fingerprints_
 [![Vulnerabilities](https://snyk.io/test/github/center-key/rev-web-assets/badge.svg)](https://snyk.io/test/github/center-key/rev-web-assets)
 [![Build](https://github.com/center-key/rev-web-assets/workflows/build/badge.svg)](https://github.com/center-key/rev-web-assets/actions/workflows/run-spec-on-push.yaml)
 
-**rev-web-assets** updates the asset filenames of a website to include a seven character hex hash.  The command's console output includes a timestamp and formatting helpful in build systems.
+**rev-web-assets** updates the asset filenames of a website to contain a seven character hex hash.  The command's console output includes a timestamp and formatting helpful in build systems.
 
 <img src=https://raw.githubusercontent.com/center-key/rev-web-assets/main/screenshot.png
 width=800 alt=screenshot>
@@ -45,17 +45,29 @@ $ rev-web-assets rev-web-assets build/dev/web-app build/prod/web-app
 
 ### 3. CLI Flags
 Command-line flags:
-| Flag         | Description                                         | Value      |
-| ------------ | --------------------------------------------------- | ---------- |
-| `--cd`       | Change working directory before starting starting.  | **string** |
-| `--manifest` | Output the list of files to: **manifest.json**      | N/A        |
-| `--quiet`    | Suppress informational messages.                    | N/A        |
-| `--summary`  | Only print out the single line summary message.     | N/A        |
+| Flag                  | Description                                        | Value      |
+| --------------------- | -------------------------------------------------- | ---------- |
+| `--cd`                | Change working directory before starting starting. | **string** |
+| `--manifest`          | Output the list of files to: **manifest.json**     | N/A        |
+| `--meta-content-base` | Make og:image or other url absolute                | **string** |
+| `--quiet`             | Suppress informational messages.                   | N/A        |
+| `--summary`           | Only print out the single line summary message.    | N/A        |
 
 Examples:
    - `rev-web-assets --cd=web source target`  &nbsp; Same as: `rev-web-assets web/source web/target`
    - `rev-web-assets source target --quiet`   &nbsp; Displays no output.
    - `rev-web-assets source target --summary` &nbsp; Displays the summary but not the individual filenames.
+   - `rev-web-assets source target --meta-content-base=https://example.net` &nbsp; Prepends the base to `<meta>` URLs.
+
+URLs in `<meta>` tag `content` attributes generally need to be absolute URLs.&nbsp;
+Setting the `--meta-content-base` flag to `https://example.net` will transform the line of HTML from:
+```html
+<meta property=og:image content="logo.png">
+```
+into something like:
+```html
+<meta property=og:image content="https://example.net/logo.ad41b20.png">
+```
 
 ## C) Application Code
 Even though **rev-web-assets** is primarily intended for build scripts, the package can easily be used in ESM and TypeScript projects.
