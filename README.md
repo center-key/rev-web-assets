@@ -8,7 +8,7 @@ _Revision web asset filenames with cache busting content hash fingerprints_
 [![Vulnerabilities](https://snyk.io/test/github/center-key/rev-web-assets/badge.svg)](https://snyk.io/test/github/center-key/rev-web-assets)
 [![Build](https://github.com/center-key/rev-web-assets/workflows/build/badge.svg)](https://github.com/center-key/rev-web-assets/actions/workflows/run-spec-on-push.yaml)
 
-**rev-web-assets** updates the asset filenames of a website to contain a seven character hex hash.  The command's console output includes a timestamp and formatting helpful in build systems.
+**rev-web-assets** updates the asset filenames of a website to contain a eight-digit hex hash.  The command's console output includes a timestamp and formatting helpful in build systems.
 
 <img src=https://raw.githubusercontent.com/center-key/rev-web-assets/main/screenshot.png
 width=800 alt=screenshot>

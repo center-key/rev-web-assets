@@ -18,7 +18,7 @@ export type ManifestDetail = {
    canonicalFolder: string,         //directory of the normalized path of the asset file
    isHtml:          boolean,        //true if the asset file is HTML
    isCss:           boolean,        //true if the asset file is CSS
-   hash:            string | null,  //seven digit cache busting hex humber that changes if the asset changes
+   hash:            string | null,  //eight-digit cache busting hex humber that changes if the asset changes
    hashedFilename:  string | null,  //filename of the asset with hash inserted before the file extension
    destFolder:      string,         //directory of the target asset
    destPath:        string | null,  //folder and filename of the target asset
@@ -81,7 +81,7 @@ const revWebAssets = {
       },
 
    calcAssetHash(detail: ManifestDetail): void {
-      const hashLen =         7;
+      const hashLen =         8;
       const contents =        fs.readFileSync(detail.origin).toString();
       const hash =            crypto.createHash('md5').update(contents).digest('hex');
       detail.hash =           hash.substring(0, hashLen);

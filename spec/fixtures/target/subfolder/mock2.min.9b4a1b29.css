@@ -3,8 +3,8 @@ section#two.hide-bad >figure.bad {
    display: none;
    }
 article >p:nth-of-type(3) {
-   background-image: url(../graphics/mock1.ad41b20.jpg);
+   background-image: url(../graphics/mock1.ad41b203.jpg);
    }
 article >p:nth-of-type(4) {
-   background-image: url(graphics/mock2.9e7dfdb.jpg);
+   background-image: url(graphics/mock2.9e7dfdbd.jpg);
    }

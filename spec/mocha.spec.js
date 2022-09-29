@@ -74,15 +74,15 @@ describe('Target folder', () => {
    it('contains the correct files with the correct revisioned filenames', () => {
       const actual = revWebAssets.readDirSyncRecursive('spec/fixtures/target');
       const expected = [
-         'spec/fixtures/target/graphics/mock1.ad41b20.jpg',
+         'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
          'spec/fixtures/target/manifest.json',
-         'spec/fixtures/target/mock1.189c636.js',
+         'spec/fixtures/target/mock1.189c6361.js',
          'spec/fixtures/target/mock1.html',
-         'spec/fixtures/target/mock1.min.c2f4e84.css',
-         'spec/fixtures/target/subfolder/graphics/mock2.9e7dfdb.jpg',
-         'spec/fixtures/target/subfolder/mock2.09d6bb5.js',
+         'spec/fixtures/target/mock1.min.c2f4e84e.css',
+         'spec/fixtures/target/subfolder/graphics/mock2.9e7dfdbd.jpg',
+         'spec/fixtures/target/subfolder/mock2.09d6bb59.js',
          'spec/fixtures/target/subfolder/mock2.html',
-         'spec/fixtures/target/subfolder/mock2.min.9b4a1b2.css',
+         'spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css'
          ];
       assertDeepStrictEqual(actual, expected);
       });
