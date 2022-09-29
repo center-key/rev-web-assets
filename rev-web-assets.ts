@@ -74,8 +74,10 @@ const revWebAssets = {
       },
 
    hashFilename(filename: string, hash: string | null): string {
+      // Example:
+      //    './graphics/logo.png' + 'bd41b20' --> 'graphics/logo.bd41b20.png'
       const lastDot = /\.(?=[^.]*$)/;
-      return !hash ? filename : filename.replace(lastDot, '.' + hash + '.');
+      return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
       },
 
    calcAssetHash(detail: ManifestDetail): void {
@@ -100,7 +102,8 @@ const revWebAssets = {
          const hashedUri = () => {
             const hashed = revWebAssets.hashFilename(uri, assetDetail!.hash);
             const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
-            return slash(path.normalize(noBase ? hashed : settings.metaContentBase + '/' + hashed));
+            const trailingSlashes = /\/*$/;
+            return noBase ? hashed : settings.metaContentBase!.replace(trailingSlashes, '/') + hashed;
             };
          return assetDetail?.hash ? pre + hashedUri() + post : matched;
          };
