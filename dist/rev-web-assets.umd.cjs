@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -9,30 +9,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "crypto", "fs-extra", "path", "slash"], factory);
+        define(["require", "exports", "crypto", "fs", "path", "slash"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.revWebAssets = void 0;
     const crypto_1 = __importDefault(require("crypto"));
-    const fs_extra_1 = __importDefault(require("fs-extra"));
+    const fs_1 = __importDefault(require("fs"));
     const path_1 = __importDefault(require("path"));
     const slash_1 = __importDefault(require("slash"));
     const revWebAssets = {
-        readDirSyncRecursive(folder) {
+        readFolderRecursive(folder) {
             const files = [];
             const process = (item) => {
-                if (fs_extra_1.default.statSync(item).isFile())
+                if (fs_1.default.statSync(item).isFile())
                     files.push((0, slash_1.default)(item));
                 else
-                    fs_extra_1.default.readdirSync(item).forEach((nestedItem) => process(path_1.default.join(item, nestedItem)));
+                    fs_1.default.readdirSync(item).forEach((nestedItem) => process(path_1.default.join(item, nestedItem)));
             };
             process(path_1.default.normalize(folder));
             return files.sort();
         },
         manifest(source, target) {
-            const files = revWebAssets.readDirSyncRecursive(source);
+            const files = revWebAssets.readFolderRecursive(source);
             const process = (file) => {
                 const fileExtension = path_1.default.extname(file).toLowerCase();
                 const isHtml = ['.html', '.htm'].includes(fileExtension);
@@ -62,7 +62,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         },
         calcAssetHash(detail) {
             const hashLen = 8;
-            const contents = fs_extra_1.default.readFileSync(detail.origin).toString();
+            const contents = fs_1.default.readFileSync(detail.origin).toString();
             const hash = crypto_1.default.createHash('md5').update(contents).digest('hex');
             detail.hash = hash.substring(0, hashLen);
             detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
@@ -90,14 +90,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const srcPattern = /(<[a-z]{3,6}\s.*src=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
             const metaPattern = /(<meta\s.*content=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
             const process = (detail) => {
-                const content = fs_extra_1.default.readFileSync(detail.origin, 'utf-8');
+                const content = fs_1.default.readFileSync(detail.origin, 'utf-8');
                 const hashedContent = content
                     .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
                     .replace(srcPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
                     .replace(metaPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
                 detail.destPath = detail.destFolder + '/' + detail.filename;
-                fs_extra_1.default.ensureDirSync(detail.destFolder);
-                fs_extra_1.default.writeFileSync(detail.destPath, hashedContent);
+                fs_1.default.mkdirSync(detail.destFolder, { recursive: true });
+                fs_1.default.writeFileSync(detail.destPath, hashedContent);
             };
             manifest.filter(detail => detail.isHtml).forEach(process);
         },
@@ -105,12 +105,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const urlPattern = /(url\(["']?)([^)('"]*)(["']?\))/ig;
             const process = (detail) => {
                 var _a;
-                const content = fs_extra_1.default.readFileSync(detail.origin, 'utf-8');
+                const content = fs_1.default.readFileSync(detail.origin, 'utf-8');
                 const hashedContent = content
                     .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
                 detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
-                fs_extra_1.default.ensureDirSync(detail.destFolder);
-                fs_extra_1.default.writeFileSync(detail.destPath, hashedContent);
+                fs_1.default.mkdirSync(detail.destFolder, { recursive: true });
+                fs_1.default.writeFileSync(detail.destPath, hashedContent);
             };
             manifest.filter(detail => detail.isCss).forEach(process);
         },
@@ -118,8 +118,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const process = (detail) => {
                 var _a;
                 detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
-                fs_extra_1.default.ensureDirSync(detail.destFolder);
-                fs_extra_1.default.copyFileSync(detail.origin, detail.destPath);
+                fs_1.default.mkdirSync(detail.destFolder, { recursive: true });
+                fs_1.default.copyFileSync(detail.origin, detail.destPath);
             };
             manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
         },
@@ -136,13 +136,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const source = normalize(startFolder + sourceFolder);
             const target = normalize(startFolder + targetFolder);
             if (targetFolder)
-                fs_extra_1.default.ensureDirSync(target);
+                fs_1.default.mkdirSync(target, { recursive: true });
             const errorMessage = !sourceFolder ? 'Must specify the source folder path.' :
                 !targetFolder ? 'Must specify the target folder path.' :
-                    !fs_extra_1.default.pathExistsSync(source) ? 'Source folder does not exist: ' + source :
-                        !fs_extra_1.default.pathExistsSync(target) ? 'Target folder cannot be created: ' + target :
-                            !fs_extra_1.default.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
-                                !fs_extra_1.default.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
+                    !fs_1.default.existsSync(source) ? 'Source folder does not exist: ' + source :
+                        !fs_1.default.existsSync(target) ? 'Target folder cannot be created: ' + target :
+                            !fs_1.default.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
+                                !fs_1.default.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
                                     null;
             if (errorMessage)
                 throw Error('[rev-web-assets] ' + errorMessage);
@@ -152,7 +152,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             revWebAssets.copyAssets(manifest);
             const manifestPath = path_1.default.join(target, 'manifest.json');
             if (settings.saveManifest)
-                fs_extra_1.default.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   '));
+                fs_1.default.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   '));
             return {
                 source: source,
                 target: target,

@@ -1,4 +1,4 @@
-//! rev-web-assets v0.0.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export declare type Settings = {
     cd: string | null;
@@ -27,7 +27,7 @@ export declare type Results = {
     manifest: Manifest;
 };
 declare const revWebAssets: {
-    readDirSyncRecursive(folder: string): string[];
+    readFolderRecursive(folder: string): string[];
     manifest(source: string, target: string): {
         origin: string;
         filename: string;
