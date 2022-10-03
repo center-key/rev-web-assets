@@ -3,7 +3,7 @@
 
 // Imports
 import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
-import { readdirSync, readFileSync } from 'fs';
+import fs from 'fs';
 import assert from 'assert';
 
 // Setup
@@ -20,7 +20,7 @@ before(() =>
 describe('The "dist" folder', () => {
 
    it('contains the correct files', () => {
-      const actual = readdirSync('dist');
+      const actual = fs.readdirSync('dist').sort();
       const expected = [
          'rev-web-assets.d.ts',
          'rev-web-assets.js',
@@ -52,7 +52,7 @@ describe('Library module', () => {
 describe('Generated manifest', () => {
 
    it('contains a list of 8 files', () => {
-      const manifest = JSON.parse(readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
+      const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
       const actual = {
          files:        manifest.length,
          results:      results.count,
@@ -72,7 +72,7 @@ describe('Generated manifest', () => {
 describe('Target folder', () => {
 
    it('contains the correct files with the correct revisioned filenames', () => {
-      const actual = revWebAssets.readDirSyncRecursive('spec/fixtures/target');
+      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target');
       const expected = [
          'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
          'spec/fixtures/target/manifest.json',

@@ -1,7 +1,7 @@
 // rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
-import fs     from 'fs-extra';
+import fs     from 'fs';
 import path   from 'path';
 import slash  from 'slash';
 
@@ -34,7 +34,7 @@ export type Results = {
 
 const revWebAssets = {
 
-   readDirSyncRecursive(folder: string): string[] {
+   readFolderRecursive(folder: string): string[] {
       const files: string[] = [];
       const process = (item: string) => {
          if (fs.statSync(item).isFile())
@@ -48,7 +48,7 @@ const revWebAssets = {
       },
 
    manifest(source: string, target: string) {
-      const files = revWebAssets.readDirSyncRecursive(source);
+      const files = revWebAssets.readFolderRecursive(source);
       const process = (file: string) => {
          const fileExtension = path.extname(file).toLowerCase();
          const isHtml =        ['.html', '.htm'].includes(fileExtension);
@@ -123,7 +123,7 @@ const revWebAssets = {
             .replace(srcPattern,  revWebAssets.hashAssetPath(manifest, detail, settings))
             .replace(metaPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
          detail.destPath = detail.destFolder + '/' + detail.filename;
-         fs.ensureDirSync(detail.destFolder);
+         fs.mkdirSync(detail.destFolder, { recursive: true });
          fs.writeFileSync(detail.destPath, hashedContent);
          };
       manifest.filter(detail => detail.isHtml).forEach(process);
@@ -137,7 +137,7 @@ const revWebAssets = {
          const hashedContent = content
             .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
          detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
-         fs.ensureDirSync(detail.destFolder);
+         fs.mkdirSync(detail.destFolder, { recursive: true });
          fs.writeFileSync(detail.destPath, hashedContent);
          };
       manifest.filter(detail => detail.isCss).forEach(process);
@@ -146,7 +146,7 @@ const revWebAssets = {
    copyAssets(manifest: Manifest) {
       const process = (detail: ManifestDetail) => {
          detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
-         fs.ensureDirSync(detail.destFolder);
+         fs.mkdirSync(detail.destFolder, { recursive: true });
          fs.copyFileSync(detail.origin, detail.destPath);
          };
       manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
@@ -166,12 +166,12 @@ const revWebAssets = {
       const source =      normalize(startFolder + sourceFolder);
       const target =      normalize(startFolder + targetFolder);
       if (targetFolder)
-         fs.ensureDirSync(target);
+         fs.mkdirSync(target, { recursive: true });
       const errorMessage =
          !sourceFolder ?                      'Must specify the source folder path.' :
          !targetFolder ?                      'Must specify the target folder path.' :
-         !fs.pathExistsSync(source) ?         'Source folder does not exist: ' + source :
-         !fs.pathExistsSync(target) ?         'Target folder cannot be created: ' + target :
+         !fs.existsSync(source) ?         'Source folder does not exist: ' + source :
+         !fs.existsSync(target) ?         'Target folder cannot be created: ' + target :
          !fs.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
          !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
          null;
