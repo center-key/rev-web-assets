@@ -48,6 +48,18 @@
       "destPath": "spec/fixtures/target/mock1.min.c2f4e84e.css"
    },
    {
+      "origin": "spec/fixtures/source/mock1.php",
+      "filename": "mock1.php",
+      "canonicalFolder": "",
+      "canonical": "mock1.php",
+      "isHtml": true,
+      "isCss": false,
+      "hash": null,
+      "hashedFilename": null,
+      "destFolder": "spec/fixtures/target",
+      "destPath": "spec/fixtures/target/mock1.php"
+   },
+   {
       "origin": "spec/fixtures/source/subfolder/graphics/mock2.jpg",
       "filename": "mock2.jpg",
       "canonicalFolder": "subfolder/graphics",
@@ -94,5 +106,17 @@
       "hashedFilename": "mock2.min.9b4a1b29.css",
       "destFolder": "spec/fixtures/target/subfolder",
       "destPath": "spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css"
+   },
+   {
+      "origin": "spec/fixtures/source/subfolder/mock2.php",
+      "filename": "mock2.php",
+      "canonicalFolder": "subfolder",
+      "canonical": "subfolder/mock2.php",
+      "isHtml": true,
+      "isCss": false,
+      "hash": null,
+      "hashedFilename": null,
+      "destFolder": "spec/fixtures/target/subfolder",
+      "destPath": "spec/fixtures/target/subfolder/mock2.php"
    }
 ]

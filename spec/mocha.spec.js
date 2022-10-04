@@ -51,7 +51,7 @@ describe('Library module', () => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 describe('Generated manifest', () => {
 
-   it('contains a list of 8 files', () => {
+   it('contains a list of 10 files', () => {
       const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
       const actual = {
          files:        manifest.length,
@@ -59,9 +59,9 @@ describe('Generated manifest', () => {
          resultsFiles: results.manifest.length,
          };
       const expected = {
-         files:        8,
-         results:      8,
-         resultsFiles: 8,
+         files:        10,
+         results:      10,
+         resultsFiles: 10,
          };
       assertDeepStrictEqual(actual, expected);
       });
@@ -79,10 +79,12 @@ describe('Target folder', () => {
          'spec/fixtures/target/mock1.189c6361.js',
          'spec/fixtures/target/mock1.html',
          'spec/fixtures/target/mock1.min.c2f4e84e.css',
+         'spec/fixtures/target/mock1.php',
          'spec/fixtures/target/subfolder/graphics/mock2.9e7dfdbd.jpg',
          'spec/fixtures/target/subfolder/mock2.09d6bb59.js',
          'spec/fixtures/target/subfolder/mock2.html',
-         'spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css'
+         'spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css',
+         'spec/fixtures/target/subfolder/mock2.php',
          ];
       assertDeepStrictEqual(actual, expected);
       });

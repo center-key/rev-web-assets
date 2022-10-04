@@ -51,7 +51,7 @@ const revWebAssets = {
       const files = revWebAssets.readFolderRecursive(source);
       const process = (file: string) => {
          const fileExtension = path.extname(file).toLowerCase();
-         const isHtml =        ['.html', '.htm'].includes(fileExtension);
+         const isHtml =        ['.html', '.htm', '.php'].includes(fileExtension);
          const isCss =         ['.css'].includes(fileExtension);
          const canonical =     file.substring(source.length + 1);
          const canonicalFolder = path.dirname(canonical).replace(/\.$/, '');
@@ -93,7 +93,7 @@ const revWebAssets = {
          // Example matched broken into 3 parts:
          //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
          const ext =           path.extname(uri);
-         const doNotHash =     uri.includes(':') || ['.html', '.htm'].includes(ext) || ext.length < 2;
+         const doNotHash =     uri.includes(':') || ['.html', '.htm', '.php'].includes(ext) || ext.length < 2;
          const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
          const canonical =     slash(path.normalize(canonicalPath + uri));
          const assetDetail =   doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
@@ -183,7 +183,7 @@ const revWebAssets = {
       revWebAssets.copyAssets(manifest);
       const manifestPath = path.join(target, 'manifest.json');
       if (settings.saveManifest)
-         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   '));
+         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');
       return {
          source:   source,
          target:   target,
