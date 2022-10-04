@@ -1,4 +1,4 @@
-//! rev-web-assets v0.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.1.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs';
@@ -20,7 +20,7 @@ const revWebAssets = {
         const files = revWebAssets.readFolderRecursive(source);
         const process = (file) => {
             const fileExtension = path.extname(file).toLowerCase();
-            const isHtml = ['.html', '.htm'].includes(fileExtension);
+            const isHtml = ['.html', '.htm', '.php'].includes(fileExtension);
             const isCss = ['.css'].includes(fileExtension);
             const canonical = file.substring(source.length + 1);
             const canonicalFolder = path.dirname(canonical).replace(/\.$/, '');
@@ -55,7 +55,7 @@ const revWebAssets = {
     hashAssetPath(manifest, detail, settings) {
         return (matched, pre, uri, post) => {
             const ext = path.extname(uri);
-            const doNotHash = uri.includes(':') || ['.html', '.htm'].includes(ext) || ext.length < 2;
+            const doNotHash = uri.includes(':') || ['.html', '.htm', '.php'].includes(ext) || ext.length < 2;
             const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
             const canonical = slash(path.normalize(canonicalPath + uri));
             const assetDetail = doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
@@ -137,7 +137,7 @@ const revWebAssets = {
         revWebAssets.copyAssets(manifest);
         const manifestPath = path.join(target, 'manifest.json');
         if (settings.saveManifest)
-            fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   '));
+            fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');
         return {
             source: source,
             target: target,

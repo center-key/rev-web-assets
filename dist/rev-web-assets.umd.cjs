@@ -1,4 +1,4 @@
-//! rev-web-assets v0.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.1.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const files = revWebAssets.readFolderRecursive(source);
             const process = (file) => {
                 const fileExtension = path_1.default.extname(file).toLowerCase();
-                const isHtml = ['.html', '.htm'].includes(fileExtension);
+                const isHtml = ['.html', '.htm', '.php'].includes(fileExtension);
                 const isCss = ['.css'].includes(fileExtension);
                 const canonical = file.substring(source.length + 1);
                 const canonicalFolder = path_1.default.dirname(canonical).replace(/\.$/, '');
@@ -70,7 +70,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         hashAssetPath(manifest, detail, settings) {
             return (matched, pre, uri, post) => {
                 const ext = path_1.default.extname(uri);
-                const doNotHash = uri.includes(':') || ['.html', '.htm'].includes(ext) || ext.length < 2;
+                const doNotHash = uri.includes(':') || ['.html', '.htm', '.php'].includes(ext) || ext.length < 2;
                 const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
                 const canonical = (0, slash_1.default)(path_1.default.normalize(canonicalPath + uri));
                 const assetDetail = doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
@@ -152,7 +152,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             revWebAssets.copyAssets(manifest);
             const manifestPath = path_1.default.join(target, 'manifest.json');
             if (settings.saveManifest)
-                fs_1.default.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   '));
+                fs_1.default.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');
             return {
                 source: source,
                 target: target,

@@ -1,6 +1,6 @@
 {
    "name": "rev-web-assets",
-   "version": "0.1.0",
+   "version": "0.1.1",
    "description": "Revision web asset filenames with cache busting content hash fingerprints",
    "license": "MIT",
    "type": "module",
@@ -78,8 +78,8 @@
    "devDependencies": {
       "@types/fancy-log": "~2.0",
       "@types/node": "~18.8",
-      "@typescript-eslint/eslint-plugin": "~5.38",
-      "@typescript-eslint/parser": "~5.38",
+      "@typescript-eslint/eslint-plugin": "~5.39",
+      "@typescript-eslint/parser": "~5.39",
       "add-dist-header": "~0.3",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~0.1",
