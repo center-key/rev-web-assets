@@ -29,20 +29,16 @@ const validFlags =  ['cd', 'manifest', 'meta-content-base', 'quiet', 'summary'];
 const args =        process.argv.slice(2);
 const flags =       args.filter(arg => /^--/.test(arg));
 const flagMap =     Object.fromEntries(flags.map(flag => flag.replace(/^--/, '').split('=')));
+const flagOn =      Object.fromEntries(validFlags.map(flag => [flag, flag in flagMap]));
 const invalidFlag = Object.keys(flagMap).find(key => !validFlags.includes(key));
 const params =      args.filter(arg => !/^--/.test(arg));
 
 // Data
 const source = params[0];
 const target = params[1];
-const mode = {
-   manifest: 'manifest' in flagMap,
-   quiet:    'quiet'    in flagMap,
-   summary:  'summary'  in flagMap,
-   };
 
 // Reporting
-const printReport = (results, summaryOnly) => {
+const printReport = (results) => {
    const name =      chalk.gray('rev-web-assets');
    const source =    chalk.blue.bold(results.source);
    const target =    chalk.magenta(results.target);
@@ -55,7 +51,7 @@ const printReport = (results, summaryOnly) => {
       const dest =   chalk.green(detail.destPath.substring(results.target.length + 1));
       log(name, origin, arrow.little, dest);
       };
-   if (!summaryOnly)
+   if (!flagOn.summary)
       results.manifest.forEach(logDetail);
    };
 
@@ -71,8 +67,8 @@ if (error)
 const options = {
    cd:              flagMap.cd ?? null,
    metaContentBase: flagMap['meta-content-base'] ?? null,
-   saveManifest:    mode.manifest,
+   saveManifest:    flagOn.manifest,
    };
 const results = revWebAssets.revision(source, target, options);
-if (!mode.quiet)
-   printReport(results, mode.summary);
+if (!flagOn.quiet)
+   printReport(results);
