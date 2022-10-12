@@ -8,7 +8,8 @@ _Revision web asset filenames with cache busting content hash fingerprints_
 [![Vulnerabilities](https://snyk.io/test/github/center-key/rev-web-assets/badge.svg)](https://snyk.io/test/github/center-key/rev-web-assets)
 [![Build](https://github.com/center-key/rev-web-assets/workflows/build/badge.svg)](https://github.com/center-key/rev-web-assets/actions/workflows/run-spec-on-push.yaml)
 
-**rev-web-assets** updates the asset filenames of a website to contain a eight-digit hex hash.  The command's console output includes a timestamp and formatting helpful in build systems.
+**rev-web-assets** updates the asset filenames of a website to contain a eight-digit hex hash.&nbsp;
+The command's console output includes a timestamp and formatting helpful in build systems.
 
 <img src=https://raw.githubusercontent.com/center-key/rev-web-assets/main/screenshot.png
 width=800 alt=screenshot>
@@ -23,8 +24,9 @@ $ npm install --save-dev rev-web-assets
 ### 1. npm scripts
 Run `rev-web-assets` from the `"scripts"` section of your **package.json** file.
 
-The **first** parameter is the *source* folder.
-The **second** parameter is the *target* folder.
+Parameters:
+* The **first** parameter is the *source* folder.
+* The **second** parameter is the *target* folder.
 
 Example **package.json** scripts:
 ```json
@@ -32,7 +34,6 @@ Example **package.json** scripts:
       "revision": "rev-web-assets build/dev/web-app build/prod/web-app"
    },
 ```
-Try out the first script with the command: `npm run revision`
 
 ### 2. Global
 You can install **rev-web-assets** globally and then run it anywhere directly from the terminal.
@@ -70,7 +71,7 @@ into something like:
 ```
 
 ## C) Application Code
-Even though **rev-web-assets** is primarily intended for build scripts, the package can easily be used in ESM and TypeScript projects.
+Even though **rev-web-assets** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.
 
 Example:
 ``` typescript
@@ -85,10 +86,11 @@ See the **TypeScript Declarations** at the top of [rev-web-assets.ts](rev-web-as
 <br>
 
 ---
-**Build Tools**
+**CLI Build Tools**
    - 🎋 [add-dist-header](https://github.com/center-key/add-dist-header):&nbsp; _Prepend a one-line banner comment (with license notice) to distribution files_
-   - 📄 [copy-file-util](https://github.com/center-key/copy-file-util):&nbsp; _Copy or rename a file (CLI tool designed for use in npm scripts)_
-   - 📂 [copy-folder-cli](https://github.com/center-key/copy-folder-cli):&nbsp; _Recursively copy a folder (CLI tool designed for use in npm scripts)_
+   - 📄 [copy-file-util](https://github.com/center-key/copy-file-util):&nbsp; _Copy or rename a file with optional package version number_
+   - 📂 [copy-folder-util](https://github.com/center-key/copy-folder-util):&nbsp; _Recursively copy files from one folder to another folder_
+   - 🔍 [replacer-util](https://github.com/center-key/replacer-util):&nbsp; _Find and replace strings or template outputs in text files_
    - 🔢 [rev-web-assets](https://github.com/center-key/rev-web-assets):&nbsp; _Revision web asset filenames with cache busting content hash fingerprints_
    - 🚦 [w3c-html-validator](https://github.com/center-key/w3c-html-validator):&nbsp; _Check the markup validity of HTML files using the W3C validator_
 
