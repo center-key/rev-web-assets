@@ -89,6 +89,6 @@
       "npm-run-all2": "~6.0",
       "rimraf": "~3.0",
       "typescript": "~4.8",
-      "w3c-html-validator": "~1.1"
+      "w3c-html-validator": "~1.2"
    }
 }
