@@ -51,6 +51,7 @@ Command-line flags:
 | `--cd`                | Change working directory before starting starting. | **string** |
 | `--manifest`          | Output the list of files to: **manifest.json**     | N/A        |
 | `--meta-content-base` | Make og:image or other url absolute                | **string** |
+| `--note`              | Place to add a comment only for humans.            | **string** |
 | `--quiet`             | Suppress informational messages.                   | N/A        |
 | `--summary`           | Only print out the single line summary message.    | N/A        |
 

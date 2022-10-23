@@ -25,7 +25,7 @@ import chalk            from 'chalk';
 import log              from 'fancy-log';
 
 // Parameters
-const validFlags =  ['cd', 'manifest', 'meta-content-base', 'quiet', 'summary'];
+const validFlags =  ['cd', 'manifest', 'meta-content-base', 'note', 'quiet', 'summary'];
 const args =        process.argv.slice(2);
 const flags =       args.filter(arg => /^--/.test(arg));
 const flagMap =     Object.fromEntries(flags.map(flag => flag.replace(/^--/, '').split('=')));
