@@ -1,4 +1,4 @@
-//! rev-web-assets v0.1.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.1.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
