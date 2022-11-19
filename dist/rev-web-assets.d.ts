@@ -1,12 +1,12 @@
-//! rev-web-assets v0.1.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v0.1.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
-export declare type Settings = {
+export type Settings = {
     cd: string | null;
     metaContentBase: string | null;
     saveManifest: boolean;
 };
-export declare type Options = Partial<Settings>;
-export declare type ManifestDetail = {
+export type Options = Partial<Settings>;
+export type ManifestDetail = {
     origin: string;
     filename: string;
     canonical: string;
@@ -18,8 +18,8 @@ export declare type ManifestDetail = {
     destFolder: string;
     destPath: string | null;
 };
-export declare type Manifest = ManifestDetail[];
-export declare type Results = {
+export type Manifest = ManifestDetail[];
+export type Results = {
     source: string;
     target: string;
     count: number;
