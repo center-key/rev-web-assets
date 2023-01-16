@@ -44,7 +44,7 @@ $ npm install --global rev-web-assets
 $ rev-web-assets rev-web-assets build/dev/web-app build/prod/web-app
 ```
 
-### 3. CLI Flags
+### 3. CLI flags
 Command-line flags:
 | Flag                  | Description                                        | Value      |
 | --------------------- | -------------------------------------------------- | ---------- |

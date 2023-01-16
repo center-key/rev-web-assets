@@ -5,10 +5,10 @@
       <meta property=og:type  content="website">
       <meta property=og:image content="https://example.net/graphics/mock1.ad41b203.jpg">
       <title>🔢🔢🔢 rev-web-assets 🔢🔢🔢</title>
-      <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@1.2/dist/pretty-print-json.css>
+      <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@1.4/dist/css/pretty-print-json.css>
       <link rel=stylesheet href=mock1.min.c2f4e84e.css>
       <link rel=stylesheet href=subfolder/mock2.min.9b4a1b29.css>
-      <script defer src=https://cdn.jsdelivr.net/npm/pretty-print-json@1.2/dist/pretty-print-json.min.js></script>
+      <script defer src=https://cdn.jsdelivr.net/npm/pretty-print-json@1.4/dist/pretty-print-json.min.js></script>
       <script defer src=mock1.189c6361.js></script>
       <script defer src=subfolder/mock2.09d6bb59.js></script>
    </head>
