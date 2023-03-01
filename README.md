@@ -56,10 +56,17 @@ Command-line flags:
 | `--summary`           | Only print out the single line summary message.    | N/A        |
 
 Examples:
-   - `rev-web-assets --cd=web source target`  &nbsp; Same as: `rev-web-assets web/source web/target`
-   - `rev-web-assets source target --quiet`   &nbsp; Displays no output.
-   - `rev-web-assets source target --summary` &nbsp; Displays the summary but not the individual filenames.
-   - `rev-web-assets source target --meta-content-base=https://example.net` &nbsp; Prepends the base to `<meta>` URLs.
+   - `rev-web-assets --cd=web source target`<br>
+   Same as: `rev-web-assets web/source web/target`
+
+   - `rev-web-assets source target --quiet`<br>
+   Displays no output.
+
+   - `rev-web-assets source target --summary`<br>
+   Displays the summary but not the individual filenames.
+
+   - `rev-web-assets source target --meta-content-base=https://example.net`<br>
+   Prepends the base to `<meta>` URLs.
 
 URLs in `<meta>` tag `content` attributes generally need to be absolute URLs.&nbsp;
 Setting the `--meta-content-base` flag to `https://example.net` will transform the line of HTML from:
