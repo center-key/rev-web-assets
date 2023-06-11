@@ -26,7 +26,7 @@ import chalk from 'chalk';
 import log   from 'fancy-log';
 
 // Parameters and flags
-const validFlags = ['cd', 'manifest', 'meta-content-base', 'note', 'quiet', 'summary'];
+const validFlags = ['cd', 'force', 'manifest', 'meta-content-base', 'note', 'quiet', 'summary'];
 const cli =        cliArgvUtil.parse(validFlags);
 const source =     cli.params[0];
 const target =     cli.params[1];
@@ -60,6 +60,7 @@ if (error)
    throw Error('[rev-web-assets] ' + error);
 const options = {
    cd:              cli.flagMap.cd ?? null,
+   force:           cli.flagOn.force,
    metaContentBase: cli.flagMap.metaContentBase ?? null,
    saveManifest:    cli.flagOn.manifest,
    };

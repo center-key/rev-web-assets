@@ -60,7 +60,7 @@
    },
    "runScriptsConfig": {
       "clean": [
-         "rimraf build dist spec/fixtures/target"
+         "rimraf build dist spec/fixtures/target spec/fixtures/target-force"
       ],
       "build": [
          "jshint . --exclude-path .gitignore",
@@ -80,22 +80,22 @@
       "chalk": "~5.2",
       "cli-argv-util": "~1.0",
       "fancy-log": "~2.0",
-      "slash": "~5.0"
+      "slash": "~5.1"
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
-      "@types/node": "~18.15",
-      "@typescript-eslint/eslint-plugin": "~5.58",
-      "@typescript-eslint/parser": "~5.58",
+      "@types/node": "~20.3",
+      "@typescript-eslint/eslint-plugin": "~5.59",
+      "@typescript-eslint/parser": "~5.59",
       "add-dist-header": "~1.0",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~1.0",
-      "eslint": "~8.38",
+      "eslint": "~8.42",
       "jshint": "~2.13",
       "mocha": "~10.2",
       "rimraf": "~5.0",
       "run-scripts-util": "~1.1",
-      "typescript": "~5.0",
+      "typescript": "~5.1",
       "w3c-html-validator": "~1.3"
    }
 }

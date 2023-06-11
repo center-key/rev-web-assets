@@ -46,14 +46,15 @@ $ rev-web-assets rev-web-assets build/dev/web-app build/prod/web-app
 
 ### 3. CLI flags
 Command-line flags:
-| Flag                  | Description                                        | Value      |
-| --------------------- | -------------------------------------------------- | ---------- |
-| `--cd`                | Change working directory before starting starting. | **string** |
-| `--manifest`          | Output the list of files to: **manifest.json**     | N/A        |
-| `--meta-content-base` | Make og:image or other url absolute                | **string** |
-| `--note`              | Place to add a comment only for humans.            | **string** |
-| `--quiet`             | Suppress informational messages.                   | N/A        |
-| `--summary`           | Only print out the single line summary message.    | N/A        |
+| Flag                  | Description                                             | Value      |
+| --------------------- | ------------------------------------------------------- | ---------- |
+| `--cd`                | Change working directory before starting starting.      | **string** |
+| `--force`             | Revision (hash) all asset files even if not referenced. | N/A        |
+| `--manifest`          | Output the list of files to: **manifest.json**          | N/A        |
+| `--meta-content-base` | Make og:image or other url absolute                     | **string** |
+| `--note`              | Place to add a comment only for humans.                 | **string** |
+| `--quiet`             | Suppress informational messages.                        | N/A        |
+| `--summary`           | Only print out the single line summary message.         | N/A        |
 
 Examples:
    - `rev-web-assets --cd=web source target`<br>
@@ -84,6 +85,7 @@ Even though **rev-web-assets** is primarily intended for build scripts, the pack
 Example:
 ``` typescript
 import { revWebAssets } from 'rev-web-assets';
+
 const options = { saveManifest: true };
 const results = revWebAssets.revision('source', 'target', options);
 console.log('Number of web files processed:', results.count);

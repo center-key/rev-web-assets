@@ -1,0 +1,30 @@
+[
+   {
+      "origin": "spec/fixtures/source/graphics/mock1.jpg",
+      "filename": "mock1.jpg",
+      "canonicalFolder": "",
+      "canonical": "mock1.jpg",
+      "isHtml": false,
+      "isCss": false,
+      "hash": "ad41b203",
+      "hashedFilename": "mock1.ad41b203.jpg",
+      "destFolder": "spec/fixtures/target-force",
+      "destPath": "spec/fixtures/target-force/mock1.ad41b203.jpg",
+      "usedIn": [],
+      "references": 0
+   },
+   {
+      "origin": "spec/fixtures/source/graphics/unused.jpg",
+      "filename": "unused.jpg",
+      "canonicalFolder": "",
+      "canonical": "unused.jpg",
+      "isHtml": false,
+      "isCss": false,
+      "hash": "eb19dd7e",
+      "hashedFilename": "unused.eb19dd7e.jpg",
+      "destFolder": "spec/fixtures/target-force",
+      "destPath": "spec/fixtures/target-force/unused.eb19dd7e.jpg",
+      "usedIn": [],
+      "references": 0
+   }
+]

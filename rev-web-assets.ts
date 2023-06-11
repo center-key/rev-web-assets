@@ -7,6 +7,7 @@ import slash  from 'slash';
 
 export type Settings = {
    cd:              string | null,  //change working directory
+   force:           boolean,        //revision (hash) all asset files even if not referenced
    metaContentBase: string | null,  //make og:image or other url absolute
    saveManifest:    boolean,        //output the list of files to manifest.json in the target folder
    };
@@ -87,7 +88,7 @@ const revWebAssets = {
 
    calcAssetHash(detail: ManifestDetail): ManifestDetail {
       // Use the file contents of the asset to generate its hash and then store the hash in he
-      // assets manifest details.
+      // assets manifest detail.
       const hashLen =         8;
       const contents =        fs.readFileSync(detail.origin).toString();
       const hash =            crypto.createHash('md5').update(contents).digest('hex');
@@ -172,6 +173,7 @@ const revWebAssets = {
    revision(sourceFolder: string, targetFolder: string, options?: Options): Results {
       const defaults = {
          cd:              null,
+         force:           false,
          metaContentBase: null,
          saveManifest:    false,
          };
@@ -196,7 +198,11 @@ const revWebAssets = {
          throw Error('[rev-web-assets] ' + errorMessage);
       const manifest = revWebAssets.manifest(source, target);
       revWebAssets.processHtml(manifest, settings);
-      revWebAssets.processCss(manifest, settings);
+      revWebAssets.processCss(manifest,  settings);
+      const hashUnusedAsset = (detail: ManifestDetail) =>
+         !detail.hash && !detail.isHtml && revWebAssets.calcAssetHash(detail);
+      if (settings.force)
+         manifest.forEach(hashUnusedAsset);
       revWebAssets.copyAssets(manifest);
       manifest.forEach(detail => detail.usedIn && detail.usedIn.sort());
       const manifestPath = path.join(target, 'manifest.json');

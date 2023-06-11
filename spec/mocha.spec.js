@@ -3,6 +3,7 @@
 
 // Imports
 import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
+import { execSync } from 'node:child_process';
 import fs from 'fs';
 import assert from 'assert';
 
@@ -108,6 +109,27 @@ describe('Correct error is thrown', () => {
       const makeBogusCall = () => revWebAssets.revision('/source-folder');
       const exception =     { message: '[rev-web-assets] Must specify the target folder path.' };
       assert.throws(makeBogusCall, exception);
+      });
+
+   });
+
+////////////////////////////////////////////////////////////////////////////////
+describe('Executing the CLI', () => {
+   const cmd = (posix) => process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
+   const run = (posix) => execSync(cmd(posix), { stdio: 'inherit' });
+
+   it('with the --force flag revisions unused asset files', () => {
+      run('node bin/cli.js spec/fixtures/source/graphics spec/fixtures/target-force --force --manifest');
+      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target-force');
+      const expected = [
+         'spec/fixtures/target-force/manifest.json',
+         'spec/fixtures/target-force/mock1.ad41b203.jpg',
+         'spec/fixtures/target-force/unused.eb19dd7e.jpg',
+         ];
+      if (process.platform === 'win32')  //windows incorrect eol alters hashes
+         assertDeepStrictEqual({ files: actual.length }, { files: expected.length });
+      else
+         assertDeepStrictEqual(actual, expected);
       });
 
    });
