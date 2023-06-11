@@ -47,9 +47,10 @@ const revWebAssets = {
       return files.sort();
       },
 
-   manifest(source: string, target: string) {
+   manifest(source: string, target: string): ManifestDetail[] {
+      // Creates a manifest list with stub manifest details for each file in the source folder.
       const files = revWebAssets.readFolderRecursive(source);
-      const process = (file: string) => {
+      const process = (file: string): ManifestDetail => {
          const fileExtension = path.extname(file).toLowerCase();
          const isHtml =        ['.html', '.htm', '.php'].includes(fileExtension);
          const isCss =         ['.css'].includes(fileExtension);
@@ -80,15 +81,18 @@ const revWebAssets = {
       return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
       },
 
-   calcAssetHash(detail: ManifestDetail): void {
+   calcAssetHash(detail: ManifestDetail): ManifestDetail {
+      // Use the file contents of the asset to generate its hash and then store the hash in he
+      // assets manifest details.
       const hashLen =         8;
       const contents =        fs.readFileSync(detail.origin).toString();
       const hash =            crypto.createHash('md5').update(contents).digest('hex');
       detail.hash =           hash.substring(0, hashLen);
       detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
+      return detail;
       },
 
-   hashAssetPath(manifest: Manifest, detail: ManifestDetail, settings: Settings) {
+   hashAssetPath(manifest: ManifestDetail[], detail: ManifestDetail, settings: Settings) {
       return (matched: string, pre: string, uri: string, post: string): string => {
          // Example matched broken into 3 parts:
          //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
@@ -115,7 +119,7 @@ const revWebAssets = {
       // meta: <meta property=og:image content=graphics/logo-card.png>
       const hrefPattern = /(<[a-z]{1,4}\s.*href=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
       const srcPattern =  /(<[a-z]{3,6}\s.*src=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
-      const metaPattern =  /(<meta\s.*content=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
+      const metaPattern = /(<meta\s.*content=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig
       const process = (detail: ManifestDetail) => {
          const content = fs.readFileSync(detail.origin, 'utf-8');
          const hashedContent = content
@@ -143,7 +147,7 @@ const revWebAssets = {
       manifest.filter(detail => detail.isCss).forEach(process);
       },
 
-   copyAssets(manifest: Manifest) {
+   copyAssets(manifest: ManifestDetail[]) {
       const process = (detail: ManifestDetail) => {
          detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
          fs.mkdirSync(detail.destFolder, { recursive: true });
@@ -170,8 +174,8 @@ const revWebAssets = {
       const errorMessage =
          !sourceFolder ?                      'Must specify the source folder path.' :
          !targetFolder ?                      'Must specify the target folder path.' :
-         !fs.existsSync(source) ?         'Source folder does not exist: ' + source :
-         !fs.existsSync(target) ?         'Target folder cannot be created: ' + target :
+         !fs.existsSync(source) ?             'Source folder does not exist: ' + source :
+         !fs.existsSync(target) ?             'Target folder cannot be created: ' + target :
          !fs.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
          !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
          null;

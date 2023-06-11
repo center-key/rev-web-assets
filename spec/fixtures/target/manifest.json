@@ -12,6 +12,18 @@
       "destPath": "spec/fixtures/target/graphics/mock1.ad41b203.jpg"
    },
    {
+      "origin": "spec/fixtures/source/graphics/unused.jpg",
+      "filename": "unused.jpg",
+      "canonicalFolder": "graphics",
+      "canonical": "graphics/unused.jpg",
+      "isHtml": false,
+      "isCss": false,
+      "hash": null,
+      "hashedFilename": null,
+      "destFolder": "spec/fixtures/target/graphics",
+      "destPath": "spec/fixtures/target/graphics/unused.jpg"
+   },
+   {
       "origin": "spec/fixtures/source/mock1.html",
       "filename": "mock1.html",
       "canonicalFolder": "",

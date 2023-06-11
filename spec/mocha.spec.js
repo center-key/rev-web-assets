@@ -51,7 +51,7 @@ describe('Library module', () => {
 ////////////////////////////////////////////////////////////////////////////////
 describe('Generated manifest', () => {
 
-   it('contains a list of 10 files', () => {
+   it('contains a list of the correct number of files', () => {
       const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
       const actual = {
          files:        manifest.length,
@@ -59,9 +59,9 @@ describe('Generated manifest', () => {
          resultsFiles: results.manifest.length,
          };
       const expected = {
-         files:        10,
-         results:      10,
-         resultsFiles: 10,
+         files:        11,
+         results:      11,
+         resultsFiles: 11,
          };
       assertDeepStrictEqual(actual, expected);
       });
@@ -75,6 +75,7 @@ describe('Target folder', () => {
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target');
       const expected = [
          'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
+         'spec/fixtures/target/graphics/unused.jpg',
          'spec/fixtures/target/manifest.json',
          'spec/fixtures/target/mock1.189c6361.js',
          'spec/fixtures/target/mock1.html',
