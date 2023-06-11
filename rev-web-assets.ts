@@ -12,16 +12,18 @@ export type Settings = {
    };
 export type Options = Partial<Settings>;
 export type ManifestDetail = {
-   origin:          string,         //source path of asset file
-   filename:        string,         //source filename of asset file
-   canonical:       string,         //normalized path used to lookup asset in manifest
-   canonicalFolder: string,         //directory of the normalized path of the asset file
-   isHtml:          boolean,        //true if the asset file is HTML
-   isCss:           boolean,        //true if the asset file is CSS
-   hash:            string | null,  //eight-digit cache busting hex humber that changes if the asset changes
-   hashedFilename:  string | null,  //filename of the asset with hash inserted before the file extension
-   destFolder:      string,         //directory of the target asset
-   destPath:        string | null,  //folder and filename of the target asset
+   origin:          string,          //source path of asset file
+   filename:        string,          //source filename of asset file
+   canonical:       string,          //normalized path used to lookup asset in manifest
+   canonicalFolder: string,          //directory of the normalized path of the asset file
+   isHtml:          boolean,         //true if the asset file is HTML
+   isCss:           boolean,         //true if the asset file is CSS
+   hash:            string | null,   //eight-digit cache busting hex humber that changes if the asset changes
+   hashedFilename:  string | null,   //filename of the asset with hash inserted before the file extension
+   destFolder:      string,          //directory of the target asset
+   destPath:        string | null,   //folder and filename of the target asset
+   usedIn:          string[] | null, //files that references the asset
+   references:      number | null,   //number of times the asset is referenced
    };
 export type Manifest = ManifestDetail[];  //list of assets
 export type Results = {
@@ -68,6 +70,8 @@ const revWebAssets = {
             hashedFilename:  null,
             destFolder:      destFolder,
             destPath:        null,
+            usedIn:          isHtml ? null : [],
+            references:      isHtml ? null : 0,
             };
          }
       const manifest = files.map(process);
@@ -93,7 +97,11 @@ const revWebAssets = {
       },
 
    hashAssetPath(manifest: ManifestDetail[], detail: ManifestDetail, settings: Settings) {
-      return (matched: string, pre: string, uri: string, post: string): string => {
+      // Returns a function that takes RegEx matched parts for an asset reference and swaps in
+      // the hashed filename.
+      // Example function output:
+      //    '<img src=logo.c2f3e84e.png alt=Logo>'
+      const replacer = (matched: string, pre: string, uri: string, post: string): string => {
          // Example matched broken into 3 parts:
          //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
          const ext =           path.extname(uri);
@@ -103,6 +111,10 @@ const revWebAssets = {
          const assetDetail =   doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
          if (assetDetail && !assetDetail.hash)
             revWebAssets.calcAssetHash(assetDetail);
+         if (assetDetail)
+            assetDetail.references!++;
+         if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
+            assetDetail.usedIn!.push(detail.canonical);
          const hashedUri = () => {
             const hashed = revWebAssets.hashFilename(uri, assetDetail!.hash);
             const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
@@ -111,6 +123,7 @@ const revWebAssets = {
             };
          return assetDetail?.hash ? pre + hashedUri() + post : matched;
          };
+      return replacer;
       },
 
    processHtml(manifest: ManifestDetail[], settings: Settings) {
@@ -185,6 +198,7 @@ const revWebAssets = {
       revWebAssets.processHtml(manifest, settings);
       revWebAssets.processCss(manifest, settings);
       revWebAssets.copyAssets(manifest);
+      manifest.forEach(detail => detail.usedIn && detail.usedIn.sort());
       const manifestPath = path.join(target, 'manifest.json');
       if (settings.saveManifest)
          fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');
