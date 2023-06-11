@@ -37,5 +37,8 @@
          <p>Cover 2A</p>
          <p>Cover 2B</p>
       </article>
+      <footer>
+         <a href=https://github.com/center-key/rev-web-assets>github.com/center-key/rev-web-assets</a>
+      </footer>
    </body>
 </html>

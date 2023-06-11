@@ -1,4 +1,4 @@
-//! rev-web-assets v1.0.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -51,6 +51,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                     hashedFilename: null,
                     destFolder: destFolder,
                     destPath: null,
+                    usedIn: isHtml ? null : [],
+                    references: isHtml ? null : 0,
                 };
             };
             const manifest = files.map(process);
@@ -66,9 +68,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const hash = crypto_1.default.createHash('md5').update(contents).digest('hex');
             detail.hash = hash.substring(0, hashLen);
             detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
+            return detail;
         },
         hashAssetPath(manifest, detail, settings) {
-            return (matched, pre, uri, post) => {
+            const replacer = (matched, pre, uri, post) => {
                 const ext = path_1.default.extname(uri);
                 const doNotHash = uri.includes(':') || ['.html', '.htm', '.php'].includes(ext) || ext.length < 2;
                 const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
@@ -76,6 +79,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 const assetDetail = doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
                 if (assetDetail && !assetDetail.hash)
                     revWebAssets.calcAssetHash(assetDetail);
+                if (assetDetail)
+                    assetDetail.references++;
+                if (assetDetail && !assetDetail.usedIn.includes(detail.canonical))
+                    assetDetail.usedIn.push(detail.canonical);
                 const hashedUri = () => {
                     const hashed = revWebAssets.hashFilename(uri, assetDetail.hash);
                     const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
@@ -84,6 +91,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 };
                 return (assetDetail === null || assetDetail === void 0 ? void 0 : assetDetail.hash) ? pre + hashedUri() + post : matched;
             };
+            return replacer;
         },
         processHtml(manifest, settings) {
             const hrefPattern = /(<[a-z]{1,4}\s.*href=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
@@ -126,6 +134,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         revision(sourceFolder, targetFolder, options) {
             const defaults = {
                 cd: null,
+                force: false,
                 metaContentBase: null,
                 saveManifest: false,
             };
@@ -149,7 +158,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             const manifest = revWebAssets.manifest(source, target);
             revWebAssets.processHtml(manifest, settings);
             revWebAssets.processCss(manifest, settings);
+            const hashUnusedAsset = (detail) => !detail.hash && !detail.isHtml && revWebAssets.calcAssetHash(detail);
+            if (settings.force)
+                manifest.forEach(hashUnusedAsset);
             revWebAssets.copyAssets(manifest);
+            manifest.forEach(detail => detail.usedIn && detail.usedIn.sort());
             const manifestPath = path_1.default.join(target, 'manifest.json');
             if (settings.saveManifest)
                 fs_1.default.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');

@@ -1,7 +1,8 @@
-//! rev-web-assets v1.0.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
+    force: boolean;
     metaContentBase: string | null;
     saveManifest: boolean;
 };
@@ -17,6 +18,8 @@ export type ManifestDetail = {
     hashedFilename: string | null;
     destFolder: string;
     destPath: string | null;
+    usedIn: string[] | null;
+    references: number | null;
 };
 export type Manifest = ManifestDetail[];
 export type Results = {
@@ -28,24 +31,13 @@ export type Results = {
 };
 declare const revWebAssets: {
     readFolderRecursive(folder: string): string[];
-    manifest(source: string, target: string): {
-        origin: string;
-        filename: string;
-        canonicalFolder: string;
-        canonical: string;
-        isHtml: boolean;
-        isCss: boolean;
-        hash: null;
-        hashedFilename: null;
-        destFolder: string;
-        destPath: null;
-    }[];
+    manifest(source: string, target: string): ManifestDetail[];
     hashFilename(filename: string, hash: string | null): string;
-    calcAssetHash(detail: ManifestDetail): void;
-    hashAssetPath(manifest: Manifest, detail: ManifestDetail, settings: Settings): (matched: string, pre: string, uri: string, post: string) => string;
+    calcAssetHash(detail: ManifestDetail): ManifestDetail;
+    hashAssetPath(manifest: ManifestDetail[], detail: ManifestDetail, settings: Settings): (matched: string, pre: string, uri: string, post: string) => string;
     processHtml(manifest: ManifestDetail[], settings: Settings): void;
     processCss(manifest: ManifestDetail[], settings: Settings): void;
-    copyAssets(manifest: Manifest): void;
+    copyAssets(manifest: ManifestDetail[]): void;
     revision(sourceFolder: string, targetFolder: string, options?: Options): Results;
 };
 export { revWebAssets };
