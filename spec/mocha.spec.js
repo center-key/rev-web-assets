@@ -89,10 +89,7 @@ describe('Target folder', () => {
          'spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css',
          'spec/fixtures/target/subfolder/mock2.php',
          ];
-      if (process.platform === 'win32')  //windows incorrect eol alters hashes
-         assertDeepStrictEqual({ files: actual.length }, { files: expected.length });
-      else
-         assertDeepStrictEqual(actual, expected);
+      assertDeepStrictEqual(actual, expected);
       });
 
    });
@@ -130,10 +127,7 @@ describe('Executing the CLI', () => {
          'spec/fixtures/target-force/mock1.ad41b203.jpg',
          'spec/fixtures/target-force/unused.eb19dd7e.jpg',
          ];
-      if (process.platform === 'win32')  //windows incorrect eol alters hashes
-         assertDeepStrictEqual({ files: actual.length }, { files: expected.length });
-      else
-         assertDeepStrictEqual(actual, expected);
+      assertDeepStrictEqual(actual, expected);
       });
 
    });

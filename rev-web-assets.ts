@@ -92,7 +92,8 @@ const revWebAssets = {
       // Use the file contents of the asset to generate its hash and then store the hash in he
       // assets manifest detail.
       const hashLen =         8;
-      const contents =        fs.readFileSync(detail.origin).toString();
+      const brokenWindows =   /$\r\n/gm;
+      const contents =        fs.readFileSync(detail.origin).toString().replace(brokenWindows, '\n');
       const hash =            crypto.createHash('md5').update(contents).digest('hex');
       detail.bytes =          contents.length;
       detail.hash =           hash.substring(0, hashLen);
