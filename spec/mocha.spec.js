@@ -9,6 +9,7 @@ import assert from 'assert';
 
 // Setup
 import { revWebAssets } from '../dist/rev-web-assets.js';
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 const options = {
    metaContentBase: 'https://example.net',
    saveManifest:    true,
@@ -115,11 +116,14 @@ describe('Correct error is thrown', () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
-   const cmd = (posix) => process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
-   const run = (posix) => execSync(cmd(posix), { stdio: 'inherit' });
+   const run = (posix) => {
+      const name =    Object.keys(pkg.bin).sort()[0];
+      const command = process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
+      execSync(command.replace(name, 'node bin/cli.js'), { stdio: 'inherit' });
+      };
 
    it('with the --force flag revisions unused asset files', () => {
-      run('node bin/cli.js spec/fixtures/source/graphics spec/fixtures/target-force --force --manifest');
+      run('rev-web-assets spec/fixtures/source/graphics spec/fixtures/target-force --force --manifest');
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target-force');
       const expected = [
          'spec/fixtures/target-force/manifest.json',
