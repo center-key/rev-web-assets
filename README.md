@@ -51,7 +51,7 @@ Command-line flags:
 | `--cd`                | Change working directory before starting starting.      | **string** |
 | `--force`             | Revision (hash) all asset files even if not referenced. | N/A        |
 | `--manifest`          | Output the list of files to: **manifest.json**          | N/A        |
-| `--meta-content-base` | Make og:image or other url absolute                     | **string** |
+| `--meta-content-base` | Make meta URLs, like "og:image", absolute.              | **string** |
 | `--note`              | Place to add a comment only for humans.                 | **string** |
 | `--quiet`             | Suppress informational messages.                        | N/A        |
 | `--summary`           | Only print out the single line summary message.         | N/A        |
@@ -77,6 +77,47 @@ Setting the `--meta-content-base` flag to `https://example.net` will transform t
 into something like:
 ```html
 <meta property=og:image content="https://example.net/logo.ad41b20.png">
+```
+
+The `--manifest` flag produces a JSON file containing an array objects with details about each file:
+```typescript
+export type ManifestDetail = {
+   origin:          string,          //source path of asset file
+   filename:        string,          //source filename of asset file
+   canonical:       string,          //normalized path used to lookup asset in manifest
+   canonicalFolder: string,          //directory of the normalized path of the asset file
+   isHtml:          boolean,         //true if the asset file is HTML
+   isCss:           boolean,         //true if the asset file is CSS
+   bytes:           number | null,   //asset file size
+   hash:            string | null,   //eight-digit cache busting hex humber that changes if the asset changes
+   hashedFilename:  string | null,   //filename of the asset with hash inserted before the file extension
+   destFolder:      string,          //directory of the target asset
+   destPath:        string | null,   //folder and filename of the target asset
+   usedIn:          string[] | null, //files that references the asset
+   references:      number | null,   //number of times the asset is referenced
+   };
+```
+Example:
+```json
+   {
+      "origin": "src/website/graphics/logo.png",
+      "filename": "logo.png",
+      "canonicalFolder": "graphics",
+      "canonical": "graphics/logo.png",
+      "bytes": 7203,
+      "isHtml": false,
+      "isCss": false,
+      "hash": "ad42b203",
+      "hashedFilename": "logo.ad42b203.png",
+      "destFolder": "target/website/graphics",
+      "destPath": "target/website/graphics/logo.ad42b203.png",
+      "usedIn": [
+         "index.html",
+         "products/index.html",
+         "style.css",
+      ],
+      "references": 7
+   },
 ```
 
 ## C) Application Code

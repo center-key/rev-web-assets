@@ -8,7 +8,7 @@ import slash  from 'slash';
 export type Settings = {
    cd:              string | null,  //change working directory
    force:           boolean,        //revision (hash) all asset files even if not referenced
-   metaContentBase: string | null,  //make og:image or other url absolute
+   metaContentBase: string | null,  //make meta URLs, like "og:image", absolute
    saveManifest:    boolean,        //output the list of files to manifest.json in the target folder
    };
 export type Options = Partial<Settings>;
@@ -19,6 +19,7 @@ export type ManifestDetail = {
    canonicalFolder: string,          //directory of the normalized path of the asset file
    isHtml:          boolean,         //true if the asset file is HTML
    isCss:           boolean,         //true if the asset file is CSS
+   bytes:           number | null,   //asset file size
    hash:            string | null,   //eight-digit cache busting hex humber that changes if the asset changes
    hashedFilename:  string | null,   //filename of the asset with hash inserted before the file extension
    destFolder:      string,          //directory of the target asset
@@ -65,6 +66,7 @@ const revWebAssets = {
             filename:        path.basename(file),
             canonicalFolder: canonicalFolder,
             canonical:       canonical,
+            bytes:           null,
             isHtml:          isHtml,
             isCss:           isCss,
             hash:            null,
@@ -92,6 +94,7 @@ const revWebAssets = {
       const hashLen =         8;
       const contents =        fs.readFileSync(detail.origin).toString();
       const hash =            crypto.createHash('md5').update(contents).digest('hex');
+      detail.bytes =          contents.length;
       detail.hash =           hash.substring(0, hashLen);
       detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
       return detail;
