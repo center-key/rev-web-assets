@@ -68,6 +68,34 @@ describe('Generated manifest', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
+   it('contains the correct file details for mock1.jpg', () => {
+      const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
+      const actual = manifest[0];
+      const expected = {
+         origin:          'spec/fixtures/source/graphics/mock1.jpg',
+         filename:        'mock1.jpg',
+         canonicalFolder: 'graphics',
+         canonical:       'graphics/mock1.jpg',
+         bytes:           20200,
+         isHtml:          false,
+         isCss:           false,
+         hash:            'ad41b203',
+         hashedFilename:  'mock1.ad41b203.jpg',
+         destFolder:      'spec/fixtures/target/graphics',
+         destPath:        'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
+         usedIn: [
+            'mock1.html',
+            'mock1.min.css',
+            'mock1.php',
+            'subfolder/mock2.html',
+            'subfolder/mock2.min.css',
+            'subfolder/mock2.php',
+            ],
+         references: 8,
+         };
+      assertDeepStrictEqual(actual, expected);
+      });
+
    });
 
 ////////////////////////////////////////////////////////////////////////////////
