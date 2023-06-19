@@ -1,4 +1,4 @@
-//! rev-web-assets v1.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.1.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
@@ -14,6 +14,7 @@ export type ManifestDetail = {
     canonicalFolder: string;
     isHtml: boolean;
     isCss: boolean;
+    bytes: number | null;
     hash: string | null;
     hashedFilename: string | null;
     destFolder: string;

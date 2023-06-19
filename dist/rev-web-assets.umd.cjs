@@ -1,4 +1,4 @@
-//! rev-web-assets v1.1.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.1.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -45,6 +45,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                     filename: path_1.default.basename(file),
                     canonicalFolder: canonicalFolder,
                     canonical: canonical,
+                    bytes: null,
                     isHtml: isHtml,
                     isCss: isCss,
                     hash: null,
@@ -64,8 +65,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         },
         calcAssetHash(detail) {
             const hashLen = 8;
-            const contents = fs_1.default.readFileSync(detail.origin).toString();
+            const brokenWindows = /$\r\n/gm;
+            const contents = fs_1.default.readFileSync(detail.origin).toString().replace(brokenWindows, '\n');
             const hash = crypto_1.default.createHash('md5').update(contents).digest('hex');
+            detail.bytes = contents.length;
             detail.hash = hash.substring(0, hashLen);
             detail.hashedFilename = revWebAssets.hashFilename(detail.filename, detail.hash);
             return detail;
