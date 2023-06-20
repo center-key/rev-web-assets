@@ -1,4 +1,4 @@
-//! rev-web-assets v1.1.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.2.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs';
