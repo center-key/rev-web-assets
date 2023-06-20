@@ -5,15 +5,14 @@
    "license": "MIT",
    "type": "module",
    "module": "dist/rev-web-assets.js",
-   "main": "dist/rev-web-assets.umd.cjs",
+   "main": "dist/rev-web-assets.js",
    "types": "dist/rev-web-assets.d.ts",
    "files": [
       "dist"
    ],
    "exports": {
       ".": {
-         "import": "./dist/rev-web-assets.js",
-         "require": "./dist/rev-web-assets.umd.cjs"
+         "import": "./dist/rev-web-assets.js"
       },
       "./": "./dist/"
    },
@@ -66,8 +65,6 @@
          "jshint . --exclude-path .gitignore",
          "eslint --max-warnings 0 . --ext .ts",
          "tsc",
-         "tsc --module UMD --outDir build/umd",
-         "copy-file build/umd/rev-web-assets.js build/rev-web-assets.umd.cjs",
          "add-dist-header build dist"
       ]
    },
@@ -85,8 +82,8 @@
    "devDependencies": {
       "@types/fancy-log": "~2.0",
       "@types/node": "~20.3",
-      "@typescript-eslint/eslint-plugin": "~5.59",
-      "@typescript-eslint/parser": "~5.59",
+      "@typescript-eslint/eslint-plugin": "~5.60",
+      "@typescript-eslint/parser": "~5.60",
       "add-dist-header": "~1.0",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~1.0",
