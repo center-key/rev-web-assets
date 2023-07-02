@@ -106,7 +106,7 @@ describe('Target folder', () => {
          'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
          'spec/fixtures/target/graphics/unused.jpg',
          'spec/fixtures/target/manifest.json',
-         'spec/fixtures/target/mock1.189c6361.js',
+         'spec/fixtures/target/mock1.bbd2ac8e.js',
          'spec/fixtures/target/mock1.html',
          'spec/fixtures/target/mock1.min.c2f4e84e.css',
          'spec/fixtures/target/mock1.php',
