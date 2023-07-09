@@ -81,9 +81,9 @@
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.3",
-      "@typescript-eslint/eslint-plugin": "~5.60",
-      "@typescript-eslint/parser": "~5.60",
+      "@types/node": "~20.4",
+      "@typescript-eslint/eslint-plugin": "~5.61",
+      "@typescript-eslint/parser": "~5.61",
       "add-dist-header": "~1.1",
       "assert-deep-strict-equal": "~1.1",
       "copy-file-util": "~1.1",
