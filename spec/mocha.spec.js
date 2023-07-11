@@ -3,7 +3,7 @@
 
 // Imports
 import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
-import { execSync } from 'node:child_process';
+import { cliArgvUtil } from 'cli-argv-util';
 import fs from 'fs';
 import assert from 'assert';
 
@@ -140,11 +140,7 @@ describe('Correct error is thrown', () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
-   const run = (posix) => {
-      const name =    Object.keys(pkg.bin).sort()[0];
-      const command = process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
-      return execSync(command.replace(name, 'node bin/cli.js'), { stdio: 'inherit' });
-      };
+   const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('with the --force flag revisions unused asset files', () => {
       run('rev-web-assets spec/fixtures/source/graphics spec/fixtures/target-force --force --manifest');
