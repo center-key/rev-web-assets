@@ -38,29 +38,19 @@ export type Results = {
 
 const revWebAssets = {
 
-   readFolderRecursive(folder: string): string[] {
-      const files: string[] = [];
-      const process = (item: string) => {
-         if (fs.statSync(item).isFile())
-            files.push(slash(item));
-         else
-            fs.readdirSync(item).forEach((nestedItem: string) =>
-               process(path.join(item, nestedItem)));
-         };
-      process(path.normalize(folder));
-      return files.sort();
-      },
-
    manifest(source: string, target: string): ManifestDetail[] {
       // Creates a manifest list with stub manifest details for each file in the source folder.
-      const files = revWebAssets.readFolderRecursive(source);
+      const files = fs.readdirSync(source, { recursive: true })
+         .map(file => path.join(source, file.toString()))
+         .filter(file => fs.statSync(file).isFile())
+         .sort();
       const process = (file: string): ManifestDetail => {
-         const fileExtension = path.extname(file).toLowerCase();
-         const isHtml =        ['.html', '.htm', '.php'].includes(fileExtension);
-         const isCss =         ['.css'].includes(fileExtension);
-         const canonical =     file.substring(source.length + 1);
+         const fileExtension =   path.extname(file).toLowerCase();
+         const isHtml =          ['.html', '.htm', '.php'].includes(fileExtension);
+         const isCss =           ['.css'].includes(fileExtension);
+         const canonical =       file.substring(source.length + 1);
          const canonicalFolder = path.dirname(canonical).replace(/\.$/, '');
-         const destFolder =    !canonicalFolder ? target : target + '/' + canonicalFolder;
+         const destFolder =      !canonicalFolder ? target : target + '/' + canonicalFolder;
          return {
             origin:          file,
             filename:        path.basename(file),

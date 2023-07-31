@@ -101,20 +101,23 @@ describe('Generated manifest', () => {
 describe('Target folder', () => {
 
    it('contains the correct files with the correct revisioned filenames', () => {
-      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target');
+      const actual = fs.readdirSync('spec/fixtures/target', { recursive: true }).sort();
       const expected = [
-         'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
-         'spec/fixtures/target/graphics/unused.jpg',
-         'spec/fixtures/target/manifest.json',
-         'spec/fixtures/target/mock1.bbd2ac8e.js',
-         'spec/fixtures/target/mock1.html',
-         'spec/fixtures/target/mock1.min.c2f4e84e.css',
-         'spec/fixtures/target/mock1.php',
-         'spec/fixtures/target/subfolder/graphics/mock2.9e7dfdbd.jpg',
-         'spec/fixtures/target/subfolder/mock2.09d6bb59.js',
-         'spec/fixtures/target/subfolder/mock2.html',
-         'spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css',
-         'spec/fixtures/target/subfolder/mock2.php',
+         'graphics',
+         'graphics/mock1.ad41b203.jpg',
+         'graphics/unused.jpg',
+         'manifest.json',
+         'mock1.bbd2ac8e.js',
+         'mock1.html',
+         'mock1.min.c2f4e84e.css',
+         'mock1.php',
+         'subfolder',
+         'subfolder/graphics',
+         'subfolder/graphics/mock2.9e7dfdbd.jpg',
+         'subfolder/mock2.09d6bb59.js',
+         'subfolder/mock2.html',
+         'subfolder/mock2.min.9b4a1b29.css',
+         'subfolder/mock2.php',
          ];
       assertDeepStrictEqual(actual, expected);
       });
@@ -144,11 +147,11 @@ describe('Executing the CLI', () => {
 
    it('with the --force flag revisions unused asset files', () => {
       run('rev-web-assets spec/fixtures/source/graphics spec/fixtures/target-force --force --manifest');
-      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target-force');
+      const actual = fs.readdirSync('spec/fixtures/target-force').sort();
       const expected = [
-         'spec/fixtures/target-force/manifest.json',
-         'spec/fixtures/target-force/mock1.ad41b203.jpg',
-         'spec/fixtures/target-force/unused.eb19dd7e.jpg',
+         'manifest.json',
+         'mock1.ad41b203.jpg',
+         'unused.eb19dd7e.jpg',
          ];
       assertDeepStrictEqual(actual, expected);
       });
