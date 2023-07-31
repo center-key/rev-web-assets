@@ -1,4 +1,4 @@
-//! rev-web-assets v1.2.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
@@ -31,7 +31,6 @@ export type Results = {
     manifest: Manifest;
 };
 declare const revWebAssets: {
-    readFolderRecursive(folder: string): string[];
     manifest(source: string, target: string): ManifestDetail[];
     hashFilename(filename: string, hash: string | null): string;
     calcAssetHash(detail: ManifestDetail): ManifestDetail;

@@ -1,23 +1,15 @@
-//! rev-web-assets v1.2.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import slash from 'slash';
 const revWebAssets = {
-    readFolderRecursive(folder) {
-        const files = [];
-        const process = (item) => {
-            if (fs.statSync(item).isFile())
-                files.push(slash(item));
-            else
-                fs.readdirSync(item).forEach((nestedItem) => process(path.join(item, nestedItem)));
-        };
-        process(path.normalize(folder));
-        return files.sort();
-    },
     manifest(source, target) {
-        const files = revWebAssets.readFolderRecursive(source);
+        const files = fs.readdirSync(source, { recursive: true })
+            .map(file => path.join(source, file.toString()))
+            .filter(file => fs.statSync(file).isFile())
+            .sort();
         const process = (file) => {
             const fileExtension = path.extname(file).toLowerCase();
             const isHtml = ['.html', '.htm', '.php'].includes(fileExtension);
