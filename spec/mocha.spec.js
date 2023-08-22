@@ -101,7 +101,7 @@ describe('Generated manifest', () => {
 describe('Target folder', () => {
 
    it('contains the correct files with the correct revisioned filenames', () => {
-      const actual = fs.readdirSync('spec/fixtures/target', { recursive: true }).sort();
+      const actual = cliArgvUtil.readFolder('spec/fixtures/target');
       const expected = [
          'graphics',
          'graphics/mock1.ad41b203.jpg',

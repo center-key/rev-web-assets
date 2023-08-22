@@ -10,7 +10,7 @@
 //    },
 //
 // Usage from command line:
-//    $ npm install --global rev-web-assets
+//    $ npm install --save-dev rev-web-assets
 //    $ rev-web-assets build/web-app dist/web-app
 //
 // Contributors to this project:
