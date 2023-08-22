@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs';
@@ -7,7 +7,7 @@ import slash from 'slash';
 const revWebAssets = {
     manifest(source, target) {
         const files = fs.readdirSync(source, { recursive: true })
-            .map(file => path.join(source, file.toString()))
+            .map(file => slash(path.join(source, file.toString())))
             .filter(file => fs.statSync(file).isFile())
             .sort();
         const process = (file) => {
@@ -69,7 +69,7 @@ const revWebAssets = {
                 const trailingSlashes = /\/*$/;
                 return noBase ? hashed : settings.metaContentBase.replace(trailingSlashes, '/') + hashed;
             };
-            return (assetDetail === null || assetDetail === void 0 ? void 0 : assetDetail.hash) ? pre + hashedUri() + post : matched;
+            return assetDetail?.hash ? pre + hashedUri() + post : matched;
         };
         return replacer;
     },
@@ -92,11 +92,10 @@ const revWebAssets = {
     processCss(manifest, settings) {
         const urlPattern = /(url\(["']?)([^)('"]*)(["']?\))/ig;
         const process = (detail) => {
-            var _a;
             const content = fs.readFileSync(detail.origin, 'utf-8');
             const hashedContent = content
                 .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
-            detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
+            detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
             fs.mkdirSync(detail.destFolder, { recursive: true });
             fs.writeFileSync(detail.destPath, hashedContent);
         };
@@ -104,8 +103,7 @@ const revWebAssets = {
     },
     copyAssets(manifest) {
         const process = (detail) => {
-            var _a;
-            detail.destPath = detail.destFolder + '/' + ((_a = detail.hashedFilename) !== null && _a !== void 0 ? _a : detail.filename);
+            detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
             fs.mkdirSync(detail.destFolder, { recursive: true });
             fs.copyFileSync(detail.origin, detail.destPath);
         };
@@ -118,7 +116,7 @@ const revWebAssets = {
             metaContentBase: null,
             saveManifest: false,
         };
-        const settings = Object.assign(Object.assign({}, defaults), options);
+        const settings = { ...defaults, ...options };
         const startTime = Date.now();
         const normalize = (folder) => !folder ? '' : slash(path.normalize(folder)).replace(/\/$/, '');
         const startFolder = settings.cd ? normalize(settings.cd) + '/' : '';
