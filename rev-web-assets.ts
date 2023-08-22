@@ -41,7 +41,7 @@ const revWebAssets = {
    manifest(source: string, target: string): ManifestDetail[] {
       // Creates a manifest list with stub manifest details for each file in the source folder.
       const files = fs.readdirSync(source, { recursive: true })
-         .map(file => path.join(source, file.toString()))
+         .map(file => slash(path.join(source, file.toString())))
          .filter(file => fs.statSync(file).isFile())
          .sort();
       const process = (file: string): ManifestDetail => {
