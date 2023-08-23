@@ -38,7 +38,7 @@ Example **package.json** scripts:
 Example terminal commands:
 ```shell
 $ npm install --save-dev rev-web-assets
-$ npx rev-web-assets rev-web-assets build/dev/web-app build/prod/web-app
+$ npx rev-web-assets build/dev/web-app build/prod/web-app
 ```
 You can also install **rev-web-assets** globally (`--global`) and then run it anywhere directly from the terminal.
 

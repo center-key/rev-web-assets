@@ -1,17 +1,18 @@
 // rev-web-assets ~~ MIT License
 
+// Imports
 import crypto from 'crypto';
 import fs     from 'fs';
 import path   from 'path';
 import slash  from 'slash';
 
+// Types
 export type Settings = {
    cd:              string | null,  //change working directory
    force:           boolean,        //revision (hash) all asset files even if not referenced
    metaContentBase: string | null,  //make meta URLs, like "og:image", absolute
    saveManifest:    boolean,        //output the list of files to manifest.json in the target folder
    };
-export type Options = Partial<Settings>;
 export type ManifestDetail = {
    origin:          string,          //source path of asset file
    filename:        string,          //source filename of asset file
@@ -164,7 +165,7 @@ const revWebAssets = {
       manifest.filter(file => !file.isHtml && !file.isCss).forEach(process);
       },
 
-   revision(sourceFolder: string, targetFolder: string, options?: Options): Results {
+   revision(sourceFolder: string, targetFolder: string, options?: Partial<Settings>): Results {
       const defaults = {
          cd:              null,
          force:           false,
