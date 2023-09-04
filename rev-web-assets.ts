@@ -79,6 +79,14 @@ const revWebAssets = {
       return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
       },
 
+   removeHash(filename: string): string {
+      // Reverts a hashed filename back to its original filename (for use in specification cases
+      // to verify hashed file exists).
+      // Example:
+      //    'graphics/logo.bd41b20.png' --> 'graphics/logo.png'
+      return filename.replace(/[.][0-9a-f]{8}[.]/, '.');
+      },
+
    calcAssetHash(detail: ManifestDetail): ManifestDetail {
       // Use the file contents of the asset to generate its hash and then store the hash in he
       // assets manifest detail.

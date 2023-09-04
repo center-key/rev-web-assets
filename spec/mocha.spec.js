@@ -125,6 +125,25 @@ describe('Target folder', () => {
    });
 
 ////////////////////////////////////////////////////////////////////////////////
+describe('Specification utility function removeHash()', () => {
+
+   it('reverts a hashed filename back to its original filename', () => {
+      const folder = 'spec/fixtures/target/subfolder';
+      const actual = cliArgvUtil.readFolder(folder).map(revWebAssets.removeHash);
+      const expected = [
+         'graphics',
+         'graphics/mock2.jpg',
+         'mock2.js',
+         'mock2.html',
+         'mock2.min.css',
+         'mock2.php',
+         ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   });
+
+////////////////////////////////////////////////////////////////////////////////
 describe('Correct error is thrown', () => {
 
    it('when the "source" folder is missing', () => {
