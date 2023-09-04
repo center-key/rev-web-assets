@@ -119,7 +119,7 @@ Example:
 ```
 
 ## C) Application Code
-Even though **rev-web-assets** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.
+Even though **rev-web-assets** is primarily intended for build scripts, the package can be used programmatically in ESM and TypeScript projects.
 
 Example:
 ``` typescript

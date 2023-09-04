@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import crypto from 'crypto';
 import fs from 'fs';
@@ -39,6 +39,9 @@ const revWebAssets = {
     hashFilename(filename, hash) {
         const lastDot = /\.(?=[^.]*$)/;
         return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
+    },
+    removeHash(filename) {
+        return filename.replace(/[.][0-9a-f]{8}[.]/, '.');
     },
     calcAssetHash(detail) {
         const hashLen = 8;
