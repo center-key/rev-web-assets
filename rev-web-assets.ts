@@ -1,8 +1,10 @@
 // rev-web-assets ~~ MIT License
 
 // Imports
+import chalk  from 'chalk';
 import crypto from 'crypto';
 import fs     from 'fs';
+import log    from 'fancy-log';
 import path   from 'path';
 import slash  from 'slash';
 
@@ -35,6 +37,9 @@ export type Results = {
    count:    number;    //number of files in target folder
    duration: number;    //execution time in milliseconds
    manifest: Manifest,  //list of assets
+   };
+export type ReporterSettings = {
+   summaryOnly: boolean,  //only print out the single line summary message
    };
 
 const revWebAssets = {
@@ -218,6 +223,28 @@ const revWebAssets = {
          duration: Date.now() - startTime,
          manifest: manifest,
          };
+      },
+
+   reporter(results: Results, options?: Partial<ReporterSettings>): Results {
+      const defaults = {
+         summaryOnly: false,
+         };
+      const settings = { ...defaults, ...options };
+      const name =      chalk.gray('rev-web-assets');
+      const source =    chalk.blue.bold(results.source);
+      const target =    chalk.magenta(results.target);
+      const arrow =     { big: chalk.gray.bold(' ⟹  '), little: chalk.gray.bold('→') };
+      const infoColor = results.count ? chalk.white : chalk.red.bold;
+      const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+      log(name, source, arrow.big, target, info);
+      const logDetail = (detail: ManifestDetail) => {
+         const origin = chalk.white(detail.origin.substring(results.source.length + 1));
+         const dest =   chalk.green(detail.destPath!.substring(results.target.length + 1));
+         log(name, origin, arrow.little, dest);
+         };
+      if (!settings.summaryOnly)
+         results.manifest.forEach(logDetail);
+      return results;
       },
 
    };

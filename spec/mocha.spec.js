@@ -41,9 +41,21 @@ describe('Library module', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has a revision() function', () => {
-      const actual =   { validate: typeof revWebAssets.revision };
-      const expected = { validate: 'function' };
+   it('has the correct functions', () => {
+      const module = revWebAssets;
+      const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
+      const expected = [
+         ['calcAssetHash', 'function'],
+         ['copyAssets',    'function'],
+         ['hashAssetPath', 'function'],
+         ['hashFilename',  'function'],
+         ['manifest',      'function'],
+         ['processCss',    'function'],
+         ['processHtml',   'function'],
+         ['removeHash',    'function'],
+         ['reporter',      'function'],
+         ['revision',      'function'],
+         ];
       assertDeepStrictEqual(actual, expected);
       });
 

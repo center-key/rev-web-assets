@@ -22,32 +22,12 @@
 // Imports
 import { cliArgvUtil } from 'cli-argv-util';
 import { revWebAssets } from '../dist/rev-web-assets.js';
-import chalk from 'chalk';
-import log   from 'fancy-log';
 
 // Parameters and flags
 const validFlags = ['cd', 'force', 'manifest', 'meta-content-base', 'note', 'quiet', 'summary'];
 const cli =        cliArgvUtil.parse(validFlags);
 const source =     cli.params[0];
 const target =     cli.params[1];
-
-// Reporting
-const printReport = (results) => {
-   const name =      chalk.gray('rev-web-assets');
-   const source =    chalk.blue.bold(results.source);
-   const target =    chalk.magenta(results.target);
-   const arrow =     { big: chalk.gray.bold(' ⟹  '), little: chalk.gray.bold('→') };
-   const infoColor = results.count ? chalk.white : chalk.red.bold;
-   const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
-   log(name, source, arrow.big, target, info);
-   const logDetail = (detail) => {
-      const origin = chalk.white(detail.origin.substring(results.source.length + 1));
-      const dest =   chalk.green(detail.destPath.substring(results.target.length + 1));
-      log(name, origin, arrow.little, dest);
-      };
-   if (!cli.flagOn.summary)
-      results.manifest.forEach(logDetail);
-   };
 
 // Revision Web Assets
 const error =
@@ -66,4 +46,4 @@ const options = {
    };
 const results = revWebAssets.revision(source, target, options);
 if (!cli.flagOn.quiet)
-   printReport(results);
+   revWebAssets.reporter(results, { summaryOnly: cli.flagOn.summary });
