@@ -55,8 +55,11 @@ Command-line flags:
 | `--summary`           | Only print out the single line summary message.         | N/A        |
 
 Examples:
+   - `rev-web-assets web/source web/target`<br>
+   Revisions the files in the **web/source** folder and saves the new files to the **web/target** folder.
+
    - `rev-web-assets --cd=web source target`<br>
-   Same as: `rev-web-assets web/source web/target`
+   Identical to the previous example.
 
    - `rev-web-assets source target --quiet`<br>
    Displays no output.
@@ -64,8 +67,13 @@ Examples:
    - `rev-web-assets source target --summary`<br>
    Displays the summary but not the individual filenames.
 
+   - `rev-web-assets source 'target/Web Files' --summary`<br>
+   Save the target files to a folder that has a space in its name.
+
    - `rev-web-assets source target --meta-content-base=https://example.net`<br>
    Prepends the base to `<meta>` URLs.
+
+_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
 URLs in `<meta>` tag `content` attributes generally need to be absolute URLs.&nbsp;
 Setting the `--meta-content-base` flag to `https://example.net` will transform the line of HTML from:

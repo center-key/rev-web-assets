@@ -1,7 +1,9 @@
-//! rev-web-assets v1.3.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
+import chalk from 'chalk';
 import crypto from 'crypto';
 import fs from 'fs';
+import log from 'fancy-log';
 import path from 'path';
 import slash from 'slash';
 const revWebAssets = {
@@ -154,6 +156,27 @@ const revWebAssets = {
             duration: Date.now() - startTime,
             manifest: manifest,
         };
+    },
+    reporter(results, options) {
+        const defaults = {
+            summaryOnly: false,
+        };
+        const settings = { ...defaults, ...options };
+        const name = chalk.gray('rev-web-assets');
+        const source = chalk.blue.bold(results.source);
+        const target = chalk.magenta(results.target);
+        const arrow = { big: chalk.gray.bold(' ⟹  '), little: chalk.gray.bold('→') };
+        const infoColor = results.count ? chalk.white : chalk.red.bold;
+        const info = infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+        log(name, source, arrow.big, target, info);
+        const logDetail = (detail) => {
+            const origin = chalk.white(detail.origin.substring(results.source.length + 1));
+            const dest = chalk.green(detail.destPath.substring(results.target.length + 1));
+            log(name, origin, arrow.little, dest);
+        };
+        if (!settings.summaryOnly)
+            results.manifest.forEach(logDetail);
+        return results;
     },
 };
 export { revWebAssets };

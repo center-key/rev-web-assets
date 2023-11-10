@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
@@ -29,6 +29,9 @@ export type Results = {
     duration: number;
     manifest: Manifest;
 };
+export type ReporterSettings = {
+    summaryOnly: boolean;
+};
 declare const revWebAssets: {
     manifest(source: string, target: string): ManifestDetail[];
     hashFilename(filename: string, hash: string | null): string;
@@ -39,5 +42,6 @@ declare const revWebAssets: {
     processCss(manifest: ManifestDetail[], settings: Settings): void;
     copyAssets(manifest: ManifestDetail[]): void;
     revision(sourceFolder: string, targetFolder: string, options?: Partial<Settings>): Results;
+    reporter(results: Results, options?: Partial<ReporterSettings>): Results;
 };
 export { revWebAssets };
