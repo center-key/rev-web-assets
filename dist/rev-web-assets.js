@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import chalk from 'chalk';
 import crypto from 'crypto';
