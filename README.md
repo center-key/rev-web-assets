@@ -5,7 +5,7 @@ _Revision web asset filenames with cache busting content hash fingerprints_
 
 [![License:MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/center-key/rev-web-assets/blob/main/LICENSE.txt)
 [![npm](https://img.shields.io/npm/v/rev-web-assets.svg)](https://www.npmjs.com/package/rev-web-assets)
-[![Build](https://github.com/center-key/rev-web-assets/workflows/build/badge.svg)](https://github.com/center-key/rev-web-assets/actions/workflows/run-spec-on-push.yaml)
+[![Build](https://github.com/center-key/rev-web-assets/actions/workflows/run-spec-on-push.yaml/badge.svg)](https://github.com/center-key/rev-web-assets/actions/workflows/run-spec-on-push.yaml)
 
 **rev-web-assets** updates the asset filenames of a website to contain a eight-digit hex hash.&nbsp;
 The command's console output includes a timestamp and formatting helpful in build systems.

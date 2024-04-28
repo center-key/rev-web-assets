@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;

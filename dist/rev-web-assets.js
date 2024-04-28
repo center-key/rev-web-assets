@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.3.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import chalk from 'chalk';
 import crypto from 'crypto';
@@ -68,11 +68,12 @@ const revWebAssets = {
                 assetDetail.references++;
             if (assetDetail && !assetDetail.usedIn.includes(detail.canonical))
                 assetDetail.usedIn.push(detail.canonical);
+            const trailingSlashes = /\/*$/;
+            const absoluteUrl = () => settings.metaContentBase.replace(trailingSlashes, '/') +
+                assetDetail?.canonicalFolder + '/' + assetDetail?.hashedFilename;
             const hashedUri = () => {
-                const hashed = revWebAssets.hashFilename(uri, assetDetail.hash);
                 const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
-                const trailingSlashes = /\/*$/;
-                return noBase ? hashed : settings.metaContentBase.replace(trailingSlashes, '/') + hashed;
+                return noBase ? revWebAssets.hashFilename(uri, assetDetail.hash) : absoluteUrl();
             };
             return assetDetail?.hash ? pre + hashedUri() + post : matched;
         };
