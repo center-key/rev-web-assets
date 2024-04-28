@@ -124,11 +124,13 @@ const revWebAssets = {
             assetDetail.references!++;
          if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
             assetDetail.usedIn!.push(detail.canonical);
+         const trailingSlashes = /\/*$/;
+         const absoluteUrl = () => settings.metaContentBase!.replace(trailingSlashes, '/') +
+            assetDetail?.canonicalFolder + '/' + assetDetail?.hashedFilename;
          const hashedUri = () => {
-            const hashed = revWebAssets.hashFilename(uri, assetDetail!.hash);
+            // Example: 'graphics/avatar.jpg' --> 'graphics/avatar.ad41b203.jpg'
             const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
-            const trailingSlashes = /\/*$/;
-            return noBase ? hashed : settings.metaContentBase!.replace(trailingSlashes, '/') + hashed;
+            return noBase ? revWebAssets.hashFilename(uri, assetDetail!.hash) : absoluteUrl();
             };
          return assetDetail?.hash ? pre + hashedUri() + post : matched;
          };

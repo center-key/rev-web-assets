@@ -3,7 +3,7 @@
    <head>
       <meta charset=utf-8>
       <meta property=og:type  content="website">
-      <meta property=og:image content="https://example.net/graphics/mock2.9e7dfdbd.jpg">
+      <meta property=og:image content="https://example.net/subfolder/graphics/mock2.9e7dfdbd.jpg">
       <title>🔢🔢🔢 rev-web-assets 🔢🔢🔢</title>
       <link rel=icon       href=https://centerkey.com/graphics/bookmark.png>
       <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@3.0/dist/css/pretty-print-json.css>
