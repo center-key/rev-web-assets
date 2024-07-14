@@ -14,14 +14,15 @@ export type Settings = {
    force:           boolean,        //revision (hash) all asset files even if not referenced
    metaContentBase: string | null,  //make meta URLs, like "og:image", absolute
    saveManifest:    boolean,        //output the list of files to manifest.json in the target folder
+   skip:            string | null,  //do not revision (hash) asset files with paths containing given string.
    };
 export type ManifestDetail = {
    origin:          string,          //source path of asset file
    filename:        string,          //source filename of asset file
    canonical:       string,          //normalized path used to lookup asset in manifest
    canonicalFolder: string,          //directory of the normalized path of the asset file
-   isHtml:          boolean,         //true if the asset file is HTML
-   isCss:           boolean,         //true if the asset file is CSS
+   isHtml:          boolean,         //asset file is HTML
+   isCss:           boolean,         //asset file is CSS
    bytes:           number | null,   //asset file size
    hash:            string | null,   //eight-digit cache busting hex humber that changes if the asset changes
    hashedFilename:  string | null,   //filename of the asset with hash inserted before the file extension
@@ -29,6 +30,7 @@ export type ManifestDetail = {
    destPath:        string | null,   //folder and filename of the target asset
    usedIn:          string[] | null, //files that references the asset
    references:      number | null,   //number of times the asset is referenced
+   skipped:         boolean,         //asset file is configured to not be hashed
    };
 export type Manifest = ManifestDetail[];  //list of assets
 export type Results = {
@@ -44,7 +46,7 @@ export type ReporterSettings = {
 
 const revWebAssets = {
 
-   manifest(source: string, target: string): ManifestDetail[] {
+   manifest(source: string, target: string, skip: string | null): ManifestDetail[] {
       // Creates a manifest list with stub manifest details for each file in the source folder.
       const files = fs.readdirSync(source, { recursive: true })
          .map(file => slash(path.join(source, file.toString())))
@@ -71,6 +73,7 @@ const revWebAssets = {
             destPath:        null,
             usedIn:          isHtml ? null : [],
             references:      isHtml ? null : 0,
+            skipped:         !isHtml && !!skip && file.includes(skip),
             };
          }
       const manifest = files.map(process);
@@ -84,7 +87,7 @@ const revWebAssets = {
       return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
       },
 
-   removeHash(filename: string): string {
+   stripHash(filename: string): string {
       // Reverts a hashed filename back to its original filename (for use in specification cases
       // to verify hashed file exists).
       // Example:
@@ -110,15 +113,17 @@ const revWebAssets = {
       // the hashed filename.
       // Example function output:
       //    '<img src=logo.c2f3e84e.png alt=Logo>'
+      const webPages = ['.html', '.htm', '.php'];
       const replacer = (matched: string, pre: string, uri: string, post: string): string => {
          // Example matched broken into 3 parts:
          //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
          const ext =           path.extname(uri);
-         const doNotHash =     uri.includes(':') || ['.html', '.htm', '.php'].includes(ext) || ext.length < 2;
+         const doNotHash =     uri.includes(':') || webPages.includes(ext) || ext.length < 2;
          const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
          const canonical =     slash(path.normalize(canonicalPath + uri));
          const assetDetail =   doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
-         if (assetDetail && !assetDetail.hash)
+         const skipAsset =     !!settings.skip && uri.includes(settings.skip);
+         if (assetDetail && !assetDetail.hash && !skipAsset)
             revWebAssets.calcAssetHash(assetDetail);
          if (assetDetail)
             assetDetail.references!++;
@@ -186,8 +191,9 @@ const revWebAssets = {
          force:           false,
          metaContentBase: null,
          saveManifest:    false,
+         skip:            null,
          };
-      const settings = { ...defaults, ...options };
+      const settings =  { ...defaults, ...options };
       const startTime = Date.now();
       const normalize = (folder: string) =>
          !folder ? '' : slash(path.normalize(folder)).replace(/\/$/, '');
@@ -206,11 +212,11 @@ const revWebAssets = {
          null;
       if (errorMessage)
          throw Error('[rev-web-assets] ' + errorMessage);
-      const manifest = revWebAssets.manifest(source, target);
+      const manifest = revWebAssets.manifest(source, target, settings.skip);
       revWebAssets.processHtml(manifest, settings);
       revWebAssets.processCss(manifest,  settings);
       const hashUnusedAsset = (detail: ManifestDetail) =>
-         !detail.hash && !detail.isHtml && revWebAssets.calcAssetHash(detail);
+         !detail.hash && !detail.isHtml && !detail.skipped && revWebAssets.calcAssetHash(detail);
       if (settings.force)
          manifest.forEach(hashUnusedAsset);
       revWebAssets.copyAssets(manifest);
@@ -231,7 +237,7 @@ const revWebAssets = {
       const defaults = {
          summaryOnly: false,
          };
-      const settings = { ...defaults, ...options };
+      const settings =  { ...defaults, ...options };
       const name =      chalk.gray('rev-web-assets');
       const source =    chalk.blue.bold(results.source);
       const target =    chalk.magenta(results.target);

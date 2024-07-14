@@ -30,6 +30,7 @@
       <article>
          <h3>Images</h3>
          <figure>
+            <img src=graphics/do-not-hash.jpg alt=neon>
             <img src=graphics/mock1.jpg alt=neon>
             <img src=subfolder/graphics/mock2.jpg alt=neon>
          </figure>

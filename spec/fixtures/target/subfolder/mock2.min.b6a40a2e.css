@@ -2,9 +2,12 @@
 section#two.hide-bad >figure.bad {
    display: none;
    }
-article >p:nth-of-type(3) {
+article >p:nth-of-type(4) {
+   background-image: url(../graphics/do-not-hash.jpg);
+   }
+article >p:nth-of-type(5) {
    background-image: url(../graphics/mock1.ad41b203.jpg);
    }
-article >p:nth-of-type(4) {
+article >p:nth-of-type(6) {
    background-image: url(graphics/mock2.9e7dfdbd.jpg);
    }

@@ -34,8 +34,11 @@ article >p {
    padding: 30px;
    }
 article >p:nth-of-type(1) {
-   background-image: url(graphics/mock1.ad41b203.jpg);
+   background-image: url(graphics/do-not-hash.jpg);
    }
 article >p:nth-of-type(2) {
+   background-image: url(graphics/mock1.ad41b203.jpg);
+   }
+article >p:nth-of-type(3) {
    background-image: url(subfolder/graphics/mock2.9e7dfdbd.jpg);
    }

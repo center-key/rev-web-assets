@@ -13,6 +13,7 @@ const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 const options = {
    metaContentBase: 'https://example.net',
    saveManifest:    true,
+   skip:            'do-not-hash',
    };
 let results;
 before(() =>
@@ -52,9 +53,9 @@ describe('Library module', () => {
          ['manifest',      'function'],
          ['processCss',    'function'],
          ['processHtml',   'function'],
-         ['removeHash',    'function'],
          ['reporter',      'function'],
          ['revision',      'function'],
+         ['stripHash',     'function'],
          ];
       assertDeepStrictEqual(actual, expected);
       });
@@ -72,16 +73,16 @@ describe('Generated manifest', () => {
          resultsFiles: results.manifest.length,
          };
       const expected = {
-         files:        11,
-         results:      11,
-         resultsFiles: 11,
+         files:        12,
+         results:      12,
+         resultsFiles: 12,
          };
       assertDeepStrictEqual(actual, expected);
       });
 
    it('contains the correct file details for mock1.jpg', () => {
       const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
-      const actual = manifest[0];
+      const actual =   manifest[1];
       const expected = {
          origin:          'spec/fixtures/source/graphics/mock1.jpg',
          filename:        'mock1.jpg',
@@ -103,6 +104,7 @@ describe('Generated manifest', () => {
             'subfolder/mock2.php',
             ],
          references: 8,
+         skipped:    false,
          };
       assertDeepStrictEqual(actual, expected);
       });
@@ -116,19 +118,20 @@ describe('Target folder', () => {
       const actual = cliArgvUtil.readFolder('spec/fixtures/target');
       const expected = [
          'graphics',
+         'graphics/do-not-hash.jpg',
          'graphics/mock1.ad41b203.jpg',
          'graphics/unused.jpg',
          'manifest.json',
          'mock1.bbd2ac8e.js',
          'mock1.html',
-         'mock1.min.c2f4e84e.css',
+         'mock1.min.d45c0047.css',
          'mock1.php',
          'subfolder',
          'subfolder/graphics',
          'subfolder/graphics/mock2.9e7dfdbd.jpg',
          'subfolder/mock2.09d6bb59.js',
          'subfolder/mock2.html',
-         'subfolder/mock2.min.9b4a1b29.css',
+         'subfolder/mock2.min.b6a40a2e.css',
          'subfolder/mock2.php',
          ];
       assertDeepStrictEqual(actual, expected);
@@ -137,11 +140,11 @@ describe('Target folder', () => {
    });
 
 ////////////////////////////////////////////////////////////////////////////////
-describe('Specification utility function removeHash()', () => {
+describe('Specification utility function stripHash()', () => {
 
    it('reverts a hashed filename back to its original filename', () => {
       const folder = 'spec/fixtures/target/subfolder';
-      const actual = cliArgvUtil.readFolder(folder).map(revWebAssets.removeHash);
+      const actual = cliArgvUtil.readFolder(folder).map(revWebAssets.stripHash);
       const expected = [
          'graphics',
          'graphics/mock2.jpg',
@@ -177,9 +180,10 @@ describe('Executing the CLI', () => {
    const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('with the --force flag revisions unused asset files', () => {
-      run('rev-web-assets spec/fixtures/source/graphics spec/fixtures/target-force --force --manifest');
+      run('rev-web-assets spec/fixtures/source/graphics spec/fixtures/target-force --force --skip=do-not-hash --manifest');
       const actual = fs.readdirSync('spec/fixtures/target-force').sort();
       const expected = [
+         'do-not-hash.jpg',
          'manifest.json',
          'mock1.ad41b203.jpg',
          'unused.eb19dd7e.jpg',

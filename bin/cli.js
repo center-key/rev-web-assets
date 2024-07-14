@@ -24,10 +24,11 @@ import { cliArgvUtil } from 'cli-argv-util';
 import { revWebAssets } from '../dist/rev-web-assets.js';
 
 // Parameters and flags
-const validFlags = ['cd', 'force', 'manifest', 'meta-content-base', 'note', 'quiet', 'summary'];
-const cli =        cliArgvUtil.parse(validFlags);
-const source =     cli.params[0];
-const target =     cli.params[1];
+const validFlags =
+   ['cd', 'force', 'manifest', 'meta-content-base', 'note', 'quiet', 'skip', 'summary'];
+const cli =    cliArgvUtil.parse(validFlags);
+const source = cli.params[0];
+const target = cli.params[1];
 
 // Revision Web Assets
 const error =
@@ -43,6 +44,7 @@ const options = {
    force:           cli.flagOn.force,
    metaContentBase: cli.flagMap.metaContentBase ?? null,
    saveManifest:    cli.flagOn.manifest,
+   skip:            cli.flagMap.skip ?? null,
    };
 const results = revWebAssets.revision(source, target, options);
 if (!cli.flagOn.quiet)

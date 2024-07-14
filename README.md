@@ -44,15 +44,16 @@ You can also install **rev-web-assets** globally (`--global`) and then run it an
 
 ### 3. CLI flags
 Command-line flags:
-| Flag                  | Description                                             | Value      |
-| --------------------- | ------------------------------------------------------- | ---------- |
-| `--cd`                | Change working directory before starting starting.      | **string** |
-| `--force`             | Revision (hash) all asset files even if not referenced. | N/A        |
-| `--manifest`          | Output the list of files to: **manifest.json**          | N/A        |
-| `--meta-content-base` | Make meta URLs, like "og:image", absolute.              | **string** |
-| `--note`              | Place to add a comment only for humans.                 | **string** |
-| `--quiet`             | Suppress informational messages.                        | N/A        |
-| `--summary`           | Only print out the single line summary message.         | N/A        |
+| Flag                  | Description                                                            | Value      |
+| --------------------- | ---------------------------------------------------------------------- | ---------- |
+| `--cd`                | Change working directory before starting starting.                     | **string** |
+| `--force`             | Revision (hash) all asset files even if not referenced.                | N/A        |
+| `--manifest`          | Output the list of files to: **manifest.json**                         | N/A        |
+| `--meta-content-base` | Make meta URLs, like "og:image", absolute.                             | **string** |
+| `--note`              | Place to add a comment only for humans.                                | **string** |
+| `--quiet`             | Suppress informational messages.                                       | N/A        |
+| `--skip`              | Do not revision (hash) asset files with paths containing given string. | **string** |
+| `--summary`           | Only print out the single line summary message.                        | N/A        |
 
 Examples:
    - `rev-web-assets web/source web/target`<br>
@@ -73,7 +74,8 @@ Examples:
    - `rev-web-assets source target --meta-content-base=https://example.net`<br>
    Prepends the base to `<meta>` URLs.
 
-_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
+_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the
+errors often encountered on Microsoft Windows._
 
 URLs in `<meta>` tag `content` attributes generally need to be absolute URLs.&nbsp;
 Setting the `--meta-content-base` flag to `https://example.net` will transform the line of HTML from:
@@ -92,8 +94,8 @@ export type ManifestDetail = {
    filename:        string,          //source filename of asset file
    canonical:       string,          //normalized path used to lookup asset in manifest
    canonicalFolder: string,          //directory of the normalized path of the asset file
-   isHtml:          boolean,         //true if the asset file is HTML
-   isCss:           boolean,         //true if the asset file is CSS
+   isHtml:          boolean,         //asset file is HTML
+   isCss:           boolean,         //asset file is CSS
    bytes:           number | null,   //asset file size
    hash:            string | null,   //eight-digit cache busting hex humber that changes if the asset changes
    hashedFilename:  string | null,   //filename of the asset with hash inserted before the file extension
@@ -101,6 +103,7 @@ export type ManifestDetail = {
    destPath:        string | null,   //folder and filename of the target asset
    usedIn:          string[] | null, //files that references the asset
    references:      number | null,   //number of times the asset is referenced
+   skipped:         boolean,         //asset file is configured to not be hashed
    };
 ```
 Example:

@@ -1,5 +1,28 @@
 [
    {
+      "origin": "spec/fixtures/source/graphics/do-not-hash.jpg",
+      "filename": "do-not-hash.jpg",
+      "canonicalFolder": "graphics",
+      "canonical": "graphics/do-not-hash.jpg",
+      "bytes": null,
+      "isHtml": false,
+      "isCss": false,
+      "hash": null,
+      "hashedFilename": null,
+      "destFolder": "spec/fixtures/target/graphics",
+      "destPath": "spec/fixtures/target/graphics/do-not-hash.jpg",
+      "usedIn": [
+         "mock1.html",
+         "mock1.min.css",
+         "mock1.php",
+         "subfolder/mock2.html",
+         "subfolder/mock2.min.css",
+         "subfolder/mock2.php"
+      ],
+      "references": 6,
+      "skipped": true
+   },
+   {
       "origin": "spec/fixtures/source/graphics/mock1.jpg",
       "filename": "mock1.jpg",
       "canonicalFolder": "graphics",
@@ -19,7 +42,8 @@
          "subfolder/mock2.min.css",
          "subfolder/mock2.php"
       ],
-      "references": 8
+      "references": 8,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/graphics/unused.jpg",
@@ -34,7 +58,8 @@
       "destFolder": "spec/fixtures/target/graphics",
       "destPath": "spec/fixtures/target/graphics/unused.jpg",
       "usedIn": [],
-      "references": 0
+      "references": 0,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/mock1.html",
@@ -49,7 +74,8 @@
       "destFolder": "spec/fixtures/target",
       "destPath": "spec/fixtures/target/mock1.html",
       "usedIn": null,
-      "references": null
+      "references": null,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/mock1.js",
@@ -69,27 +95,29 @@
          "subfolder/mock2.html",
          "subfolder/mock2.php"
       ],
-      "references": 4
+      "references": 4,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/mock1.min.css",
       "filename": "mock1.min.css",
       "canonicalFolder": "",
       "canonical": "mock1.min.css",
-      "bytes": 809,
+      "bytes": 894,
       "isHtml": false,
       "isCss": true,
-      "hash": "c2f4e84e",
-      "hashedFilename": "mock1.min.c2f4e84e.css",
+      "hash": "d45c0047",
+      "hashedFilename": "mock1.min.d45c0047.css",
       "destFolder": "spec/fixtures/target",
-      "destPath": "spec/fixtures/target/mock1.min.c2f4e84e.css",
+      "destPath": "spec/fixtures/target/mock1.min.d45c0047.css",
       "usedIn": [
          "mock1.html",
          "mock1.php",
          "subfolder/mock2.html",
          "subfolder/mock2.php"
       ],
-      "references": 4
+      "references": 4,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/mock1.php",
@@ -104,7 +132,8 @@
       "destFolder": "spec/fixtures/target",
       "destPath": "spec/fixtures/target/mock1.php",
       "usedIn": null,
-      "references": null
+      "references": null,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/subfolder/graphics/mock2.jpg",
@@ -126,7 +155,8 @@
          "subfolder/mock2.min.css",
          "subfolder/mock2.php"
       ],
-      "references": 8
+      "references": 8,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.html",
@@ -141,7 +171,8 @@
       "destFolder": "spec/fixtures/target/subfolder",
       "destPath": "spec/fixtures/target/subfolder/mock2.html",
       "usedIn": null,
-      "references": null
+      "references": null,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.js",
@@ -161,27 +192,29 @@
          "subfolder/mock2.html",
          "subfolder/mock2.php"
       ],
-      "references": 4
+      "references": 4,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.min.css",
       "filename": "mock2.min.css",
       "canonicalFolder": "subfolder",
       "canonical": "subfolder/mock2.min.css",
-      "bytes": 256,
+      "bytes": 344,
       "isHtml": false,
       "isCss": true,
-      "hash": "9b4a1b29",
-      "hashedFilename": "mock2.min.9b4a1b29.css",
+      "hash": "b6a40a2e",
+      "hashedFilename": "mock2.min.b6a40a2e.css",
       "destFolder": "spec/fixtures/target/subfolder",
-      "destPath": "spec/fixtures/target/subfolder/mock2.min.9b4a1b29.css",
+      "destPath": "spec/fixtures/target/subfolder/mock2.min.b6a40a2e.css",
       "usedIn": [
          "mock1.html",
          "mock1.php",
          "subfolder/mock2.html",
          "subfolder/mock2.php"
       ],
-      "references": 4
+      "references": 4,
+      "skipped": false
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.php",
@@ -196,6 +229,7 @@
       "destFolder": "spec/fixtures/target/subfolder",
       "destPath": "spec/fixtures/target/subfolder/mock2.php",
       "usedIn": null,
-      "references": null
+      "references": null,
+      "skipped": false
    }
 ]
