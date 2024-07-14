@@ -1,4 +1,4 @@
-//! rev-web-assets v1.3.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.4.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import chalk from 'chalk';
 import crypto from 'crypto';
@@ -7,7 +7,7 @@ import log from 'fancy-log';
 import path from 'path';
 import slash from 'slash';
 const revWebAssets = {
-    manifest(source, target) {
+    manifest(source, target, skip) {
         const files = fs.readdirSync(source, { recursive: true })
             .map(file => slash(path.join(source, file.toString())))
             .filter(file => fs.statSync(file).isFile())
@@ -33,6 +33,7 @@ const revWebAssets = {
                 destPath: null,
                 usedIn: isHtml ? null : [],
                 references: isHtml ? null : 0,
+                skipped: !isHtml && !!skip && file.includes(skip),
             };
         };
         const manifest = files.map(process);
@@ -42,7 +43,7 @@ const revWebAssets = {
         const lastDot = /\.(?=[^.]*$)/;
         return slash(path.normalize(!hash ? filename : filename.replace(lastDot, '.' + hash + '.')));
     },
-    removeHash(filename) {
+    stripHash(filename) {
         return filename.replace(/[.][0-9a-f]{8}[.]/, '.');
     },
     calcAssetHash(detail) {
@@ -56,13 +57,15 @@ const revWebAssets = {
         return detail;
     },
     hashAssetPath(manifest, detail, settings) {
+        const webPages = ['.html', '.htm', '.php'];
         const replacer = (matched, pre, uri, post) => {
             const ext = path.extname(uri);
-            const doNotHash = uri.includes(':') || ['.html', '.htm', '.php'].includes(ext) || ext.length < 2;
+            const doNotHash = uri.includes(':') || webPages.includes(ext) || ext.length < 2;
             const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
             const canonical = slash(path.normalize(canonicalPath + uri));
             const assetDetail = doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
-            if (assetDetail && !assetDetail.hash)
+            const skipAsset = !!settings.skip && uri.includes(settings.skip);
+            if (assetDetail && !assetDetail.hash && !skipAsset)
                 revWebAssets.calcAssetHash(assetDetail);
             if (assetDetail)
                 assetDetail.references++;
@@ -121,6 +124,7 @@ const revWebAssets = {
             force: false,
             metaContentBase: null,
             saveManifest: false,
+            skip: null,
         };
         const settings = { ...defaults, ...options };
         const startTime = Date.now();
@@ -139,10 +143,10 @@ const revWebAssets = {
                                 null;
         if (errorMessage)
             throw Error('[rev-web-assets] ' + errorMessage);
-        const manifest = revWebAssets.manifest(source, target);
+        const manifest = revWebAssets.manifest(source, target, settings.skip);
         revWebAssets.processHtml(manifest, settings);
         revWebAssets.processCss(manifest, settings);
-        const hashUnusedAsset = (detail) => !detail.hash && !detail.isHtml && revWebAssets.calcAssetHash(detail);
+        const hashUnusedAsset = (detail) => !detail.hash && !detail.isHtml && !detail.skipped && revWebAssets.calcAssetHash(detail);
         if (settings.force)
             manifest.forEach(hashUnusedAsset);
         revWebAssets.copyAssets(manifest);

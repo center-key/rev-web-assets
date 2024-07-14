@@ -1,10 +1,11 @@
-//! rev-web-assets v1.3.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.4.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
     force: boolean;
     metaContentBase: string | null;
     saveManifest: boolean;
+    skip: string | null;
 };
 export type ManifestDetail = {
     origin: string;
@@ -20,6 +21,7 @@ export type ManifestDetail = {
     destPath: string | null;
     usedIn: string[] | null;
     references: number | null;
+    skipped: boolean;
 };
 export type Manifest = ManifestDetail[];
 export type Results = {
@@ -33,9 +35,9 @@ export type ReporterSettings = {
     summaryOnly: boolean;
 };
 declare const revWebAssets: {
-    manifest(source: string, target: string): ManifestDetail[];
+    manifest(source: string, target: string, skip: string | null): ManifestDetail[];
     hashFilename(filename: string, hash: string | null): string;
-    removeHash(filename: string): string;
+    stripHash(filename: string): string;
     calcAssetHash(detail: ManifestDetail): ManifestDetail;
     hashAssetPath(manifest: ManifestDetail[], detail: ManifestDetail, settings: Settings): (matched: string, pre: string, uri: string, post: string) => string;
     processHtml(manifest: ManifestDetail[], settings: Settings): void;
