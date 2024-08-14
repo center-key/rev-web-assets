@@ -38,7 +38,7 @@ const error =
    cli.paramsCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
    null;
 if (error)
-   throw Error('[rev-web-assets] ' + error);
+   throw new Error('[rev-web-assets] ' + error);
 const options = {
    cd:              cli.flagMap.cd ?? null,
    force:           cli.flagOn.force,

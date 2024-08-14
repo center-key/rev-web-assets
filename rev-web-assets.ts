@@ -130,8 +130,9 @@ const revWebAssets = {
          if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
             assetDetail.usedIn!.push(detail.canonical);
          const trailingSlashes = /\/*$/;
-         const absoluteUrl = () => settings.metaContentBase!.replace(trailingSlashes, '/') +
-            assetDetail?.canonicalFolder + '/' + assetDetail?.hashedFilename;
+         const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
+         const absoluteUrl = () =>
+            `${metaContentBase}${assetDetail?.canonicalFolder}/${assetDetail?.hashedFilename}`;
          const hashedUri = () => {
             // Example: 'graphics/avatar.jpg' --> 'graphics/avatar.ad41b203.jpg'
             const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
@@ -211,7 +212,7 @@ const revWebAssets = {
          !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
          null;
       if (errorMessage)
-         throw Error('[rev-web-assets] ' + errorMessage);
+         throw new Error('[rev-web-assets] ' + errorMessage);
       const manifest = revWebAssets.manifest(source, target, settings.skip);
       revWebAssets.processHtml(manifest, settings);
       revWebAssets.processCss(manifest,  settings);
