@@ -1,6 +1,6 @@
 {
    "name": "rev-web-assets",
-   "version": "1.4.0",
+   "version": "1.4.1",
    "description": "Revision web asset filenames with cache busting content hash fingerprints",
    "license": "MIT",
    "type": "module",
@@ -62,7 +62,7 @@
    "devDependencies": {
       "@eslint/js": "~9.9",
       "@types/fancy-log": "~2.0",
-      "@types/node": "~22.2",
+      "@types/node": "~22.3",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
       "copy-file-util": "~1.2",

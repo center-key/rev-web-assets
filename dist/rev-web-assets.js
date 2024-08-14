@@ -1,4 +1,4 @@
-//! rev-web-assets v1.4.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.4.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import chalk from 'chalk';
 import crypto from 'crypto';
@@ -72,8 +72,8 @@ const revWebAssets = {
             if (assetDetail && !assetDetail.usedIn.includes(detail.canonical))
                 assetDetail.usedIn.push(detail.canonical);
             const trailingSlashes = /\/*$/;
-            const absoluteUrl = () => settings.metaContentBase.replace(trailingSlashes, '/') +
-                assetDetail?.canonicalFolder + '/' + assetDetail?.hashedFilename;
+            const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
+            const absoluteUrl = () => `${metaContentBase}${assetDetail?.canonicalFolder}/${assetDetail?.hashedFilename}`;
             const hashedUri = () => {
                 const noBase = !settings.metaContentBase || !pre.startsWith('<meta');
                 return noBase ? revWebAssets.hashFilename(uri, assetDetail.hash) : absoluteUrl();
@@ -142,7 +142,7 @@ const revWebAssets = {
                             !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
                                 null;
         if (errorMessage)
-            throw Error('[rev-web-assets] ' + errorMessage);
+            throw new Error('[rev-web-assets] ' + errorMessage);
         const manifest = revWebAssets.manifest(source, target, settings.skip);
         revWebAssets.processHtml(manifest, settings);
         revWebAssets.processCss(manifest, settings);
