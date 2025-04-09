@@ -5,7 +5,7 @@
       <meta property=og:type  content="website">
       <meta property=og:image content="https://example.net/subfolder/graphics/mock2.9e7dfdbd.jpg">
       <title>🔢🔢🔢 rev-web-assets 🔢🔢🔢</title>
-      <link rel=icon       href=https://centerkey.com/graphics/bookmark.png>
+      <link rel=icon       href=https://centerkey.com/graphics/bookmark-icon.png>
       <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@3.0/dist/css/pretty-print-json.css>
       <link rel=stylesheet href=../mock1.min.d45c0047.css>
       <link rel=stylesheet href=mock2.min.b6a40a2e.css>
