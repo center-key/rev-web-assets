@@ -10,8 +10,8 @@
       <link rel=stylesheet href=../mock1.min.d45c0047.css>
       <link rel=stylesheet href=mock2.min.b6a40a2e.css>
       <script defer src=https://cdn.jsdelivr.net/npm/pretty-print-json@3.0/dist/pretty-print-json.min.js></script>
-      <script defer src=../mock1.bbd2ac8e.js></script>
-      <script defer src=mock2.09d6bb59.js></script>
+      <script defer src=../mock1.406c9089.js></script>
+      <script defer src=mock2.b8a8bb60.js></script>
    </head>
    <body>
       <h1>🔢🔢🔢 rev-web-assets 🔢🔢🔢</h1>
