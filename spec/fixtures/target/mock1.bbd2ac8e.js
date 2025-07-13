@@ -1,6 +1,6 @@
 //! rev-web-assets ~~ MIT License
 
-console.log('Mock #1');
+console.info('Mock #1');
 
 const oneElem =  globalThis.document.querySelector('#one');
 const metaElem = globalThis.document.querySelector('meta[property=og\\:image]');
@@ -11,4 +11,4 @@ const ogImage = metaElem.getAttribute('content');
 const revved = !/mock1\.jpg/.test(imgElem.getAttribute('src'));
 const msg = ogImage.startsWith('https://') ?
    '✓ Absolute URL' : 'Try setting: --meta-content-base=https://example.net';
-console.log('Open Graph Image:', ogImage, revved ? '[revved]' : '[not revved]', msg);
+console.info('Open Graph Image:', ogImage, revved ? '[revved]' : '[not revved]', msg);

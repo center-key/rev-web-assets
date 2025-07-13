@@ -138,7 +138,7 @@ import { revWebAssets } from 'rev-web-assets';
 
 const options = { saveManifest: true };
 const results = revWebAssets.revision('source', 'target', options);
-console.log('Number of web files processed:', results.count);
+console.info('Number of web files processed:', results.count);
 ```
 
 See the **TypeScript Declarations** at the top of [rev-web-assets.ts](src/rev-web-assets.ts) for documentation.
