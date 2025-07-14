@@ -1,5 +1,6 @@
-//! rev-web-assets v1.4.2 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.4.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
+import { EOL } from 'node:os';
 import chalk from 'chalk';
 import crypto from 'crypto';
 import fs from 'fs';
@@ -49,7 +50,8 @@ const revWebAssets = {
     calcAssetHash(detail) {
         const hashLen = 8;
         const brokenWindows = /$\r\n/gm;
-        const contents = fs.readFileSync(detail.origin).toString().replace(brokenWindows, '\n');
+        const normalize = (buffer) => buffer.toString().replace(brokenWindows, '\n');
+        const contents = normalize(fs.readFileSync(detail.origin));
         const hash = crypto.createHash('md5').update(contents).digest('hex');
         detail.bytes = contents.length;
         detail.hash = hash.substring(0, hashLen);
@@ -88,11 +90,12 @@ const revWebAssets = {
         const metaPattern = /(<meta\s.*content=['"]?)([^"'>\s]*)(['"]?[^<]*>)/ig;
         const process = (detail) => {
             const content = fs.readFileSync(detail.origin, 'utf-8');
+            const calcNext = () => revWebAssets.hashAssetPath(manifest, detail, settings);
             const hashedContent = content
-                .replace(hrefPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
-                .replace(srcPattern, revWebAssets.hashAssetPath(manifest, detail, settings))
-                .replace(metaPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
-            detail.destPath = detail.destFolder + '/' + detail.filename;
+                .replace(hrefPattern, calcNext())
+                .replace(srcPattern, calcNext())
+                .replace(metaPattern, calcNext());
+            detail.destPath = `${detail.destFolder}/${detail.filename}`;
             fs.mkdirSync(detail.destFolder, { recursive: true });
             fs.writeFileSync(detail.destPath, hashedContent);
         };
@@ -102,9 +105,9 @@ const revWebAssets = {
         const urlPattern = /(url\(["']?)([^)('"]*)(["']?\))/ig;
         const process = (detail) => {
             const content = fs.readFileSync(detail.origin, 'utf-8');
-            const hashedContent = content
-                .replace(urlPattern, revWebAssets.hashAssetPath(manifest, detail, settings));
-            detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
+            const calcNext = () => revWebAssets.hashAssetPath(manifest, detail, settings);
+            const hashedContent = content.replace(urlPattern, calcNext());
+            detail.destPath = `${detail.destFolder}/${detail.hashedFilename ?? detail.filename}`;
             fs.mkdirSync(detail.destFolder, { recursive: true });
             fs.writeFileSync(detail.destPath, hashedContent);
         };
@@ -112,7 +115,7 @@ const revWebAssets = {
     },
     copyAssets(manifest) {
         const process = (detail) => {
-            detail.destPath = detail.destFolder + '/' + (detail.hashedFilename ?? detail.filename);
+            detail.destPath = `${detail.destFolder}/${detail.hashedFilename ?? detail.filename}`;
             fs.mkdirSync(detail.destFolder, { recursive: true });
             fs.copyFileSync(detail.origin, detail.destPath);
         };
@@ -152,8 +155,10 @@ const revWebAssets = {
         revWebAssets.copyAssets(manifest);
         manifest.forEach(detail => detail.usedIn && detail.usedIn.sort());
         const manifestPath = path.join(target, 'manifest.json');
+        const indent = '   ';
+        const toJson = (data) => JSON.stringify(data, null, indent).replace(/\r?\n/g, EOL) + EOL;
         if (settings.saveManifest)
-            fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');
+            fs.writeFileSync(manifestPath, toJson(manifest));
         return {
             source: source,
             target: target,
