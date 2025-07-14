@@ -1,6 +1,7 @@
 // rev-web-assets ~~ MIT License
 
 // Imports
+import { EOL } from 'node:os';
 import chalk  from 'chalk';
 import crypto from 'crypto';
 import fs     from 'fs';
@@ -225,8 +226,11 @@ const revWebAssets = {
       revWebAssets.copyAssets(manifest);
       manifest.forEach(detail => detail.usedIn && detail.usedIn.sort());
       const manifestPath = path.join(target, 'manifest.json');
+      const indent = '   ';
+      const toJson = (data: unknown) =>
+         JSON.stringify(data, null, indent).replace(/\r?\n/g, EOL) + EOL;
       if (settings.saveManifest)
-         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, '   ') + '\n');
+         fs.writeFileSync(manifestPath, toJson(manifest));
       return {
          source:   source,
          target:   target,
