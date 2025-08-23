@@ -104,8 +104,8 @@ const revWebAssets = {
       // assets manifest detail.
       const hashLen =         8;
       const brokenWindows =   /$\r\n/gm;
-      const normalize =       (buffer: Buffer) => buffer.toString().replace(brokenWindows, '\n');
-      const contents =        normalize(fs.readFileSync(detail.origin));
+      const cleanUpText =     (buffer: Buffer) => buffer.toString().replace(brokenWindows, '\n');
+      const contents =        cleanUpText(fs.readFileSync(detail.origin));
       const hash =            crypto.createHash('md5').update(contents).digest('hex');
       detail.bytes =          contents.length;
       detail.hash =           hash.substring(0, hashLen);
@@ -204,13 +204,12 @@ const revWebAssets = {
          saveManifest:    false,
          skip:            null,
          };
-      const settings =  { ...defaults, ...options };
-      const startTime = Date.now();
-      const normalize = (folder: string) =>
-         !folder ? '' : slash(path.normalize(folder)).replace(/\/$/, '');
-      const startFolder = settings.cd ? normalize(settings.cd) + '/' : '';
-      const source =      normalize(startFolder + sourceFolder);
-      const target =      normalize(startFolder + targetFolder);
+      const settings =    { ...defaults, ...options };
+      const startTime =   Date.now();
+      const cleanUp =     (folder: string) => slash(path.normalize(folder.trim())).replace(/\/$/, '');
+      const startFolder = settings.cd ? cleanUp(settings.cd) + '/' : '';
+      const source =      cleanUp(startFolder + sourceFolder);
+      const target =      cleanUp(startFolder + targetFolder);
       if (targetFolder)
          fs.mkdirSync(target, { recursive: true });
       const errorMessage =
