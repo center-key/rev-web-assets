@@ -1,4 +1,4 @@
-//! rev-web-assets v1.4.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { EOL } from 'node:os';
 import chalk from 'chalk';
@@ -51,8 +51,8 @@ const revWebAssets = {
     calcAssetHash(detail) {
         const hashLen = 8;
         const brokenWindows = /$\r\n/gm;
-        const normalize = (buffer) => buffer.toString().replace(brokenWindows, '\n');
-        const contents = normalize(fs.readFileSync(detail.origin));
+        const cleanUpText = (buffer) => buffer.toString().replace(brokenWindows, '\n');
+        const contents = cleanUpText(fs.readFileSync(detail.origin));
         const hash = crypto.createHash('md5').update(contents).digest('hex');
         detail.bytes = contents.length;
         detail.hash = hash.substring(0, hashLen);
@@ -136,10 +136,10 @@ const revWebAssets = {
         };
         const settings = { ...defaults, ...options };
         const startTime = Date.now();
-        const normalize = (folder) => !folder ? '' : slash(path.normalize(folder)).replace(/\/$/, '');
-        const startFolder = settings.cd ? normalize(settings.cd) + '/' : '';
-        const source = normalize(startFolder + sourceFolder);
-        const target = normalize(startFolder + targetFolder);
+        const cleanUp = (folder) => slash(path.normalize(folder.trim())).replace(/\/$/, '');
+        const startFolder = settings.cd ? cleanUp(settings.cd) + '/' : '';
+        const source = cleanUp(startFolder + sourceFolder);
+        const target = cleanUp(startFolder + targetFolder);
         if (targetFolder)
             fs.mkdirSync(target, { recursive: true });
         const errorMessage = !sourceFolder ? 'Must specify the source folder path.' :
