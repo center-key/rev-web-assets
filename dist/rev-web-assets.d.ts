@@ -22,6 +22,7 @@ export type ManifestDetail = {
     usedIn: string[] | null;
     references: number | null;
     skipped: boolean;
+    missing: string[] | null;
 };
 export type Manifest = ManifestDetail[];
 export type Results = {
@@ -33,6 +34,7 @@ export type Results = {
 };
 export type ReporterSettings = {
     summaryOnly: boolean;
+    hide404s: boolean;
 };
 declare const revWebAssets: {
     manifest(source: string, target: string, skip: string | null): ManifestDetail[];

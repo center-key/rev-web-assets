@@ -13,7 +13,8 @@
       "destPath": "spec/fixtures/target-force/do-not-hash.jpg",
       "usedIn": [],
       "references": 0,
-      "skipped": true
+      "skipped": true,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/graphics/mock1.jpg",
@@ -29,7 +30,8 @@
       "destPath": "spec/fixtures/target-force/mock1.ad41b203.jpg",
       "usedIn": [],
       "references": 0,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/graphics/unused.jpg",
@@ -45,6 +47,7 @@
       "destPath": "spec/fixtures/target-force/unused.eb19dd7e.jpg",
       "usedIn": [],
       "references": 0,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    }
 ]

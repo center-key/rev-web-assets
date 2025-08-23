@@ -25,7 +25,7 @@ import { revWebAssets } from '../dist/rev-web-assets.js';
 
 // Parameters and flags
 const validFlags =
-   ['cd', 'force', 'manifest', 'meta-content-base', 'note', 'quiet', 'skip', 'summary'];
+   ['cd', 'force', 'hide404s', 'manifest', 'meta-content-base', 'note', 'quiet', 'skip', 'summary'];
 const cli =    cliArgvUtil.parse(validFlags);
 const source = cli.params[0];
 const target = cli.params[1];
@@ -47,5 +47,9 @@ const options = {
    skip:            cli.flagMap.skip ?? null,
    };
 const results = revWebAssets.revision(source, target, options);
+const reporterOptions = {
+   summaryOnly: cli.flagOn.summary,
+   hide404s:    cli.flagOn.hide404s,
+   };
 if (!cli.flagOn.quiet)
-   revWebAssets.reporter(results, { summaryOnly: cli.flagOn.summary });
+   revWebAssets.reporter(results, reporterOptions);

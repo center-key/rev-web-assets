@@ -11,3 +11,6 @@ article >p:nth-of-type(5) {
 article >p:nth-of-type(6) {
    background-image: url(graphics/mock2.9e7dfdbd.jpg);
    }
+article >p:nth-of-type(7) {
+   background-image: url(wrong-folder/mock.jpg);
+   }

@@ -32,6 +32,7 @@ export type ManifestDetail = {
    usedIn:          string[] | null, //files that references the asset
    references:      number | null,   //number of times the asset is referenced
    skipped:         boolean,         //asset file is configured to not be hashed
+   missing:         string[] | null, //html lines of asset files referenced but not found
    };
 export type Manifest = ManifestDetail[];  //list of assets
 export type Results = {
@@ -43,6 +44,7 @@ export type Results = {
    };
 export type ReporterSettings = {
    summaryOnly: boolean,  //only print out the single line summary message
+   hide404s:    boolean,  //suppress warnings about missing asset files
    };
 
 const revWebAssets = {
@@ -75,6 +77,7 @@ const revWebAssets = {
             usedIn:          isHtml ? null : [],
             references:      isHtml ? null : 0,
             skipped:         !isHtml && !!skip && file.includes(skip),
+            missing:         isHtml || isCss ? [] : null,
             };
          }
       const manifest = files.map(process);
@@ -123,7 +126,8 @@ const revWebAssets = {
          const doNotHash =     uri.includes(':') || webPages.includes(ext) || ext.length < 2;
          const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
          const canonical =     slash(path.normalize(canonicalPath + uri));
-         const assetDetail =   doNotHash ? null : manifest.find(detail => detail.canonical === canonical);
+         const isAssetDetail = (detail: ManifestDetail) => detail.canonical === canonical;
+         const assetDetail =   doNotHash ? null : manifest.find(isAssetDetail);
          const skipAsset =     !!settings.skip && uri.includes(settings.skip);
          if (assetDetail && !assetDetail.hash && !skipAsset)
             revWebAssets.calcAssetHash(assetDetail);
@@ -131,6 +135,8 @@ const revWebAssets = {
             assetDetail.references!++;
          if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
             assetDetail.usedIn!.push(detail.canonical);
+         if (!doNotHash && !skipAsset && !assetDetail)
+            detail.missing!.push(matched);
          const trailingSlashes = /\/*$/;
          const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
          const absoluteUrl = () =>
@@ -173,7 +179,8 @@ const revWebAssets = {
          const content =       fs.readFileSync(detail.origin, 'utf-8');
          const calcNext =      () => revWebAssets.hashAssetPath(manifest, detail, settings);
          const hashedContent = content.replace(urlPattern, calcNext());
-         detail.destPath =     `${detail.destFolder}/${detail.hashedFilename ?? detail.filename}`;
+         const filename =      detail.hashedFilename ?? detail.filename;
+         detail.destPath =     `${detail.destFolder}/${filename}`;
          fs.mkdirSync(detail.destFolder, { recursive: true });
          fs.writeFileSync(detail.destPath, hashedContent);
          };
@@ -243,6 +250,7 @@ const revWebAssets = {
    reporter(results: Results, options?: Partial<ReporterSettings>): Results {
       const defaults = {
          summaryOnly: false,
+         hide404s:    false,
          };
       const settings =  { ...defaults, ...options };
       const name =      chalk.gray('rev-web-assets');
@@ -251,11 +259,17 @@ const revWebAssets = {
       const arrow =     { big: chalk.gray.bold(' ⟹  '), little: chalk.gray.bold('→') };
       const infoColor = results.count ? chalk.white : chalk.red.bold;
       const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+      const warning =   chalk.red.bold('missing asset in');
       log(name, source, arrow.big, target, info);
       const logDetail = (detail: ManifestDetail) => {
          const origin = chalk.white(detail.origin.substring(results.source.length + 1));
          const dest =   chalk.green(detail.destPath!.substring(results.target.length + 1));
+         const file =   chalk.blue.bold(detail.origin);
          log(name, origin, arrow.little, dest);
+         const logMissingAsset = (assetLine: string) =>
+            log(name, warning, file, arrow.little, chalk.green(assetLine));
+         if (!settings.hide404s && detail.missing)
+            detail.missing.forEach(logMissingAsset);
          };
       if (!settings.summaryOnly)
          results.manifest.forEach(logDetail);

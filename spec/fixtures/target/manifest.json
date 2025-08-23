@@ -20,7 +20,8 @@
          "subfolder/mock2.php"
       ],
       "references": 6,
-      "skipped": true
+      "skipped": true,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/graphics/mock1.jpg",
@@ -43,7 +44,8 @@
          "subfolder/mock2.php"
       ],
       "references": 8,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/graphics/unused.jpg",
@@ -59,7 +61,8 @@
       "destPath": "spec/fixtures/target/graphics/unused.jpg",
       "usedIn": [],
       "references": 0,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/mock1.html",
@@ -75,7 +78,8 @@
       "destPath": "spec/fixtures/target/mock1.html",
       "usedIn": null,
       "references": null,
-      "skipped": false
+      "skipped": false,
+      "missing": []
    },
    {
       "origin": "spec/fixtures/source/mock1.js",
@@ -96,7 +100,8 @@
          "subfolder/mock2.php"
       ],
       "references": 4,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/mock1.min.css",
@@ -117,7 +122,8 @@
          "subfolder/mock2.php"
       ],
       "references": 4,
-      "skipped": false
+      "skipped": false,
+      "missing": []
    },
    {
       "origin": "spec/fixtures/source/mock1.php",
@@ -133,7 +139,11 @@
       "destPath": "spec/fixtures/target/mock1.php",
       "usedIn": null,
       "references": null,
-      "skipped": false
+      "skipped": false,
+      "missing": [
+         "<img src=graphics/missing-asset1.png alt=bogus>",
+         "<img src=graphics/missing-asset2.jpg alt=bogus>"
+      ]
    },
    {
       "origin": "spec/fixtures/source/subfolder/graphics/mock2.jpg",
@@ -156,7 +166,8 @@
          "subfolder/mock2.php"
       ],
       "references": 8,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.html",
@@ -172,7 +183,8 @@
       "destPath": "spec/fixtures/target/subfolder/mock2.html",
       "usedIn": null,
       "references": null,
-      "skipped": false
+      "skipped": false,
+      "missing": []
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.js",
@@ -193,20 +205,21 @@
          "subfolder/mock2.php"
       ],
       "references": 4,
-      "skipped": false
+      "skipped": false,
+      "missing": null
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.min.css",
       "filename": "mock2.min.css",
       "canonicalFolder": "subfolder",
       "canonical": "subfolder/mock2.min.css",
-      "bytes": 344,
+      "bytes": 426,
       "isHtml": false,
       "isCss": true,
-      "hash": "b6a40a2e",
-      "hashedFilename": "mock2.min.b6a40a2e.css",
+      "hash": "4aac299e",
+      "hashedFilename": "mock2.min.4aac299e.css",
       "destFolder": "spec/fixtures/target/subfolder",
-      "destPath": "spec/fixtures/target/subfolder/mock2.min.b6a40a2e.css",
+      "destPath": "spec/fixtures/target/subfolder/mock2.min.4aac299e.css",
       "usedIn": [
          "mock1.html",
          "mock1.php",
@@ -214,7 +227,10 @@
          "subfolder/mock2.php"
       ],
       "references": 4,
-      "skipped": false
+      "skipped": false,
+      "missing": [
+         "url(wrong-folder/mock.jpg)"
+      ]
    },
    {
       "origin": "spec/fixtures/source/subfolder/mock2.php",
@@ -230,6 +246,7 @@
       "destPath": "spec/fixtures/target/subfolder/mock2.php",
       "usedIn": null,
       "references": null,
-      "skipped": false
+      "skipped": false,
+      "missing": []
    }
 ]

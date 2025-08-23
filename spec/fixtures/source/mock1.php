@@ -33,6 +33,8 @@
             <img src=graphics/do-not-hash.jpg alt=neon>
             <img src=graphics/mock1.jpg alt=neon>
             <img src=subfolder/graphics/mock2.jpg alt=neon>
+            <img src=graphics/missing-asset1.png alt=bogus>
+            <img src=graphics/missing-asset2.jpg alt=bogus>
          </figure>
          <p>Cover 1A</p>
          <p>Cover 1B</p>

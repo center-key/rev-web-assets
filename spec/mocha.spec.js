@@ -105,6 +105,7 @@ describe('Generated manifest', () => {
             ],
          references: 8,
          skipped:    false,
+         missing:    null,
          };
       assertDeepStrictEqual(actual, expected);
       });
@@ -131,7 +132,7 @@ describe('Target folder', () => {
          'subfolder/graphics/mock2.9e7dfdbd.jpg',
          'subfolder/mock2.b8a8bb60.js',
          'subfolder/mock2.html',
-         'subfolder/mock2.min.b6a40a2e.css',
+         'subfolder/mock2.min.4aac299e.css',
          'subfolder/mock2.php',
          ];
       assertDeepStrictEqual(actual, expected);
