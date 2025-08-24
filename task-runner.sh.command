@@ -85,8 +85,15 @@ buildProject() {
    echo
    }
 
+devNote() {
+   echo "To test out local code changes:"
+   echo "   $ npm run pretest && node bin/cli.js spec/fixtures/source spec/fixtures/target"
+   echo
+   }
+
 setupTools
 releaseInstructions
 buildProject
+devNote
 sleep 1
 open spec/fixtures/target/mock1.html

@@ -48,7 +48,7 @@ Command-line flags:
 | --------------------- | ---------------------------------------------------------------------- | ---------- |
 | `--cd`                | Change working directory before starting starting.                     | **string** |
 | `--force`             | Revision (hash) all asset files even if not referenced.                | N/A        |
-| `--hide404s`          | Suppress warnings about missing asset files.                           | N/A        |
+| `--hide404s`          | Suppress warning messages about missing asset files.                   | N/A        |
 | `--manifest`          | Output the list of files to: **manifest.json**                         | N/A        |
 | `--meta-content-base` | Make meta URLs, like "og:image", absolute.                             | **string** |
 | `--note`              | Place to add a comment only for humans.                                | **string** |

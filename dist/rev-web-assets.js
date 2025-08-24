@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { EOL } from 'node:os';
 import chalk from 'chalk';
@@ -61,7 +61,8 @@ const revWebAssets = {
     },
     hashAssetPath(manifest, detail, settings) {
         const webPages = ['.html', '.htm', '.php'];
-        const replacer = (matched, pre, uri, post) => {
+        const replacer = (matched, pre, url, post) => {
+            const uri = url.replace(/[#?].*/, '');
             const ext = path.extname(uri);
             const doNotHash = uri.includes(':') || webPages.includes(ext) || ext.length < 2;
             const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
@@ -76,7 +77,7 @@ const revWebAssets = {
             if (assetDetail && !assetDetail.usedIn.includes(detail.canonical))
                 assetDetail.usedIn.push(detail.canonical);
             if (!doNotHash && !skipAsset && !assetDetail)
-                detail.missing.push(matched);
+                detail.missing.push(matched.replace(/\s+/g, ' '));
             const trailingSlashes = /\/*$/;
             const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
             const absoluteUrl = () => `${metaContentBase}${assetDetail?.canonicalFolder}/${assetDetail?.hashedFilename}`;
