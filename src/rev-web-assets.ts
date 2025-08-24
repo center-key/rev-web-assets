@@ -44,7 +44,7 @@ export type Results = {
    };
 export type ReporterSettings = {
    summaryOnly: boolean,  //only print out the single line summary message
-   hide404s:    boolean,  //suppress warnings about missing asset files
+   hide404s:    boolean,  //suppress warning messages about missing asset files
    };
 
 const revWebAssets = {
@@ -119,9 +119,10 @@ const revWebAssets = {
       // Example function output:
       //    '<img src=logo.c2f3e84e.png alt=Logo>'
       const webPages = ['.html', '.htm', '.php'];
-      const replacer = (matched: string, pre: string, uri: string, post: string): string => {
+      const replacer = (matched: string, pre: string, url: string, post: string): string => {
          // Example matched broken into 3 parts:
          //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
+         const uri =           url.replace(/[#?].*/, '');  //strip off trailing query string and hash fragment
          const ext =           path.extname(uri);
          const doNotHash =     uri.includes(':') || webPages.includes(ext) || ext.length < 2;
          const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
@@ -136,7 +137,7 @@ const revWebAssets = {
          if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
             assetDetail.usedIn!.push(detail.canonical);
          if (!doNotHash && !skipAsset && !assetDetail)
-            detail.missing!.push(matched);
+            detail.missing!.push(matched.replace(/\s+/g, ' '));
          const trailingSlashes = /\/*$/;
          const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
          const absoluteUrl = () =>

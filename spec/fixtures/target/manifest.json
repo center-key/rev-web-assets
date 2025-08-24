@@ -142,7 +142,7 @@
       "skipped": false,
       "missing": [
          "<img src=graphics/missing-asset1.png alt=bogus>",
-         "<img src=graphics/missing-asset2.jpg alt=bogus>"
+         "<img src=graphics/missing-asset2.jpg alt=bogus class=extraneous-whitespace>"
       ]
    },
    {

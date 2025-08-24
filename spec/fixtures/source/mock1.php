@@ -16,7 +16,7 @@
    <body>
       <h1>🔢🔢🔢 rev-web-assets 🔢🔢🔢</h1>
       <?php echo '<h2>Mock #1</h2>'; ?>
-      <a href=subfolder/mock2.php>Mock #2</a>
+      <a href=subfolder/mock2.php#two>Mock #2</a>
       <section id=one>
          <h3>Macaroni</h3>
          <figure class=bad><strong>&times;</strong><figcaption>Error</figcaption></figure>
@@ -34,7 +34,7 @@
             <img src=graphics/mock1.jpg alt=neon>
             <img src=subfolder/graphics/mock2.jpg alt=neon>
             <img src=graphics/missing-asset1.png alt=bogus>
-            <img src=graphics/missing-asset2.jpg alt=bogus>
+            <img src=graphics/missing-asset2.jpg alt=bogus        class=extraneous-whitespace>
          </figure>
          <p>Cover 1A</p>
          <p>Cover 1B</p>

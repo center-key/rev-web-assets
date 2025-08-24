@@ -16,7 +16,7 @@
    <body>
       <h1>🔢🔢🔢 rev-web-assets 🔢🔢🔢</h1>
       <?php echo '<h2>Mock #2</h2>'; ?>
-      <a href=subfolder/mock1.php>Mock #1</a>
+      <a href="subfolder/mock1.php?x=777">Mock #1</a>
       <section id=one>
          <h3>Macaroni</h3>
          <figure class=bad><strong>&times;</strong><figcaption>Error</figcaption></figure>
