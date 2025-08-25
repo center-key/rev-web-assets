@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { EOL } from 'node:os';
 import chalk from 'chalk';
@@ -62,13 +62,15 @@ const revWebAssets = {
     hashAssetPath(manifest, detail, settings) {
         const webPages = ['.html', '.htm', '.php'];
         const replacer = (matched, pre, url, post) => {
+            const line = matched.replace(/\s+/g, ' ');
             const uri = url.replace(/[#?].*/, '');
             const ext = path.extname(uri);
-            const doNotHash = uri.includes(':') || webPages.includes(ext) || ext.length < 2;
+            const isTemplate = /{.*}|<.*>|~~.*~~/.test(uri);
+            const unhashable = uri.includes(':') || webPages.includes(ext) || ext.length < 2;
             const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
             const canonical = slash(path.normalize(canonicalPath + uri));
             const isAssetDetail = (detail) => detail.canonical === canonical;
-            const assetDetail = doNotHash ? null : manifest.find(isAssetDetail);
+            const assetDetail = isTemplate || unhashable ? null : manifest.find(isAssetDetail);
             const skipAsset = !!settings.skip && uri.includes(settings.skip);
             if (assetDetail && !assetDetail.hash && !skipAsset)
                 revWebAssets.calcAssetHash(assetDetail);
@@ -76,8 +78,8 @@ const revWebAssets = {
                 assetDetail.references++;
             if (assetDetail && !assetDetail.usedIn.includes(detail.canonical))
                 assetDetail.usedIn.push(detail.canonical);
-            if (!doNotHash && !skipAsset && !assetDetail)
-                detail.missing.push(matched.replace(/\s+/g, ' '));
+            if (!isTemplate && !unhashable && !skipAsset && !assetDetail)
+                detail.missing.push({ ext, line });
             const trailingSlashes = /\/*$/;
             const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
             const absoluteUrl = () => `${metaContentBase}${assetDetail?.canonicalFolder}/${assetDetail?.hashedFilename}`;
@@ -185,14 +187,14 @@ const revWebAssets = {
         const arrow = { big: chalk.gray.bold(' ⟹  '), little: chalk.gray.bold('→') };
         const infoColor = results.count ? chalk.white : chalk.red.bold;
         const info = infoColor(`(files: ${results.count}, ${results.duration}ms)`);
-        const warning = chalk.red.bold('missing asset in');
         log(name, source, arrow.big, target, info);
         const logDetail = (detail) => {
             const origin = chalk.white(detail.origin.substring(results.source.length + 1));
             const dest = chalk.green(detail.destPath.substring(results.target.length + 1));
             const file = chalk.blue.bold(detail.origin);
+            const warning = (ext) => chalk.red.bold(`missing ${ext} asset in`);
             log(name, origin, arrow.little, dest);
-            const logMissingAsset = (assetLine) => log(name, warning, file, arrow.little, chalk.green(assetLine));
+            const logMissingAsset = (missing) => log(name, warning(missing.ext), file, arrow.little, chalk.green(missing.line));
             if (!settings.hide404s && detail.missing)
                 detail.missing.forEach(logMissingAsset);
         };

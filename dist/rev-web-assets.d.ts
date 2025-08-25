@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.1 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
@@ -6,6 +6,10 @@ export type Settings = {
     metaContentBase: string | null;
     saveManifest: boolean;
     skip: string | null;
+};
+export type MissingAsset = {
+    ext: string;
+    line: string;
 };
 export type ManifestDetail = {
     origin: string;
@@ -22,7 +26,7 @@ export type ManifestDetail = {
     usedIn: string[] | null;
     references: number | null;
     skipped: boolean;
-    missing: string[] | null;
+    missing: MissingAsset[] | null;
 };
 export type Manifest = ManifestDetail[];
 export type Results = {
