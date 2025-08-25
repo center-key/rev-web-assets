@@ -17,22 +17,26 @@ export type Settings = {
    saveManifest:    boolean,        //output the list of files to manifest.json in the target folder
    skip:            string | null,  //do not revision (hash) asset files with paths containing given string.
    };
+export type MissingAsset = {
+   ext:             string,  //filename extension of the asset file not found
+   line:            string,  //html line referencing the asset file not found
+   };
 export type ManifestDetail = {
-   origin:          string,          //source path of asset file
-   filename:        string,          //source filename of asset file
-   canonical:       string,          //normalized path used to lookup asset in manifest
-   canonicalFolder: string,          //directory of the normalized path of the asset file
-   isHtml:          boolean,         //asset file is HTML
-   isCss:           boolean,         //asset file is CSS
-   bytes:           number | null,   //asset file size
-   hash:            string | null,   //eight-digit cache busting hex humber that changes if the asset changes
-   hashedFilename:  string | null,   //filename of the asset with hash inserted before the file extension
-   destFolder:      string,          //directory of the target asset
-   destPath:        string | null,   //folder and filename of the target asset
-   usedIn:          string[] | null, //files that references the asset
-   references:      number | null,   //number of times the asset is referenced
-   skipped:         boolean,         //asset file is configured to not be hashed
-   missing:         string[] | null, //html lines of asset files referenced but not found
+   origin:          string,                //source path of asset file
+   filename:        string,                //source filename of asset file
+   canonical:       string,                //normalized path used to lookup asset in manifest
+   canonicalFolder: string,                //directory of the normalized path of the asset file
+   isHtml:          boolean,               //asset file is HTML
+   isCss:           boolean,               //asset file is CSS
+   bytes:           number | null,         //asset file size
+   hash:            string | null,         //eight-digit cache busting hex humber that changes if the asset changes
+   hashedFilename:  string | null,         //filename of the asset with hash inserted before the file extension
+   destFolder:      string,                //directory of the target asset
+   destPath:        string | null,         //folder and filename of the target asset
+   usedIn:          string[] | null,       //files that references the asset
+   references:      number | null,         //number of times the asset is referenced
+   skipped:         boolean,               //asset file is configured to not be hashed
+   missing:         MissingAsset[] | null, //asset files referenced but not found (404)
    };
 export type Manifest = ManifestDetail[];  //list of assets
 export type Results = {
@@ -122,6 +126,7 @@ const revWebAssets = {
       const replacer = (matched: string, pre: string, url: string, post: string): string => {
          // Example matched broken into 3 parts:
          //    '<img src=logo.png alt=Logo>' ==> '<img src=', 'logo.png', ' alt=Logo>'
+         const line =          matched.replace(/\s+/g, ' ');
          const uri =           url.replace(/[#?].*/, '');  //strip off trailing query string and hash fragment
          const ext =           path.extname(uri);
          const doNotHash =     uri.includes(':') || webPages.includes(ext) || ext.length < 2;
@@ -137,7 +142,7 @@ const revWebAssets = {
          if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
             assetDetail.usedIn!.push(detail.canonical);
          if (!doNotHash && !skipAsset && !assetDetail)
-            detail.missing!.push(matched.replace(/\s+/g, ' '));
+            detail.missing!.push({ ext, line });
          const trailingSlashes = /\/*$/;
          const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');
          const absoluteUrl = () =>
@@ -259,15 +264,15 @@ const revWebAssets = {
       const arrow =     { big: chalk.gray.bold(' ⟹  '), little: chalk.gray.bold('→') };
       const infoColor = results.count ? chalk.white : chalk.red.bold;
       const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
-      const warning =   chalk.red.bold('missing asset in');
       log(name, source, arrow.big, target, info);
       const logDetail = (detail: ManifestDetail) => {
-         const origin = chalk.white(detail.origin.substring(results.source.length + 1));
-         const dest =   chalk.green(detail.destPath!.substring(results.target.length + 1));
-         const file =   chalk.blue.bold(detail.origin);
+         const origin =  chalk.white(detail.origin.substring(results.source.length + 1));
+         const dest =    chalk.green(detail.destPath!.substring(results.target.length + 1));
+         const file =    chalk.blue.bold(detail.origin);
+         const warning = (ext: string) => chalk.red.bold(`missing ${ext} asset in`);
          log(name, origin, arrow.little, dest);
-         const logMissingAsset = (assetLine: string) =>
-            log(name, warning, file, arrow.little, chalk.green(assetLine));
+         const logMissingAsset = (missing: MissingAsset) =>
+            log(name, warning(missing.ext), file, arrow.little, chalk.green(missing.line));
          if (!settings.hide404s && detail.missing)
             detail.missing.forEach(logMissingAsset);
          };

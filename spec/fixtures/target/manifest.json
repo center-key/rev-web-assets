@@ -141,8 +141,14 @@
       "references": null,
       "skipped": false,
       "missing": [
-         "<img src=graphics/missing-asset1.png alt=bogus>",
-         "<img src=graphics/missing-asset2.jpg alt=bogus class=extraneous-whitespace>"
+         {
+            "ext": ".png",
+            "line": "<img src=graphics/missing-asset1.png alt=bogus>"
+         },
+         {
+            "ext": ".jpg",
+            "line": "<img src=graphics/missing-asset2.jpg alt=bogus class=extraneous-whitespace>"
+         }
       ]
    },
    {
@@ -229,7 +235,10 @@
       "references": 4,
       "skipped": false,
       "missing": [
-         "url(wrong-folder/mock.jpg)"
+         {
+            "ext": ".jpg",
+            "line": "url(wrong-folder/mock.jpg)"
+         }
       ]
    },
    {
