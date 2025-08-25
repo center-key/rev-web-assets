@@ -129,11 +129,12 @@ const revWebAssets = {
          const line =          matched.replace(/\s+/g, ' ');
          const uri =           url.replace(/[#?].*/, '');  //strip off trailing query string and hash fragment
          const ext =           path.extname(uri);
-         const doNotHash =     uri.includes(':') || webPages.includes(ext) || ext.length < 2;
+         const isTemplate =    /{.*}|<.*>|~~.*~~/.test(uri);
+         const unhashable =    uri.includes(':') || webPages.includes(ext) || ext.length < 2;
          const canonicalPath = detail.canonicalFolder ? detail.canonicalFolder + '/' : '';
          const canonical =     slash(path.normalize(canonicalPath + uri));
          const isAssetDetail = (detail: ManifestDetail) => detail.canonical === canonical;
-         const assetDetail =   doNotHash ? null : manifest.find(isAssetDetail);
+         const assetDetail =   isTemplate || unhashable ? null : manifest.find(isAssetDetail);
          const skipAsset =     !!settings.skip && uri.includes(settings.skip);
          if (assetDetail && !assetDetail.hash && !skipAsset)
             revWebAssets.calcAssetHash(assetDetail);
@@ -141,7 +142,7 @@ const revWebAssets = {
             assetDetail.references!++;
          if (assetDetail && !assetDetail.usedIn!.includes(detail.canonical))
             assetDetail.usedIn!.push(detail.canonical);
-         if (!doNotHash && !skipAsset && !assetDetail)
+         if (!isTemplate && !unhashable && !skipAsset && !assetDetail)
             detail.missing!.push({ ext, line });
          const trailingSlashes = /\/*$/;
          const metaContentBase = settings.metaContentBase?.replace(trailingSlashes, '/');

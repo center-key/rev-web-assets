@@ -33,8 +33,15 @@
             <img src=graphics/do-not-hash.jpg alt=neon>
             <img src=graphics/mock1.jpg alt=neon>
             <img src=subfolder/graphics/mock2.jpg alt=neon>
-            <img src=graphics/missing-asset1.png alt=bogus>
-            <img src=graphics/missing-asset2.jpg alt=bogus        class=extraneous-whitespace>
+         </figure>
+         <figure class=unhashable>
+            <img src=# alt=dynamically-loaded>
+            <img src=# data-attr-src=~~cart.total~~ alt=dynamically-loaded>
+            <img src=<?=$profile->avatar?> alt=dynamically-loaded>
+            <img src={{profile.avatar}} alt=dynamically-loaded>
+            <img src=~~profile.avatar~~ alt=dynamically-loaded>
+            <img src=graphics/missing-asset1.png alt=404>
+            <img src=graphics/missing-asset2.jpg        alt=extraneous-whitespace>
          </figure>
          <p>Cover 1A</p>
          <p>Cover 1B</p>

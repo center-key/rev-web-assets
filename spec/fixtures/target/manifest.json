@@ -143,11 +143,11 @@
       "missing": [
          {
             "ext": ".png",
-            "line": "<img src=graphics/missing-asset1.png alt=bogus>"
+            "line": "<img src=graphics/missing-asset1.png alt=404>"
          },
          {
             "ext": ".jpg",
-            "line": "<img src=graphics/missing-asset2.jpg alt=bogus class=extraneous-whitespace>"
+            "line": "<img src=graphics/missing-asset2.jpg alt=extraneous-whitespace>"
          }
       ]
    },
