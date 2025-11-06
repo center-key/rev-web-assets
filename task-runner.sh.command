@@ -87,7 +87,7 @@ buildProject() {
 
 devNote() {
    echo "To test out local code changes:"
-   echo "   $ npm run pretest && node bin/cli.js spec/fixtures/source spec/fixtures/target --manifest"
+   echo "   $ npm run pretest && node bin/cli.js spec/fixtures spec/target/direct --manifest"
    echo
    }
 
@@ -96,4 +96,4 @@ releaseInstructions
 buildProject
 devNote
 sleep 1
-open spec/fixtures/target/mock1.html
+open spec/target/direct/mock1.html

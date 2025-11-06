@@ -17,7 +17,7 @@ const options = {
    };
 let results;
 before(() =>
-   results = revWebAssets.revision('spec/fixtures/source', 'spec/fixtures/target', options));
+   results = revWebAssets.revision('spec/fixtures', 'spec/target/direct', options));
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('The "dist" folder', () => {
@@ -68,7 +68,7 @@ describe('Library module', () => {
 describe('Generated manifest', () => {
 
    it('contains a list of the correct number of files', () => {
-      const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
+      const manifest = JSON.parse(fs.readFileSync('spec/target/direct/manifest.json', 'utf-8'));
       const actual = {
          files:        manifest.length,
          results:      results.count,
@@ -83,10 +83,10 @@ describe('Generated manifest', () => {
       });
 
    it('contains the correct file details for mock1.jpg', () => {
-      const manifest = JSON.parse(fs.readFileSync('spec/fixtures/target/manifest.json', 'utf-8'));
+      const manifest = JSON.parse(fs.readFileSync('spec/target/direct/manifest.json', 'utf-8'));
       const actual =   manifest[1];
       const expected = {
-         origin:          'spec/fixtures/source/graphics/mock1.jpg',
+         origin:          'spec/fixtures/graphics/mock1.jpg',
          filename:        'mock1.jpg',
          canonicalFolder: 'graphics',
          canonical:       'graphics/mock1.jpg',
@@ -95,8 +95,8 @@ describe('Generated manifest', () => {
          isCss:           false,
          hash:            'ad41b203',
          hashedFilename:  'mock1.ad41b203.jpg',
-         destFolder:      'spec/fixtures/target/graphics',
-         destPath:        'spec/fixtures/target/graphics/mock1.ad41b203.jpg',
+         destFolder:      'spec/target/direct/graphics',
+         destPath:        'spec/target/direct/graphics/mock1.ad41b203.jpg',
          usedIn: [
             'mock1.html',
             'mock1.min.css',
@@ -118,7 +118,7 @@ describe('Generated manifest', () => {
 describe('Target folder', () => {
 
    it('contains the correct files with the correct revisioned filenames', () => {
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target');
+      const actual = cliArgvUtil.readFolder('spec/target/direct');
       const expected = [
          'graphics',
          'graphics/do-not-hash.jpg',
@@ -146,7 +146,7 @@ describe('Target folder', () => {
 describe('Specification utility function stripHash()', () => {
 
    it('reverts a hashed filename back to its original filename', () => {
-      const folder = 'spec/fixtures/target/subfolder';
+      const folder = 'spec/target/direct/subfolder';
       const actual = cliArgvUtil.readFolder(folder).map(revWebAssets.stripHash);
       const expected = [
          'graphics',
@@ -183,8 +183,8 @@ describe('Executing the CLI', () => {
    const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('with the --force flag revisions unused asset files', () => {
-      run('rev-web-assets spec/fixtures/source/graphics spec/fixtures/target-force --force --skip=do-not-hash --manifest');
-      const actual = fs.readdirSync('spec/fixtures/target-force').sort();
+      run('rev-web-assets spec/fixtures/graphics spec/target/force --force --skip=do-not-hash --manifest');
+      const actual = fs.readdirSync('spec/target/force').sort();
       const expected = [
          'do-not-hash.jpg',
          'manifest.json',
