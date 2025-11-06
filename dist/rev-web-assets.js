@@ -1,5 +1,6 @@
-//! rev-web-assets v1.5.3 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
+import { cliArgvUtil } from 'cli-argv-util';
 import { EOL } from 'node:os';
 import chalk from 'chalk';
 import crypto from 'crypto';
@@ -8,6 +9,37 @@ import log from 'fancy-log';
 import path from 'path';
 import slash from 'slash';
 const revWebAssets = {
+    assert(ok, message) {
+        if (!ok)
+            throw new Error(`[rev-web-assets] ${message}`);
+    },
+    cli() {
+        const validFlags = ['cd', 'force', 'hide404s', 'manifest', 'meta-content-base', 'note',
+            'quiet', 'skip', 'summary'];
+        const cli = cliArgvUtil.parse(validFlags);
+        const source = cli.params[0];
+        const target = cli.params[1];
+        const error = cli.invalidFlag ? cli.invalidFlagMsg :
+            !source ? 'Missing source folder.' :
+                !target ? 'Missing target folder.' :
+                    cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
+                        null;
+        revWebAssets.assert(!error, error);
+        const options = {
+            cd: cli.flagMap.cd ?? null,
+            force: cli.flagOn.force,
+            metaContentBase: cli.flagMap.metaContentBase ?? null,
+            saveManifest: cli.flagOn.manifest,
+            skip: cli.flagMap.skip ?? null,
+        };
+        const results = revWebAssets.revision(source, target, options);
+        const reporterOptions = {
+            summaryOnly: cli.flagOn.summary,
+            hide404s: cli.flagOn.hide404s,
+        };
+        if (!cli.flagOn.quiet)
+            revWebAssets.reporter(results, reporterOptions);
+    },
     manifest(source, target, skip) {
         const files = fs.readdirSync(source, { recursive: true })
             .map(file => slash(path.join(source, file.toString())))
@@ -139,21 +171,20 @@ const revWebAssets = {
         };
         const settings = { ...defaults, ...options };
         const startTime = Date.now();
-        const cleanUp = (folder) => slash(path.normalize(folder.trim())).replace(/\/$/, '');
-        const startFolder = settings.cd ? cleanUp(settings.cd) + '/' : '';
-        const source = cleanUp(startFolder + sourceFolder);
-        const target = cleanUp(startFolder + targetFolder);
+        const cleanPath = (folder) => slash(path.normalize(folder.trim())).replace(/\/$/, '');
+        const startFolder = settings.cd ? cleanPath(settings.cd) + '/' : '';
+        const source = cleanPath(startFolder + sourceFolder);
+        const target = cleanPath(startFolder + targetFolder);
         if (targetFolder)
             fs.mkdirSync(target, { recursive: true });
-        const errorMessage = !sourceFolder ? 'Must specify the source folder path.' :
+        const error = !sourceFolder ? 'Must specify the source folder path.' :
             !targetFolder ? 'Must specify the target folder path.' :
                 !fs.existsSync(source) ? 'Source folder does not exist: ' + source :
                     !fs.existsSync(target) ? 'Target folder cannot be created: ' + target :
                         !fs.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
                             !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
                                 null;
-        if (errorMessage)
-            throw new Error('[rev-web-assets] ' + errorMessage);
+        revWebAssets.assert(!error, error);
         const manifest = revWebAssets.manifest(source, target, settings.skip);
         revWebAssets.processHtml(manifest, settings);
         revWebAssets.processCss(manifest, settings);
