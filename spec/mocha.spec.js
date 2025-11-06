@@ -48,6 +48,7 @@ describe('Library module', () => {
       const expected = [
          ['assert',        'function'],
          ['calcAssetHash', 'function'],
+         ['cli',           'function'],
          ['copyAssets',    'function'],
          ['hashAssetPath', 'function'],
          ['hashFilename',  'function'],
