@@ -53,6 +53,11 @@ export type ReporterSettings = {
 
 const revWebAssets = {
 
+   assert(ok: unknown, message: string | null) {
+      if (!ok)
+         throw new Error(`[rev-web-assets] ${message}`);
+      },
+
    manifest(source: string, target: string, skip: string | null): ManifestDetail[] {
       // Creates a manifest list with stub manifest details for each file in the source folder.
       const files = fs.readdirSync(source, { recursive: true })
@@ -204,7 +209,7 @@ const revWebAssets = {
       },
 
    revision(sourceFolder: string, targetFolder: string, options?: Partial<Settings>): Results {
-      const defaults = {
+      const defaults: Settings = {
          cd:              null,
          force:           false,
          metaContentBase: null,
@@ -213,13 +218,13 @@ const revWebAssets = {
          };
       const settings =    { ...defaults, ...options };
       const startTime =   Date.now();
-      const cleanUp =     (folder: string) => slash(path.normalize(folder.trim())).replace(/\/$/, '');
-      const startFolder = settings.cd ? cleanUp(settings.cd) + '/' : '';
-      const source =      cleanUp(startFolder + sourceFolder);
-      const target =      cleanUp(startFolder + targetFolder);
+      const cleanPath =   (folder: string) => slash(path.normalize(folder.trim())).replace(/\/$/, '');
+      const startFolder = settings.cd ? cleanPath(settings.cd) + '/' : '';
+      const source =      cleanPath(startFolder + sourceFolder);
+      const target =      cleanPath(startFolder + targetFolder);
       if (targetFolder)
          fs.mkdirSync(target, { recursive: true });
-      const errorMessage =
+      const error =
          !sourceFolder ?                      'Must specify the source folder path.' :
          !targetFolder ?                      'Must specify the target folder path.' :
          !fs.existsSync(source) ?             'Source folder does not exist: ' + source :
@@ -227,8 +232,7 @@ const revWebAssets = {
          !fs.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
          !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
          null;
-      if (errorMessage)
-         throw new Error('[rev-web-assets] ' + errorMessage);
+      revWebAssets.assert(!error, error);
       const manifest = revWebAssets.manifest(source, target, settings.skip);
       revWebAssets.processHtml(manifest, settings);
       revWebAssets.processCss(manifest,  settings);
@@ -254,7 +258,7 @@ const revWebAssets = {
       },
 
    reporter(results: Results, options?: Partial<ReporterSettings>): Results {
-      const defaults = {
+      const defaults: ReporterSettings = {
          summaryOnly: false,
          hide404s:    false,
          };

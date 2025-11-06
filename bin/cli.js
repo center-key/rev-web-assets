@@ -37,8 +37,7 @@ const error =
    !target ?            'Missing target folder.' :
    cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
    null;
-if (error)
-   throw new Error('[rev-web-assets] ' + error);
+revWebAssets.assert(!error, error);
 const options = {
    cd:              cli.flagMap.cd ?? null,
    force:           cli.flagOn.force,

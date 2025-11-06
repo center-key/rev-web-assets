@@ -56,7 +56,7 @@ Command-line flags:
 | `--skip`              | Do not revision (hash) asset files with paths containing given string. | **string** |
 | `--summary`           | Only print out the single line summary message.                        | N/A        |
 
-Examples:
+### 4. Examples
    - `rev-web-assets web/source web/target`<br>
    Revisions the files in the **web/source** folder and saves the new files to the **web/target** folder.
 
@@ -88,6 +88,7 @@ into something like:
 <meta property=og:image content="https://example.net/logo.ad41b20.png">
 ```
 
+### 5. Manifest
 The `--manifest` flag produces a JSON file containing an array objects with details about each file:
 ```typescript
 export type ManifestDetail = {
