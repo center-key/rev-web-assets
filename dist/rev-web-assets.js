@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.4 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.5 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { EOL } from 'node:os';
@@ -79,6 +79,10 @@ const revWebAssets = {
     },
     stripHash(filename) {
         return filename.replace(/[.][0-9a-f]{8}[.]/, '.');
+    },
+    readJustFiles(folder) {
+        const isFile = (file) => fs.statSync(folder + '/' + file).isFile();
+        return fs.readdirSync(folder).filter(isFile).map(revWebAssets.stripHash).sort();
     },
     calcAssetHash(detail) {
         const hashLen = 8;
