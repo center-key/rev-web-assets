@@ -153,6 +153,12 @@ const revWebAssets = {
       return filename.replace(/[.][0-9a-f]{8}[.]/, '.');
       },
 
+   readJustFiles(folder: string): string[] {
+      // Returns the list of files in the folder with hashes removed from the filenames.
+      const isFile = (file: string) => fs.statSync(folder + '/' + file).isFile();
+      return fs.readdirSync(folder).filter(isFile).map(revWebAssets.stripHash).sort();
+      },
+
    calcAssetHash(detail: ManifestDetail): ManifestDetail {
       // Use the file contents of the asset to generate its hash and then store the hash in he
       // assets manifest detail.

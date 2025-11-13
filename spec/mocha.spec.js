@@ -55,6 +55,7 @@ describe('Library module', () => {
          ['manifest',      'function'],
          ['processCss',    'function'],
          ['processHtml',   'function'],
+         ['readJustFiles', 'function'],
          ['reporter',      'function'],
          ['revision',      'function'],
          ['stripHash',     'function'],
@@ -143,16 +144,28 @@ describe('Target folder', () => {
    });
 
 ////////////////////////////////////////////////////////////////////////////////
-describe('Specification utility function stripHash()', () => {
+describe('Specification utility function', () => {
 
-   it('reverts a hashed filename back to its original filename', () => {
+   it('stripHash() reverts a hashed filename back to its original filename', () => {
       const folder = 'spec/target/direct/subfolder';
-      const actual = cliArgvUtil.readFolder(folder).map(revWebAssets.stripHash);
+      const actual = cliArgvUtil.readFolder(folder).map(revWebAssets.stripHash).sort();
       const expected = [
          'graphics',
          'graphics/mock2.jpg',
-         'mock2.js',
          'mock2.html',
+         'mock2.js',
+         'mock2.min.css',
+         'mock2.php',
+         ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   it('readJustFiles() gets the correct list of original filenames for a folder', () => {
+      const folder = 'spec/target/direct/subfolder';
+      const actual = revWebAssets.readJustFiles(folder);
+      const expected = [
+         'mock2.html',
+         'mock2.js',
          'mock2.min.css',
          'mock2.php',
          ];

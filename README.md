@@ -20,12 +20,16 @@ $ npm install --save-dev rev-web-assets
 ```
 
 ## B) Usage
-### 1. npm package.json scripts
-Run `rev-web-assets` from the `"scripts"` section of your **package.json** file.
-
+### 1. Synopsis
+```
+rev-web-assets [SOURCE] [TARGET]
+```
 Parameters:
 * The **first** parameter is the *source* folder.
 * The **second** parameter is the *target* folder.
+
+### 2. npm package.json scripts
+Run `rev-web-assets` from the `"scripts"` section of your **package.json** file.
 
 Example **package.json** scripts:
 ```json
@@ -34,7 +38,7 @@ Example **package.json** scripts:
    },
 ```
 
-### 2. Command-line npx
+### 3. Command-line npx
 Example terminal commands:
 ```shell
 $ npm install --save-dev rev-web-assets
@@ -42,7 +46,7 @@ $ npx rev-web-assets build/dev/web-app build/prod/web-app
 ```
 You can also install **rev-web-assets** globally (`--global`) and then run it anywhere directly from the terminal.
 
-### 3. CLI flags
+### 4. CLI flags
 Command-line flags:
 | Flag                  | Description                                                            | Value      |
 | --------------------- | ---------------------------------------------------------------------- | ---------- |
@@ -56,7 +60,7 @@ Command-line flags:
 | `--skip`              | Do not revision (hash) asset files with paths containing given string. | **string** |
 | `--summary`           | Only print out the single line summary message.                        | N/A        |
 
-### 4. Examples
+### 5. Examples
    - `rev-web-assets web/source web/target`<br>
    Revisions the files in the **web/source** folder and saves the new files to the **web/target** folder.
 
@@ -67,7 +71,7 @@ Command-line flags:
    Displays no output.
 
    - `rev-web-assets source target --summary`<br>
-   Displays the summary but not the individual filenames.
+   Displays the summary informaion but not informaion about individual filenames.
 
    - `rev-web-assets source 'target/Web Files' --summary`<br>
    Save the target files to a folder that has a space in its name.
@@ -88,7 +92,7 @@ into something like:
 <meta property=og:image content="https://example.net/logo.ad41b20.png">
 ```
 
-### 5. Manifest
+### 6. Manifest
 The `--manifest` flag produces a JSON file containing an array objects with details about each file:
 ```typescript
 export type ManifestDetail = {
