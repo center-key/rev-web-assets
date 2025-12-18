@@ -79,11 +79,13 @@ Command-line flags:
    - `rev-web-assets source target --meta-content-base=https://example.net`<br>
    Prepends the base to `<meta>` URLs.
 
-_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the
+> [!NOTE]
+> _Single quotes in commands are normalized so they work cross-platform and avoid the
 errors often encountered on Microsoft Windows._
 
 URLs in `<meta>` tag `content` attributes generally need to be absolute URLs.&nbsp;
-Setting the `--meta-content-base` flag to `https://example.net` will transform the line of HTML from:
+Setting the `--meta-content-base` flag to `https://example.net` will transform the line of HTML
+from:
 ```html
 <meta property=og:image content="logo.png">
 ```
