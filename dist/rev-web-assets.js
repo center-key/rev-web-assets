@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.6 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.7 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { EOL } from 'node:os';
@@ -217,19 +217,23 @@ const revWebAssets = {
         };
         const settings = { ...defaults, ...options };
         const name = chalk.gray('rev-web-assets');
-        const indent = chalk.gray('|');
         const ancestor = cliArgvUtil.calcAncestor(results.source, results.target);
         const infoColor = results.count ? chalk.white : chalk.red.bold;
         const info = infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+        const symbol = {
+            arrow: chalk.gray.bold('→'),
+            checkmark: chalk.green.bold('✔'),
+            indent: chalk.gray('|'),
+        };
         log(name, ancestor.message, info);
         const logDetail = (detail) => {
-            const arrow = chalk.gray.bold('→');
-            const origin = chalk.white(detail.origin.substring(results.source.length + 1));
-            const dest = chalk.green(detail.destPath.substring(results.target.length + 1));
-            const file = chalk.blue.bold(detail.origin);
+            const origin = detail.origin.substring(results.source.length + 1);
+            const dest = detail.destPath.substring(results.target.length + 1);
+            const checkmark = detail.hash ? symbol.checkmark : '';
+            log(name, symbol.indent, cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
             const warning = (ext) => chalk.red.bold(`missing ${ext} asset in`);
-            log(name, indent, origin, arrow, dest);
-            const logMissingAsset = (missing) => log(name, warning(missing.ext), file, arrow, chalk.green(missing.line));
+            const file = chalk.blue.bold(detail.origin);
+            const logMissingAsset = (missing) => log(name, warning(missing.ext), file, symbol.arrow, chalk.green(missing.line));
             if (!settings.hide404s && detail.missing)
                 detail.missing.forEach(logMissingAsset);
         };
