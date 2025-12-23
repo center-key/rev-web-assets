@@ -321,14 +321,13 @@ const revWebAssets = {
       const symbol = {
          arrow:     chalk.gray.bold('→'),
          checkmark: chalk.green.bold('✔'),
-         indent:    chalk.gray('|'),
          };
       log(name, ancestor.message, info);
-      const logDetail = (detail: ManifestDetail) => {
+      const logDetail = (detail: ManifestDetail, i: number) => {
          const origin =    detail.origin.substring(results.source.length + 1);
          const dest =      detail.destPath!.substring(results.target.length + 1);
          const checkmark = detail.hash ? symbol.checkmark : '';
-         log(name, symbol.indent, cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
+         log(name, chalk.magenta(i + 1), cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
          const warning = (ext: string) => chalk.red.bold(`missing ${ext} asset in`);
          const file =    chalk.blue.bold(detail.origin);
          const logMissingAsset = (missing: MissingAsset) =>
