@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.7 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.8 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { EOL } from 'node:os';
@@ -223,14 +223,13 @@ const revWebAssets = {
         const symbol = {
             arrow: chalk.gray.bold('→'),
             checkmark: chalk.green.bold('✔'),
-            indent: chalk.gray('|'),
         };
         log(name, ancestor.message, info);
-        const logDetail = (detail) => {
+        const logDetail = (detail, i) => {
             const origin = detail.origin.substring(results.source.length + 1);
             const dest = detail.destPath.substring(results.target.length + 1);
             const checkmark = detail.hash ? symbol.checkmark : '';
-            log(name, symbol.indent, cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
+            log(name, chalk.magenta(i + 1), cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
             const warning = (ext) => chalk.red.bold(`missing ${ext} asset in`);
             const file = chalk.blue.bold(detail.origin);
             const logMissingAsset = (missing) => log(name, warning(missing.ext), file, symbol.arrow, chalk.green(missing.line));
