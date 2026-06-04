@@ -1,12 +1,12 @@
-//! rev-web-assets v1.5.8 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.5.9 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
-import { EOL } from 'node:os';
+import os from 'node:os';
 import chalk from 'chalk';
-import crypto from 'crypto';
-import fs from 'fs';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
 import log from 'fancy-log';
-import path from 'path';
+import path from 'node:path';
 import slash from 'slash';
 const revWebAssets = {
     assert(ok, message) {
@@ -199,7 +199,7 @@ const revWebAssets = {
         manifest.forEach(detail => detail.usedIn && detail.usedIn.sort());
         const manifestPath = path.join(target, 'manifest.json');
         const indent = '   ';
-        const toJson = (data) => JSON.stringify(data, null, indent).replace(/\r?\n/g, EOL) + EOL;
+        const toJson = (data) => JSON.stringify(data, null, indent).replace(/\r?\n/g, os.EOL) + os.EOL;
         if (settings.saveManifest)
             fs.writeFileSync(manifestPath, toJson(manifest));
         return {
