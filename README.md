@@ -50,7 +50,7 @@ You can also install **rev-web-assets** globally (`--global`) and then run it an
 Command-line flags:
 | Flag                  | Description                                                            | Value      |
 | --------------------- | ---------------------------------------------------------------------- | ---------- |
-| `--cd`                | Change working directory before starting starting.                     | **string** |
+| `--cd`                | Change working directory before starting.                              | **string** |
 | `--force`             | Revision (hash) all asset files even if not referenced.                | N/A        |
 | `--hide404s`          | Suppress warning messages about missing asset files.                   | N/A        |
 | `--manifest`          | Output the list of files to: **manifest.json**                         | N/A        |

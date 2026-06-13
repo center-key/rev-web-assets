@@ -35,7 +35,7 @@ describe('Library module', () => {
       const module = revWebAssets;
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
-         ['assert',        'function'],
+         ['assertOk',      'function'],
          ['calcAssetHash', 'function'],
          ['cli',           'function'],
          ['copyAssets',    'function'],

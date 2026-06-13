@@ -69,7 +69,7 @@ export type ReporterSettings = {
 
 const revWebAssets = {
 
-   assert(ok: unknown, message: string | null) {
+   assertOk(ok: unknown, message: string | null) {
       if (!ok)
          throw new Error(`[rev-web-assets] ${message}`);
       },
@@ -86,7 +86,7 @@ const revWebAssets = {
          !target ?            'Missing target folder.' :
          cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2]! :
          null;
-      revWebAssets.assert(!error, error);
+      revWebAssets.assertOk(!error, error);
       const options: Settings = {
          cd:              cli.flagMap.cd ?? null,
          force:           cli.flagOn.force!,
@@ -283,7 +283,7 @@ const revWebAssets = {
          !fs.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
          !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
          null;
-      revWebAssets.assert(!error, error);
+      revWebAssets.assertOk(!error, error);
       const manifest = revWebAssets.manifest(source, target, settings.skip);
       revWebAssets.processHtml(manifest, settings);
       revWebAssets.processCss(manifest,  settings);
