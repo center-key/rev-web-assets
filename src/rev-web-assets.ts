@@ -317,6 +317,7 @@ const revWebAssets = {
          };
       const settings =  { ...defaults, ...options };
       const name =      chalk.gray('rev-web-assets');
+      const version =   chalk.gray('v' + revWebAssets.version);
       const ancestor =  cliArgvUtil.calcAncestor(results.source, results.target);
       const infoColor = results.count ? chalk.white : chalk.red.bold;
       const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
@@ -324,7 +325,7 @@ const revWebAssets = {
          arrow:     chalk.gray.bold('→'),
          checkmark: chalk.green.bold('✔'),
          };
-      log(name, ancestor.message, info);
+      log(name, version, ancestor.message, info);
       const logDetail = (detail: ManifestDetail, i: number) => {
          const origin =    detail.origin.substring(results.source.length + 1);
          const dest =      detail.destPath!.substring(results.target.length + 1);
