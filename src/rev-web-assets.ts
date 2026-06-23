@@ -69,6 +69,8 @@ export type ReporterSettings = {
 
 const revWebAssets = {
 
+   version: '{{package.version}}',
+
    assertOk(ok: unknown, message: string | null) {
       if (!ok)
          throw new Error(`[rev-web-assets] ${message}`);

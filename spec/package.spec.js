@@ -22,6 +22,20 @@ describe('The "dist" folder', () => {
 
    });
 
+
+////////////////////////////////////////////////////////////////////////////////
+describe('Library version number', () => {
+
+   it('follows semantic version formatting', () => {
+      const version =  revWebAssets.version;
+      const semVer =   /\d+[.]\d+[.]\d+/;
+      const actual =   { version: version, valid: semVer.test(version) };
+      const expected = { version: version, valid: true };
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   });
+
 ////////////////////////////////////////////////////////////////////////////////
 describe('Library module', () => {
 
@@ -48,6 +62,7 @@ describe('Library module', () => {
          ['reporter',      'function'],
          ['revision',      'function'],
          ['stripHash',     'function'],
+         ['version',       'string'],
          ];
       assertDeepStrictEqual(actual, expected);
       });
