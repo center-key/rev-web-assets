@@ -39,14 +39,15 @@ describe('Library version number', () => {
 ////////////////////////////////////////////////////////////////////////////////
 describe('Library module', () => {
 
-   it('is an object', () => {
-      const actual =   { constructor: revWebAssets.constructor.name };
-      const expected = { constructor: 'Object' };
+   const module = revWebAssets;
+
+   it('is exported as an object', () => {
+      const actual =   { type: typeof module };
+      const expected = { type: 'object' };
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has the correct functions', () => {
-      const module = revWebAssets;
+   it('has the correct properties', () => {
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
          ['assertOk',      'function'],

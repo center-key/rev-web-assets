@@ -318,21 +318,19 @@ const revWebAssets = {
       const settings =  { ...defaults, ...options };
       const name =      chalk.gray('rev-web-assets');
       const version =   chalk.gray('v' + revWebAssets.version);
-      const ancestor =  cliArgvUtil.calcAncestor(results.source, results.target);
       const infoColor = results.count ? chalk.white : chalk.red.bold;
-      const info =      infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+      const summary =   infoColor(`(files: ${results.count}, ${results.duration}ms)`);
       const symbol = {
-         arrow:     chalk.gray.bold('→'),
-         checkmark: chalk.green.bold('✔'),
+         arrow:     chalk.gray.bold('→'),   //rightwards arrow (U+2192)
+         checkmark: chalk.green.bold('✔'),  //heavy check mark (U+2714)
          };
-      log(name, version, ancestor.message, info);
-      const logDetail = (detail: ManifestDetail, i: number) => {
-         const origin =    detail.origin.substring(results.source.length + 1);
-         const dest =      detail.destPath!.substring(results.target.length + 1);
+      log(name, version, results.source, summary);
+      const logDetail = (detail: ManifestDetail, index: number) => {
+         const target =    cliArgvUtil.colorizePath(detail.destPath!);
          const checkmark = detail.hash ? symbol.checkmark : '';
-         log(name, chalk.magenta(i + 1), cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
+         const file =      chalk.blue.bold(detail.origin);
+         log(name, chalk.magenta(index + 1), target, checkmark);
          const warning = (ext: string) => chalk.red.bold(`missing ${ext} asset in`);
-         const file =    chalk.blue.bold(detail.origin);
          const logMissingAsset = (missing: MissingAsset) =>
             log(name, warning(missing.ext), file, symbol.arrow, chalk.green(missing.line));
          if (!settings.hide404s && detail.missing)
