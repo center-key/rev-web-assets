@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.9 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.6.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 export type Settings = {
     cd: string | null;
@@ -41,8 +41,8 @@ export type ReporterSettings = {
     hide404s: boolean;
 };
 declare const revWebAssets: {
-    assert(ok: unknown, message: string | null): void;
-    cli(): void;
+    version: string;
+    assertOk(ok: unknown, message: string | null): void;
     manifest(source: string, target: string, skip: string | null): ManifestDetail[];
     hashFilename(filename: string, hash: string | null): string;
     stripHash(filename: string): string;
@@ -54,5 +54,6 @@ declare const revWebAssets: {
     copyAssets(manifest: ManifestDetail[]): void;
     revision(sourceFolder: string, targetFolder: string, options?: Partial<Settings>): Results;
     reporter(results: Results, options?: Partial<ReporterSettings>): Results;
+    cli(): void;
 };
 export { revWebAssets };

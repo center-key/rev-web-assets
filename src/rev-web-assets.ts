@@ -76,35 +76,6 @@ const revWebAssets = {
          throw new Error(`[rev-web-assets] ${message}`);
       },
 
-   cli() {
-      const validFlags = ['cd', 'force', 'hide404s', 'manifest', 'meta-content-base', 'note',
-         'quiet', 'skip', 'summary'];
-      const cli =    cliArgvUtil.parse(validFlags);
-      const source = cli.params[0];
-      const target = cli.params[1];
-      const error =
-         cli.invalidFlag ?    cli.invalidFlagMsg :
-         !source ?            'Missing source folder.' :
-         !target ?            'Missing target folder.' :
-         cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2]! :
-         null;
-      revWebAssets.assertOk(!error, error);
-      const options: Settings = {
-         cd:              cli.flagMap.cd ?? null,
-         force:           cli.flagOn.force!,
-         metaContentBase: cli.flagMap.metaContentBase ?? null,
-         saveManifest:    cli.flagOn.manifest!,
-         skip:            cli.flagMap.skip ?? null,
-         };
-      const results = revWebAssets.revision(source!, target!, options);
-      const reporterOptions: ReporterSettings = {
-         summaryOnly: cli.flagOn.summary!,
-         hide404s:    cli.flagOn.hide404s!,
-         };
-      if (!cli.flagOn.quiet)
-         revWebAssets.reporter(results, reporterOptions);
-      },
-
    manifest(source: string, target: string, skip: string | null): ManifestDetail[] {
       // Creates a manifest list with stub manifest details for each file in the source folder.
       const files = fs.readdirSync(source, { recursive: true })
@@ -339,6 +310,35 @@ const revWebAssets = {
       if (!settings.summaryOnly)
          results.manifest.forEach(logDetail);
       return results;
+      },
+
+   cli() {
+      const validFlags = ['cd', 'force', 'hide404s', 'manifest', 'meta-content-base', 'note',
+         'quiet', 'skip', 'summary'];
+      const cli =    cliArgvUtil.parse(validFlags);
+      const source = cli.params[0];
+      const target = cli.params[1];
+      const error =
+         cli.invalidFlag ?    cli.invalidFlagMsg :
+         !source ?            'Missing source folder.' :
+         !target ?            'Missing target folder.' :
+         cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2]! :
+         null;
+      revWebAssets.assertOk(!error, error);
+      const options: Settings = {
+         cd:              cli.flagMap.cd ?? null,
+         force:           cli.flagOn.force!,
+         metaContentBase: cli.flagMap.metaContentBase ?? null,
+         saveManifest:    cli.flagOn.manifest!,
+         skip:            cli.flagMap.skip ?? null,
+         };
+      const results = revWebAssets.revision(source!, target!, options);
+      const reporterOptions: ReporterSettings = {
+         summaryOnly: cli.flagOn.summary!,
+         hide404s:    cli.flagOn.hide404s!,
+         };
+      if (!cli.flagOn.quiet)
+         revWebAssets.reporter(results, reporterOptions);
       },
 
    };

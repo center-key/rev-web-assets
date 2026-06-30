@@ -1,4 +1,4 @@
-//! rev-web-assets v1.5.9 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
+//! rev-web-assets v1.6.0 ~~ https://github.com/center-key/rev-web-assets ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import os from 'node:os';
@@ -9,36 +9,10 @@ import log from 'fancy-log';
 import path from 'node:path';
 import slash from 'slash';
 const revWebAssets = {
-    assert(ok, message) {
+    version: '1.6.0',
+    assertOk(ok, message) {
         if (!ok)
             throw new Error(`[rev-web-assets] ${message}`);
-    },
-    cli() {
-        const validFlags = ['cd', 'force', 'hide404s', 'manifest', 'meta-content-base', 'note',
-            'quiet', 'skip', 'summary'];
-        const cli = cliArgvUtil.parse(validFlags);
-        const source = cli.params[0];
-        const target = cli.params[1];
-        const error = cli.invalidFlag ? cli.invalidFlagMsg :
-            !source ? 'Missing source folder.' :
-                !target ? 'Missing target folder.' :
-                    cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
-                        null;
-        revWebAssets.assert(!error, error);
-        const options = {
-            cd: cli.flagMap.cd ?? null,
-            force: cli.flagOn.force,
-            metaContentBase: cli.flagMap.metaContentBase ?? null,
-            saveManifest: cli.flagOn.manifest,
-            skip: cli.flagMap.skip ?? null,
-        };
-        const results = revWebAssets.revision(source, target, options);
-        const reporterOptions = {
-            summaryOnly: cli.flagOn.summary,
-            hide404s: cli.flagOn.hide404s,
-        };
-        if (!cli.flagOn.quiet)
-            revWebAssets.reporter(results, reporterOptions);
     },
     manifest(source, target, skip) {
         const files = fs.readdirSync(source, { recursive: true })
@@ -188,7 +162,7 @@ const revWebAssets = {
                         !fs.statSync(source).isDirectory() ? 'Source is not a folder: ' + source :
                             !fs.statSync(target).isDirectory() ? 'Target is not a folder: ' + target :
                                 null;
-        revWebAssets.assert(!error, error);
+        revWebAssets.assertOk(!error, error);
         const manifest = revWebAssets.manifest(source, target, settings.skip);
         revWebAssets.processHtml(manifest, settings);
         revWebAssets.processCss(manifest, settings);
@@ -217,21 +191,20 @@ const revWebAssets = {
         };
         const settings = { ...defaults, ...options };
         const name = chalk.gray('rev-web-assets');
-        const ancestor = cliArgvUtil.calcAncestor(results.source, results.target);
+        const version = chalk.gray('v' + revWebAssets.version);
         const infoColor = results.count ? chalk.white : chalk.red.bold;
-        const info = infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+        const summary = infoColor(`(files: ${results.count}, ${results.duration}ms)`);
         const symbol = {
             arrow: chalk.gray.bold('→'),
             checkmark: chalk.green.bold('✔'),
         };
-        log(name, ancestor.message, info);
-        const logDetail = (detail, i) => {
-            const origin = detail.origin.substring(results.source.length + 1);
-            const dest = detail.destPath.substring(results.target.length + 1);
+        log(name, version, results.source, summary);
+        const logDetail = (detail, index) => {
+            const target = cliArgvUtil.colorizePath(detail.destPath);
             const checkmark = detail.hash ? symbol.checkmark : '';
-            log(name, chalk.magenta(i + 1), cliArgvUtil.calcAncestor(origin, dest).message, checkmark);
-            const warning = (ext) => chalk.red.bold(`missing ${ext} asset in`);
             const file = chalk.blue.bold(detail.origin);
+            log(name, chalk.magenta(index + 1), target, checkmark);
+            const warning = (ext) => chalk.red.bold(`missing ${ext} asset in`);
             const logMissingAsset = (missing) => log(name, warning(missing.ext), file, symbol.arrow, chalk.green(missing.line));
             if (!settings.hide404s && detail.missing)
                 detail.missing.forEach(logMissingAsset);
@@ -239,6 +212,33 @@ const revWebAssets = {
         if (!settings.summaryOnly)
             results.manifest.forEach(logDetail);
         return results;
+    },
+    cli() {
+        const validFlags = ['cd', 'force', 'hide404s', 'manifest', 'meta-content-base', 'note',
+            'quiet', 'skip', 'summary'];
+        const cli = cliArgvUtil.parse(validFlags);
+        const source = cli.params[0];
+        const target = cli.params[1];
+        const error = cli.invalidFlag ? cli.invalidFlagMsg :
+            !source ? 'Missing source folder.' :
+                !target ? 'Missing target folder.' :
+                    cli.paramCount > 2 ? 'Extraneous parameter: ' + cli.params[2] :
+                        null;
+        revWebAssets.assertOk(!error, error);
+        const options = {
+            cd: cli.flagMap.cd ?? null,
+            force: cli.flagOn.force,
+            metaContentBase: cli.flagMap.metaContentBase ?? null,
+            saveManifest: cli.flagOn.manifest,
+            skip: cli.flagMap.skip ?? null,
+        };
+        const results = revWebAssets.revision(source, target, options);
+        const reporterOptions = {
+            summaryOnly: cli.flagOn.summary,
+            hide404s: cli.flagOn.hide404s,
+        };
+        if (!cli.flagOn.quiet)
+            revWebAssets.reporter(results, reporterOptions);
     },
 };
 export { revWebAssets };
