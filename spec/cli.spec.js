@@ -26,3 +26,16 @@ describe('Executing the CLI', () => {
       });
 
    });
+
+////////////////////////////////////////////////////////////////////////////////
+describe('Executing the CLI on an empty folder', () => {
+
+   it('generates an empty manifest file', () => {
+      fs.mkdirSync('spec/fixtures/empty', { recursive: true });
+      run('rev-web-assets spec/fixtures/empty spec/target/empty --manifest');
+      const actual =   fs.readFileSync('spec/target/empty/manifest.json', 'utf-8').trim();
+      const expected = '[]';
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   });

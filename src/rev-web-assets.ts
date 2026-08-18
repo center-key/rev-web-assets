@@ -286,24 +286,25 @@ const revWebAssets = {
          summaryOnly: false,
          hide404s:    false,
          };
-      const settings =  { ...defaults, ...options };
-      const name =      chalk.gray('rev-web-assets');
-      const version =   chalk.gray('v' + revWebAssets.version);
-      const infoColor = results.count ? chalk.white : chalk.red.bold;
-      const summary =   infoColor(`(files: ${results.count}, ${results.duration}ms)`);
+      const settings = { ...defaults, ...options };
+      const name =     chalk.gray('rev-web-assets');
+      const version =  chalk.gray('v' + revWebAssets.version);
+      const summary =  chalk.blue(`(files: ${results.count}, ${results.duration}ms)`);
+      const errorMsg = results.count ? '' : chalk.redBright.bold('[no files found]');
       const symbol = {
          arrow:     chalk.gray.bold('→'),   //rightwards arrow (U+2192)
          checkmark: chalk.green.bold('✔'),  //heavy check mark (U+2714)
          };
-      log(name, version, results.source, summary);
+      log(name, version, results.source, summary, errorMsg);
       const logDetail = (detail: ManifestDetail, index: number) => {
+         const count =     chalk.magenta(index + 1);
          const target =    cliArgvUtil.colorizePath(detail.destPath!);
          const checkmark = detail.hash ? symbol.checkmark : '';
-         const file =      chalk.blue.bold(detail.origin);
-         log(name, chalk.magenta(index + 1), target, checkmark);
-         const warning = (ext: string) => chalk.red.bold(`missing ${ext} asset in`);
+         const warning =   (ext: string) => chalk.redBright.bold(`missing ${ext} asset in`);
+         const file =      chalk.blue(detail.origin);
          const logMissingAsset = (missing: MissingAsset) =>
-            log(name, warning(missing.ext), file, symbol.arrow, chalk.green(missing.line));
+            log(name, warning(missing.ext), file, symbol.arrow, missing.line);
+         log(name, count, target, checkmark);
          if (!settings.hide404s && detail.missing)
             detail.missing.forEach(logMissingAsset);
          };
