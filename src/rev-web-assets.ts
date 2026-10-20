@@ -290,7 +290,7 @@ const revWebAssets = {
       const name =     chalk.gray('rev-web-assets');
       const version =  chalk.gray('v' + revWebAssets.version);
       const summary =  chalk.blue(`(files: ${results.count}, ${results.duration}ms)`);
-      const errorMsg = results.count ? '' : chalk.redBright.bold('[no files found]');
+      const errorMsg = results.count ? '' : chalk.redBright('[no files found]');
       const symbol = {
          arrow:     chalk.gray.bold('→'),   //rightwards arrow (U+2192)
          checkmark: chalk.green.bold('✔'),  //heavy check mark (U+2714)
@@ -300,7 +300,7 @@ const revWebAssets = {
          const count =     chalk.magenta(index + 1);
          const target =    cliArgvUtil.colorizePath(detail.destPath!);
          const checkmark = detail.hash ? symbol.checkmark : '';
-         const warning =   (ext: string) => chalk.redBright.bold(`missing ${ext} asset in`);
+         const warning =   (ext: string) => chalk.redBright(`missing ${ext} asset in`);
          const file =      chalk.blue(detail.origin);
          const logMissingAsset = (missing: MissingAsset) =>
             log(name, warning(missing.ext), file, symbol.arrow, missing.line);
