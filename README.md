@@ -28,7 +28,7 @@ Parameters:
 * The **first** parameter is the *source* folder.
 * The **second** parameter is the *target* folder.
 
-### 2. npm package.json scripts
+### 2. npm `package.json` Scripts
 Run `rev-web-assets` from the `"scripts"` section of your **package.json** file.
 
 Example **package.json** scripts:
@@ -38,7 +38,7 @@ Example **package.json** scripts:
    },
 ```
 
-### 3. Command-line npx
+### 3. Command-Line npx
 Example terminal commands:
 ```shell
 $ npm install --save-dev rev-web-assets
@@ -46,7 +46,7 @@ $ npx rev-web-assets build/dev/web-app build/prod/web-app
 ```
 You can also install **rev-web-assets** globally (`--global`) and then run it anywhere directly from the terminal.
 
-### 4. CLI flags
+### 4. CLI Flags
 Command-line flags:
 | Flag                  | Description                                                            | Value      |
 | --------------------- | ---------------------------------------------------------------------- | ---------- |
